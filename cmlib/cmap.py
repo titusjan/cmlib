@@ -172,3 +172,18 @@ class ColorMap():
         self._meta_data = None
         self._source_meta_data = None
 
+
+class ColorLib():
+    """ The color library.
+
+        Consists of a list of color maps and a directory name where the data is stored.
+    """
+    def __init__(self, data_dir):
+        self._data_dir = data_dir
+        self._color_maps = []
+
+    @property
+    def color_maps(self):
+        """ The list of color maps"""
+        return self._color_maps
+
