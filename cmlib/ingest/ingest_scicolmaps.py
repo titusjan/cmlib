@@ -3,16 +3,16 @@
     Since the source data is already in the common format (text files with RGB floats 0 to 1),
     we only have to copy the files and add meta-data.
 """
+import logging
+import os.path
 
+from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
+from cmlib.ingest import copy_data, LOG_FMT
+
+logger = logging.getLogger(__name__)
 
 SOURCE_DIR = "../../source_data/ScientificColourMaps4"
 TARGET_DIR = "../../data/ScientificColourMaps4"
-
-import os.path
-import shutil
-
-from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
-
 
 MAPS = [
     ("acton", DataCategory.Sequential),
@@ -56,8 +56,8 @@ def ingest_files():
     for name, category in MAPS:
         data_file = "{}.txt".format(name)
         source_file = os.path.join(SOURCE_DIR, name, data_file)
-        print("copying: {} -> {}".format(source_file, TARGET_DIR))
-        shutil.copy2(source_file, TARGET_DIR)
+        target_file = os.path.join(TARGET_DIR, data_file)
+        copy_data(source_file, target_file)
 
         md = CmMetaData(name)
         md.file_name = data_file
@@ -78,5 +78,6 @@ def ingest_files():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level='INFO', format=LOG_FMT)
     ingest_files()
 
