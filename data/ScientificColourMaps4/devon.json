@@ -1,0 +1,10 @@
+{
+    "name": "devon",
+    "file_name": "devon.txt",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "tags": []
+}

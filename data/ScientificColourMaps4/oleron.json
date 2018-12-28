@@ -1,0 +1,12 @@
+{
+    "name": "oleron",
+    "file_name": "oleron.txt",
+    "category": "Other",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "tags": [
+        "geo"
+    ]
+}

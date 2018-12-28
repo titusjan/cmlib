@@ -1,0 +1,10 @@
+{
+    "name": "cork",
+    "file_name": "cork.txt",
+    "category": "Diverging",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "tags": []
+}

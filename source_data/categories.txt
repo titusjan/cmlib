@@ -1,0 +1,55 @@
+The categories that as defined by various sources.
+
+ColorBrewer (http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3):
+    - Sequential
+    - Diverging
+    - Qualitative
+
+Matplotlib (https://matplotlib.org/tutorials/colors/colormaps.html):
+    - Sequential (Perceptually uniform)
+    - Sequential
+    - Sequential2 (Banding)
+    - Diverging
+    - Cyclic
+    - Qualitative
+    - Miscellaneous 
+    
+    
+Scientific Colour-Maps, Crameri, F. (https://peterkovesi.com/projects/colourmaps/
+    - Sequential
+    - Diverging
+    - Specical
+    
+- CET, Peter Kovesi (https://peterkovesi.com/projects/colourmaps/)
+    - Linear
+    - Diverging
+    - Rainbow
+    - Cyclic
+    - Isoluminant
+    - Color Blind
+
+    
+
+-------- 
+
+Categories by CmLib
+
+DataCategory:
+    - Diverging
+    - Qualitative
+    - Cyclic
+    
+Remarks:
+    Rainbow
+    Geographic
+    Repetitive
+
+Perceptually uniform
+BW-friendly (strict increasing lightness)
+Texture friendly Isoluminant (constant lightness)
+
+
+
+Recommended:
+    Either isoluminant, perceptually uniform or BW-friendly
+    
