@@ -17,6 +17,7 @@
         http://colorcet.pyviz.org/ which comes from https://peterkovesi.com/projects/colourmaps/
 """
 import logging
+import os.path
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,13 @@ def copy_data(source_file, target_file):
 
         This ensures all data has the same format and future users (possibly non-python users)
         can use a single import routine.
+
+        The
     """
-    logger.info("copying: {} -> {}".format(source_file, target_file))
+    logger.info("Copying: {} -> {}".format(source_file, target_file))
     array = np.loadtxt(source_file)
+    save_data(target_file, array)
+
+def save_data(target_file, array):
+    logger.info("Saving: {}".format(os.path.abspath(target_file)))
     np.savetxt(target_file, array, delimiter=', ', fmt='%8.6f')

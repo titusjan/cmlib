@@ -1,0 +1,11 @@
+{
+    "name": "CET-C4",
+    "file_name": "CET-C4.csv",
+    "category": "Cyclic",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "cyclic_wrwbw_40-90_c42_n256",
+    "tags": []
+}

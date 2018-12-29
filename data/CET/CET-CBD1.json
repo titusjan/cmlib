@@ -1,0 +1,11 @@
+{
+    "name": "CET-CBD1",
+    "file_name": "CET-CBD1.csv",
+    "category": "Diverging",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": true,
+    "isoluminant": false,
+    "notes": "diverging-protanopic-deuteranopic_bwy_60-95_c32_n256",
+    "tags": []
+}

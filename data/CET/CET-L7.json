@@ -1,0 +1,11 @@
+{
+    "name": "CET-L7",
+    "file_name": "CET-L7.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_bmw_5-95_c86_n256",
+    "tags": []
+}

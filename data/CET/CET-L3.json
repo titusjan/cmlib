@@ -1,0 +1,11 @@
+{
+    "name": "CET-L3",
+    "file_name": "CET-L3.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_kryw_0-100_c71_n256",
+    "tags": []
+}

@@ -106,7 +106,9 @@ class CmMetaData(AbstractMetaData):
         self.black_white_friendly = False
         self.color_blind_friendly = False
         self.isoluminant = False
+        self.notes = ''
         self.tags = []
+
 
     def from_dict(self, dct):
         self.name = dct['name']
@@ -116,6 +118,7 @@ class CmMetaData(AbstractMetaData):
         self.black_white_friendly = dct.get('black_white_friendly', False)
         self.color_blind_friendly = dct.get('color_blind_friendly', False)
         self.isoluminant = dct.get('isoluminant', False)
+        self.notes = dct.get('notes', '')
         self.tags = dct.get('tags', [])
 
 
@@ -128,6 +131,7 @@ class CmMetaData(AbstractMetaData):
             black_white_friendly = self.black_white_friendly,
             color_blind_friendly = self.color_blind_friendly,
             isoluminant = self.isoluminant,
+            notes = self.notes,
             tags = self.tags)
 
 
@@ -139,6 +143,7 @@ class SourceMetaData(AbstractMetaData):
     def __init__(self, name=""):
         self.name = name
         self.version = ""
+        self.date = ""
         self.author = ""
         self.url = ""
         self.doi = ""  # Digital Object Identifier (e.g. from Zenodo)
@@ -147,6 +152,7 @@ class SourceMetaData(AbstractMetaData):
     def from_dict(self, dct):
         self.name = dct['name']
         self.version = dct.get('version', '')
+        self.date = dct.get('date', '')
         self.author = dct.get('author', '')
         self.url = dct.get('url', '')
         self.doi = dct.get('doi', '')
@@ -157,6 +163,7 @@ class SourceMetaData(AbstractMetaData):
         return OrderedDict(
             name = self.name,
             version = self.version,
+            date = self.date,
             author = self.author,
             url = self.url,
             doi = self.doi,

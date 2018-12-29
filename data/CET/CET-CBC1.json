@@ -1,0 +1,11 @@
+{
+    "name": "CET-CBC1",
+    "file_name": "CET-CBC1.csv",
+    "category": "Cyclic",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": true,
+    "isoluminant": false,
+    "notes": "cyclic-protanopic-deuteranopic_bwyk_16-96_c31_n256",
+    "tags": []
+}

@@ -1,0 +1,11 @@
+{
+    "name": "CET-CBTl2",
+    "file_name": "CET-CBTl2.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": true,
+    "isoluminant": false,
+    "notes": "linear-tritanopic_krjcw_5-95_c24_n256",
+    "tags": []
+}

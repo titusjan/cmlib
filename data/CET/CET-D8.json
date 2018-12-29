@@ -1,0 +1,11 @@
+{
+    "name": "CET-D8",
+    "file_name": "CET-D8.csv",
+    "category": "Diverging",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "diverging-linear_bjr_30-55_c53_n256",
+    "tags": []
+}

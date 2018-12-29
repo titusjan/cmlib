@@ -1,0 +1,13 @@
+{
+    "name": "CET-R1",
+    "file_name": "CET-R1.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "rainbow_bgyrm_35-85_c69_n256",
+    "tags": [
+        "rainbow"
+    ]
+}

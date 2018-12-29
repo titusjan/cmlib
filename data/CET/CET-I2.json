@@ -1,0 +1,11 @@
+{
+    "name": "CET-I2",
+    "file_name": "CET-I2.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": true,
+    "notes": "isoluminant_cgo_80_c38_n256",
+    "tags": []
+}

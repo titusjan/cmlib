@@ -1,0 +1,11 @@
+{
+    "name": "CET-C1",
+    "file_name": "CET-C1.csv",
+    "category": "Cyclic",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "cyclic_mrybm_35-75_c68_n256",
+    "tags": []
+}

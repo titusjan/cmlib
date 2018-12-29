@@ -1,0 +1,11 @@
+{
+    "name": "CET-L10",
+    "file_name": "CET-L10.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_gow_60-85_c27_n256",
+    "tags": []
+}

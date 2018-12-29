@@ -1,0 +1,13 @@
+{
+    "name": "CET-R3",
+    "file_name": "CET-R3.csv",
+    "category": "Diverging",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "diverging-rainbow_bgymr_45-85_c67_n256",
+    "tags": [
+        "rainbow"
+    ]
+}

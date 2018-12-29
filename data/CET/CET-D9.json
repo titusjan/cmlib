@@ -1,0 +1,11 @@
+{
+    "name": "CET-D9",
+    "file_name": "CET-D9.csv",
+    "category": "Diverging",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "diverging_bwr_55-98_c37_n256",
+    "tags": []
+}

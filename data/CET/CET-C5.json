@@ -1,0 +1,11 @@
+{
+    "name": "CET-C5",
+    "file_name": "CET-C5.csv",
+    "category": "Cyclic",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "cyclic_grey_15-85_c0_n256",
+    "tags": []
+}

@@ -1,0 +1,11 @@
+{
+    "name": "CET-L18",
+    "file_name": "CET-L18.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_wyor_100-45_c55_n256",
+    "tags": []
+}

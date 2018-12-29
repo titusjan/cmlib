@@ -1,0 +1,11 @@
+{
+    "name": "CET-CBL1",
+    "file_name": "CET-CBL1.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": true,
+    "isoluminant": false,
+    "notes": "linear-protanopic-deuteranopic_kbjyw_5-95_c25_n256",
+    "tags": []
+}

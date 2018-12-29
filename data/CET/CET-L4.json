@@ -1,0 +1,11 @@
+{
+    "name": "CET-L4",
+    "file_name": "CET-L4.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_kry_0-97_c73_n256",
+    "tags": []
+}

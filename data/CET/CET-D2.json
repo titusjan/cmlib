@@ -1,0 +1,11 @@
+{
+    "name": "CET-D2",
+    "file_name": "CET-D2.csv",
+    "category": "Diverging",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "diverging_gwv_55-95_c39_n256",
+    "tags": []
+}

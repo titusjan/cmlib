@@ -1,0 +1,11 @@
+{
+    "name": "CET-L15",
+    "file_name": "CET-L15.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_ternary-blue_0-44_c57_n256",
+    "tags": []
+}

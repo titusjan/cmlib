@@ -1,0 +1,11 @@
+{
+    "name": "CET-CBTC2",
+    "file_name": "CET-CBTC2.csv",
+    "category": "Cyclic",
+    "perceptually_uniform": true,
+    "black_white_friendly": false,
+    "color_blind_friendly": true,
+    "isoluminant": false,
+    "notes": "cyclic-tritanopic_wrwc_70-100_c20_n256",
+    "tags": []
+}

@@ -1,0 +1,11 @@
+{
+    "name": "CET-L8",
+    "file_name": "CET-L8.csv",
+    "category": "Sequential",
+    "perceptually_uniform": true,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "linear_bmy_10-95_c71_n256",
+    "tags": []
+}
