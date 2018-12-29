@@ -9,7 +9,7 @@ from cmlib.misc import LOG_FMT, load_rgb_data, save_rgb_data
 logger = logging.getLogger(__name__)
 
 SOURCE_DIR = "../../source_data/ScientificColourMaps4"
-TARGET_DIR = "../../data/ScientificColourMaps4"
+TARGET_DIR = "../../data/SciColMaps"
 
 MAPS = [
     ("acton", DataCategory.Sequential),
