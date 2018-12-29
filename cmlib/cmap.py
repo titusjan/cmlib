@@ -184,15 +184,15 @@ class CatalogMetaData(AbstractMetaData):
 class ColorMap():
     """ Represents color map data.
     """
-    def __init__(self, meta_data, source_meta_data, rgb_file_name=None):
+    def __init__(self, meta_data, catalog_meta_data, rgb_file_name=None):
         self._rgb_data = None
         self._meta_data = None
-        self._source_meta_data = None
+        self._catalog_meta_data = None
 
         self.rgb_file_name = rgb_file_name
 
         self.meta_data = meta_data
-        self.source_meta_data = source_meta_data
+        self.catalog_meta_data = catalog_meta_data
 
 
     @property
@@ -205,13 +205,13 @@ class ColorMap():
         self._meta_data = md
 
     @property
-    def source_meta_data(self):
-        return self._source_meta_data
+    def catalog_meta_data(self):
+        return self._catalog_meta_data
 
-    @source_meta_data.setter
-    def source_meta_data(self, smd):
-        check_class(smd, CatalogMetaData, allowNone=True)
-        self._source_meta_data = smd
+    @catalog_meta_data.setter
+    def catalog_meta_data(self, cmd):
+        check_class(cmd, CatalogMetaData, allowNone=True)
+        self._catalog_meta_data = cmd
 
     @property
     def rgb_data(self):
@@ -265,7 +265,7 @@ class ColorLib():
             Loads metadata. The actual color data is lazy loaded (i.e. when needed).
         """
         catalog_file = os.path.abspath(os.path.join(catalog_dir, CatalogMetaData.DEFAULT_FILE_NAME))
-        smd = CatalogMetaData.create_from_json(catalog_file)
+        cmd = CatalogMetaData.create_from_json(catalog_file)
 
         json_files_glob = os.path.join(catalog_dir, '*.json')
         for md_file_name in glob.iglob(json_files_glob):
@@ -277,5 +277,5 @@ class ColorLib():
 
             rgb_file_path = os.path.join(catalog_dir, md.file_name)
 
-            colorMap = ColorMap(meta_data=md, source_meta_data=smd, rgb_file_name=rgb_file_path)
+            colorMap = ColorMap(meta_data=md, catalog_meta_data=cmd, rgb_file_name=rgb_file_path)
             logger.info("Color map size: {}".format(colorMap.rgb_data.shape))
