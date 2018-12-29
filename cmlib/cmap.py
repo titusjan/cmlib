@@ -145,10 +145,10 @@ class CmMetaData(AbstractMetaData):
             tags = self.tags)
 
 
-class SourceMetaData(AbstractMetaData):
-    """ Represents a color map source
+class CatalogMetaData(AbstractMetaData):
+    """ Catalog info. All color maps of a single source (e.g. CET, Matplotlib) make up a catalog.
     """
-    DEFAULT_FILE_NAME = "_source.json"
+    DEFAULT_FILE_NAME = "_catalog.json"
 
     def __init__(self, name=""):
         self.name = name
@@ -210,7 +210,7 @@ class ColorMap():
 
     @source_meta_data.setter
     def source_meta_data(self, smd):
-        check_class(smd, SourceMetaData, allowNone=True)
+        check_class(smd, CatalogMetaData, allowNone=True)
         self._source_meta_data = smd
 
     @property
@@ -264,12 +264,12 @@ class ColorLib():
 
             Loads metadata. The actual color data is lazy loaded (i.e. when needed).
         """
-        catalog_file = os.path.abspath(os.path.join(catalog_dir, SourceMetaData.DEFAULT_FILE_NAME))
-        smd = SourceMetaData.create_from_json(catalog_file)
+        catalog_file = os.path.abspath(os.path.join(catalog_dir, CatalogMetaData.DEFAULT_FILE_NAME))
+        smd = CatalogMetaData.create_from_json(catalog_file)
 
         json_files_glob = os.path.join(catalog_dir, '*.json')
         for md_file_name in glob.iglob(json_files_glob):
-            if md_file_name.endswith(SourceMetaData.DEFAULT_FILE_NAME):
+            if md_file_name.endswith(CatalogMetaData.DEFAULT_FILE_NAME):
                 continue # skip catalog json file
 
             md_file_path = os.path.join(catalog_dir, md_file_name)

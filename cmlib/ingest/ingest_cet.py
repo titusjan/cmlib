@@ -6,7 +6,7 @@ import os.path
 
 import numpy as np
 
-from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
+from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
 from ingest.misc import LOG_FMT, save_data
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ MAPS = [
 
 def ingest_files():
 
-    smd = SourceMetaData()
+    smd = CatalogMetaData()
     smd.name = "CET"
     smd.version = ""
     smd.date = "May 2018"
@@ -91,7 +91,7 @@ def ingest_files():
     smd.doi = ""
     smd.license = "Creative Commons BY License."
 
-    smd.save_to_json_file(os.path.join(TARGET_DIR, SourceMetaData.DEFAULT_FILE_NAME))
+    smd.save_to_json_file(os.path.join(TARGET_DIR, CatalogMetaData.DEFAULT_FILE_NAME))
 
     for name, notes, category in MAPS:
         data_file = "{}.csv".format(name)

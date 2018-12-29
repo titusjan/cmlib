@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
-from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
+from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
 from ingest.misc import LOG_FMT, save_data
 
 logger = logging.getLogger(__name__)
@@ -55,7 +55,7 @@ MAPS = [ ('Perceptually Uniform Sequential', [
 
 def create_files(names, category, bw_friendly=False):
 
-    smd = SourceMetaData()
+    smd = CatalogMetaData()
     smd.name = "MatPlotLib"
     smd.version = mpl.__version__
     smd.date = ""
@@ -64,7 +64,7 @@ def create_files(names, category, bw_friendly=False):
     smd.doi = ""
     smd.license = "Matplotlib license." # https://matplotlib.org/users/license.html
 
-    smd.save_to_json_file(os.path.join(TARGET_DIR, SourceMetaData.DEFAULT_FILE_NAME))
+    smd.save_to_json_file(os.path.join(TARGET_DIR, CatalogMetaData.DEFAULT_FILE_NAME))
 
     for name in names:
         data_file = "{}.csv".format(name)

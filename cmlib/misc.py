@@ -44,11 +44,11 @@ def copy_data(source_file, target_file): # TODO: obsolete
 
 
 
-def load_rgb_data(source_file, *args, **kargs):
+def load_rgb_data(source_file, delimiter=', ', dtype=np.float32, **kwargs):
     """ Saves a color map array to a target file
     """
     logger.debug("Loading: {}".format(os.path.abspath(source_file)))
-    array = np.loadtxt(source_file, delimiter=', ', dtype=np.float32)
+    array = np.loadtxt(source_file, delimiter=delimiter, dtype=dtype, **kwargs)
     return array
 
 

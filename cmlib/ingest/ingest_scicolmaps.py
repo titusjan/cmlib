@@ -3,8 +3,8 @@
 import logging
 import os.path
 
-from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
-from ingest.misc import LOG_FMT, copy_data
+from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
+from cmlib.misc import LOG_FMT, load_rgb_data, save_rgb_data
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ MAPS = [
 
 def ingest_files():
 
-    smd = SourceMetaData()
+    smd = CatalogMetaData()
     smd.name = "Scientific Colour-Maps"
     smd.version = "4.0.1"
     smd.author = "Crameri, F."
@@ -48,13 +48,14 @@ def ingest_files():
     smd.doi = "10.5281/zenodo.2527899"
     smd.license = "Creative Commons Attribution 4.0 International License"
 
-    smd.save_to_json_file(os.path.join(TARGET_DIR, SourceMetaData.DEFAULT_FILE_NAME))
+    smd.save_to_json_file(os.path.join(TARGET_DIR, CatalogMetaData.DEFAULT_FILE_NAME))
 
     for name, category in MAPS:
         data_file = "{}.txt".format(name)
         source_file = os.path.join(SOURCE_DIR, name, data_file)
         target_file = os.path.join(TARGET_DIR, data_file)
-        copy_data(source_file, target_file)
+        rgb_arr = load_rgb_data(source_file, delimiter=None)
+        save_rgb_data(target_file, rgb_arr)
 
         md = CmMetaData(name)
         md.file_name = data_file
@@ -75,6 +76,6 @@ def ingest_files():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level='INFO', format=LOG_FMT)
+    logging.basicConfig(level='DEBUG', format=LOG_FMT)
     ingest_files()
 
