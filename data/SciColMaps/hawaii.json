@@ -1,6 +1,6 @@
 {
     "name": "hawaii",
-    "file_name": "hawaii.txt",
+    "file_name": "hawaii.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

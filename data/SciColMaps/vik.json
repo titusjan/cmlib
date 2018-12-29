@@ -1,6 +1,6 @@
 {
     "name": "vik",
-    "file_name": "vik.txt",
+    "file_name": "vik.csv",
     "category": "Diverging",
     "perceptually_uniform": true,
     "black_white_friendly": false,

@@ -1,6 +1,6 @@
 {
     "name": "bamako",
-    "file_name": "bamako.txt",
+    "file_name": "bamako.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

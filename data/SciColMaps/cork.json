@@ -1,6 +1,6 @@
 {
     "name": "cork",
-    "file_name": "cork.txt",
+    "file_name": "cork.csv",
     "category": "Diverging",
     "perceptually_uniform": true,
     "black_white_friendly": false,

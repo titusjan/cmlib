@@ -1,6 +1,6 @@
 {
     "name": "nuuk",
-    "file_name": "nuuk.txt",
+    "file_name": "nuuk.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

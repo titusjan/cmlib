@@ -1,6 +1,6 @@
 {
     "name": "devon",
-    "file_name": "devon.txt",
+    "file_name": "devon.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

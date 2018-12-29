@@ -1,6 +1,6 @@
 {
     "name": "turku",
-    "file_name": "turku.txt",
+    "file_name": "turku.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": true,

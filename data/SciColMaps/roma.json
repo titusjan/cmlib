@@ -1,6 +1,6 @@
 {
     "name": "roma",
-    "file_name": "roma.txt",
+    "file_name": "roma.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

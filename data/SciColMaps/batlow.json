@@ -1,6 +1,6 @@
 {
     "name": "batlow",
-    "file_name": "batlow.txt",
+    "file_name": "batlow.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

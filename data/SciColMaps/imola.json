@@ -1,6 +1,6 @@
 {
     "name": "imola",
-    "file_name": "imola.txt",
+    "file_name": "imola.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

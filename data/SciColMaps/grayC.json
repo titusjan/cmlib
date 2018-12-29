@@ -1,6 +1,6 @@
 {
     "name": "grayC",
-    "file_name": "grayC.txt",
+    "file_name": "grayC.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": true,

@@ -1,6 +1,6 @@
 {
     "name": "broc",
-    "file_name": "broc.txt",
+    "file_name": "broc.csv",
     "category": "Diverging",
     "perceptually_uniform": true,
     "black_white_friendly": false,

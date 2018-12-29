@@ -1,6 +1,6 @@
 {
     "name": "lajolla",
-    "file_name": "lajolla.txt",
+    "file_name": "lajolla.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

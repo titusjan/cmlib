@@ -1,6 +1,6 @@
 {
     "name": "davos",
-    "file_name": "davos.txt",
+    "file_name": "davos.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

@@ -1,6 +1,6 @@
 {
     "name": "lisbon",
-    "file_name": "lisbon.txt",
+    "file_name": "lisbon.csv",
     "category": "Diverging",
     "perceptually_uniform": true,
     "black_white_friendly": false,

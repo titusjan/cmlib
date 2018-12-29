@@ -51,8 +51,8 @@ def ingest_files():
     smd.save_to_json_file(os.path.join(TARGET_DIR, CatalogMetaData.DEFAULT_FILE_NAME))
 
     for name, category in MAPS:
-        data_file = "{}.txt".format(name)
-        source_file = os.path.join(SOURCE_DIR, name, data_file)
+        data_file = "{}.csv".format(name)
+        source_file = os.path.join(SOURCE_DIR, name, "{}.txt".format(name))
         target_file = os.path.join(TARGET_DIR, data_file)
         rgb_arr = load_rgb_data(source_file, delimiter=None)
         save_rgb_data(target_file, rgb_arr)

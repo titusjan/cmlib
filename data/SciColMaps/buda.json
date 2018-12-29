@@ -1,6 +1,6 @@
 {
     "name": "buda",
-    "file_name": "buda.txt",
+    "file_name": "buda.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

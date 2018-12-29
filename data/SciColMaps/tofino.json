@@ -1,6 +1,6 @@
 {
     "name": "tofino",
-    "file_name": "tofino.txt",
+    "file_name": "tofino.csv",
     "category": "Diverging",
     "perceptually_uniform": true,
     "black_white_friendly": false,

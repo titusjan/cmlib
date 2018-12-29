@@ -1,6 +1,6 @@
 {
     "name": "berlin",
-    "file_name": "berlin.txt",
+    "file_name": "berlin.csv",
     "category": "Diverging",
     "perceptually_uniform": true,
     "black_white_friendly": false,

@@ -1,6 +1,6 @@
 {
     "name": "acton",
-    "file_name": "acton.txt",
+    "file_name": "acton.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

@@ -1,6 +1,6 @@
 {
     "name": "lapaz",
-    "file_name": "lapaz.txt",
+    "file_name": "lapaz.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
     "black_white_friendly": false,

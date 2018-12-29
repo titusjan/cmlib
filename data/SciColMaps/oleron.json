@@ -1,6 +1,6 @@
 {
     "name": "oleron",
-    "file_name": "oleron.txt",
+    "file_name": "oleron.csv",
     "category": "Other",
     "perceptually_uniform": true,
     "black_white_friendly": false,
