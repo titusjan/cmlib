@@ -16,7 +16,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
-from ingest.misc import LOG_FMT, save_data
+from cmlib.misc import LOG_FMT, save_rgb_data
+
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +57,7 @@ MAPS = [ ('Perceptually Uniform Sequential', [
 def create_files(names, category, bw_friendly=False):
 
     smd = CatalogMetaData()
+    smd.key = "MatPlotLib"
     smd.name = "MatPlotLib"
     smd.version = mpl.__version__
     smd.date = ""
@@ -71,7 +73,7 @@ def create_files(names, category, bw_friendly=False):
         target_file = os.path.join(TARGET_DIR, data_file)
 
         array = make_cm_array(name)
-        save_data(target_file, array)
+        save_rgb_data(target_file, array)
 
         md = CmMetaData(name)
         md.file_name = data_file
@@ -115,9 +117,7 @@ def make_cm_array(name):
     return arr[:, 0:3]
 
 
-
-if __name__ == "__main__":
-    logging.basicConfig(level='INFO', format=LOG_FMT)
+def main():
     create_files(MAPS[0][1], DataCategory.Sequential, bw_friendly=True)
     create_files(MAPS[1][1], DataCategory.Sequential, bw_friendly=True)
     create_files(MAPS[2][1], DataCategory.Sequential)
@@ -127,3 +127,6 @@ if __name__ == "__main__":
     create_files(MAPS[6][1], DataCategory.Other)
 
 
+if __name__ == "__main__":
+    logging.basicConfig(level='DEBUG', format=LOG_FMT)
+    main()

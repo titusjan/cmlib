@@ -85,11 +85,17 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             elif col == self.COL_NAME:
                 return md.name
             elif col == self.COL_CATALOG:
-                return colMap.catalog_meta_data.name
+                return colMap.catalog_meta_data.key
             elif col == self.COL_CATEGORY:
                 return md.category.name
             else:
                 raise AssertionError("Unexpected column: {}".format(col))
+
+        elif role == Qt.ToolTipRole:
+            if col == self.COL_CATALOG:
+                colMap = self._colorMaps[row]
+                cmd = colMap.catalog_meta_data
+                return " ".join([cmd.name, cmd.version, cmd.date])
 
         return None
 

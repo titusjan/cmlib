@@ -41,7 +41,8 @@ MAPS = [
 def ingest_files():
 
     smd = CatalogMetaData()
-    smd.name = "Scientific Colour-Maps"
+    smd.key = "SciColMaps"
+    smd.name = "Scientific Colour Maps"
     smd.version = "4.0.1"
     smd.author = "Crameri, F."
     smd.url = "http://www.fabiocrameri.ch/colourmaps.php"

@@ -150,7 +150,8 @@ class CatalogMetaData(AbstractMetaData):
     """
     DEFAULT_FILE_NAME = "_catalog.json"
 
-    def __init__(self, name=""):
+    def __init__(self, key="", name=""):
+        self.key = key   # unique idenfifier for the color map
         self.name = name
         self.version = ""
         self.date = ""
@@ -160,6 +161,7 @@ class CatalogMetaData(AbstractMetaData):
         self.license = ""
 
     def from_dict(self, dct):
+        self.key = dct['key']
         self.name = dct['name']
         self.version = dct.get('version', '')
         self.date = dct.get('date', '')
@@ -171,6 +173,7 @@ class CatalogMetaData(AbstractMetaData):
 
     def as_dict(self):
         return OrderedDict(
+            key = self.key,
             name = self.name,
             version = self.version,
             date = self.date,
@@ -199,7 +202,7 @@ class ColorMap():
     def key(self):
         """ Uniquely identifies the map."""
         if self._key is None:
-            self._key = "{}/{}".format(self.catalog_meta_data.name, self.meta_data.name)
+            self._key = "{}/{}".format(self.catalog_meta_data.key, self.meta_data.name)
         return self._key
 
     @property

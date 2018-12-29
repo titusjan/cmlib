@@ -7,7 +7,7 @@ import os.path
 import numpy as np
 
 from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
-from ingest.misc import LOG_FMT, save_data
+from cmlib.misc import LOG_FMT, save_rgb_data
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +83,7 @@ MAPS = [
 def ingest_files():
 
     smd = CatalogMetaData()
+    smd.key = "CET"
     smd.name = "CET"
     smd.version = ""
     smd.date = "May 2018"
@@ -99,7 +100,7 @@ def ingest_files():
         target_file = os.path.join(TARGET_DIR, data_file)
 
         array = np.loadtxt(source_file, delimiter=',')
-        save_data(target_file, array)
+        save_rgb_data(target_file, array)
 
         md = CmMetaData(name)
         md.file_name = data_file
@@ -124,6 +125,6 @@ def ingest_files():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level='INFO', format=LOG_FMT)
+    logging.basicConfig(level='DEBUG', format=LOG_FMT)
     ingest_files()
 
