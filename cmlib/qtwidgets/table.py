@@ -1,12 +1,12 @@
 """ Table model and view classes for examining the color map library
 """
 import logging
-import os.path
+
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSignal
 
-from cmlib.cmap import ColorLib
+from cmlib.cmap import ColorLib, ColorMap
 from cmlib.misc import LOG_FMT, check_class
 from cmlib.qtwidgets.toggle_column_mixin import ToggleColumnTableView
 
@@ -119,10 +119,13 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
 class ColorLibTableViewer(ToggleColumnTableView):
 
+    sigColorMapSelected = pyqtSignal(ColorMap)
+
     def __init__(self, model=None, parent=None):
         super().__init__(parent=parent)
 
         check_class(model, ColorLibModel)
+        self._model = model
         self.setModel(model)
 
         self.setShowGrid(False)
@@ -148,45 +151,21 @@ class ColorLibTableViewer(ToggleColumnTableView):
 
         self.setContextMenuPolicy(Qt.DefaultContextMenu) # will call contextMenuEvent
 
+        self._selectionModel = self.selectionModel()
+        self._selectionModel.currentChanged.connect(self._onCurrentChanged)
 
 
-class MyWidget(QtWidgets.QWidget):
-
-    def __init__(self, data_dir, parent=None):
-        super().__init__(parent=parent)
-
-        colorLib = ColorLib()
-        colorLib.load_catalog(os.path.join(data_dir, 'CET'))
-        colorLib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
-        colorLib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
-        self.colorLibModel = ColorLibModel(colorLib, parent=self)
-
-        self.mainLayout = QtWidgets.QVBoxLayout()
-        self.setLayout(self.mainLayout)
-
-        tableView = ColorLibTableViewer(model=self.colorLibModel)
-        self.mainLayout.addWidget(tableView)
-
-
-    def sizeHint(self):
-        """ Holds the recommended size for the widget.
+    def _onCurrentChanged(self, curIdx, _prevIdx):
+        """ Emits sigColorMapSelected if a valid row has been selected
         """
-        return QtCore.QSize(800, 600)
+        if not curIdx.isValid():
+            return None
 
+        row = curIdx.row()
+        colorMap = self._model.colorLib.color_maps[row]
 
+        logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))
+        self.sigColorMapSelected.emit(colorMap)
 
-def main():
-    app = QtWidgets.QApplication([])
-
-    win = MyWidget(data_dir=os.path.abspath("../../data"))
-    win.show()
-    win.raise_()
-    app.exec_()
-
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level='DEBUG', format=LOG_FMT)
-    main()
 
 

@@ -198,6 +198,10 @@ class ColorMap():
         self.catalog_meta_data = catalog_meta_data
 
 
+    def __repr__(self):
+        return "<ColorMap {}>".format(self.key)
+
+
     @property
     def key(self):
         """ Uniquely identifies the map."""
