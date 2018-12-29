@@ -134,7 +134,7 @@ class CmMetaData(AbstractMetaData):
 
     def as_dict(self):
         return OrderedDict(
-            name=self.name,
+            name = self.name,
             file_name = self.file_name,
             category = self.category.name,
             perceptually_uniform = self.perceptually_uniform,
@@ -185,15 +185,22 @@ class ColorMap():
     """ Represents color map data.
     """
     def __init__(self, meta_data, catalog_meta_data, rgb_file_name=None):
+        self._key = None
         self._rgb_data = None
         self._meta_data = None
         self._catalog_meta_data = None
 
         self.rgb_file_name = rgb_file_name
-
         self.meta_data = meta_data
         self.catalog_meta_data = catalog_meta_data
 
+
+    @property
+    def key(self):
+        """ Uniquely identifies the map."""
+        if self._key is None:
+            self._key = "{}/{}".format(self.catalog_meta_data.name, self.meta_data.name)
+        return self._key
 
     @property
     def meta_data(self):
@@ -203,6 +210,7 @@ class ColorMap():
     def meta_data(self, md):
         check_class(md, CmMetaData, allowNone=True)
         self._meta_data = md
+        self._key = None # invalidate cache
 
     @property
     def catalog_meta_data(self):
@@ -212,6 +220,7 @@ class ColorMap():
     def catalog_meta_data(self, cmd):
         check_class(cmd, CatalogMetaData, allowNone=True)
         self._catalog_meta_data = cmd
+        self._key = None # invalidate cache
 
     @property
     def rgb_data(self):
@@ -244,6 +253,7 @@ class ColorMap():
         self._rgb_data = rgb_arr
 
 
+
 class ColorLib():
     """ The color library.
 
@@ -257,6 +267,12 @@ class ColorLib():
     def color_maps(self):
         """ The list of color maps"""
         return self._color_maps
+
+
+    def clear(self):
+        """ Removes all color maps
+        """
+        self._color_maps.clear()
 
 
     def load_catalog(self, catalog_dir):
@@ -278,4 +294,4 @@ class ColorLib():
             rgb_file_path = os.path.join(catalog_dir, md.file_name)
 
             colorMap = ColorMap(meta_data=md, catalog_meta_data=cmd, rgb_file_name=rgb_file_path)
-            logger.info("Color map size: {}".format(colorMap.rgb_data.shape))
+            self._color_maps.append(colorMap)
