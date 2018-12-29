@@ -7,7 +7,7 @@ import os.path
 import numpy as np
 
 from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
-from cmlib.ingest import save_data, LOG_FMT
+from ingest.misc import LOG_FMT, save_data
 
 logger = logging.getLogger(__name__)
 

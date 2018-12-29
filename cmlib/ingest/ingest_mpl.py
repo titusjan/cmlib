@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
-from cmlib.ingest import save_data, LOG_FMT
+from ingest.misc import LOG_FMT, save_data
 
 logger = logging.getLogger(__name__)
 

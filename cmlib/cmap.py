@@ -57,8 +57,16 @@
 """
 import abc
 import enum
+import glob
 import json
+import logging
+import os.path
+
 from collections import OrderedDict
+
+from cmlib.misc import check_class, check_is_an_array, load_rgb_data
+
+logger = logging.getLogger(__name__)
 
 class DataCategory(enum.Enum):
     Sequential = 1
@@ -82,10 +90,12 @@ class AbstractMetaData(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
     def load_from_json(self, file_name):
+        logger.debug("Loading: {}".format(os.path.abspath(file_name)))
         with open(file_name, 'r') as fp:
             return self.from_dict(json.load(fp))
 
     def save_to_json_file(self, file_name):
+        logger.debug("Saving: {}".format(os.path.abspath(file_name)))
         with open(file_name, 'w') as fp:
             json.dump(self.as_dict(), fp, indent=4)
 
@@ -113,7 +123,7 @@ class CmMetaData(AbstractMetaData):
     def from_dict(self, dct):
         self.name = dct['name']
         self.file_name = dct['file_name']
-        self.category = DataCategory(dct['category'])
+        self.category = DataCategory[dct['category']]
         self.perceptually_uniform = dct.get('perceptually_uniform', False)
         self.black_white_friendly = dct.get('black_white_friendly', False)
         self.color_blind_friendly = dct.get('color_blind_friendly', False)
@@ -174,10 +184,64 @@ class SourceMetaData(AbstractMetaData):
 class ColorMap():
     """ Represents color map data.
     """
-    def __init__(self):
+    def __init__(self, meta_data, source_meta_data, rgb_file_name=None):
         self._rgb_data = None
         self._meta_data = None
         self._source_meta_data = None
+
+        self.rgb_file_name = rgb_file_name
+
+        self.meta_data = meta_data
+        self.source_meta_data = source_meta_data
+
+
+    @property
+    def meta_data(self):
+        return self._meta_data
+
+    @meta_data.setter
+    def meta_data(self, md):
+        check_class(md, CmMetaData, allowNone=True)
+        self._meta_data = md
+
+    @property
+    def source_meta_data(self):
+        return self._source_meta_data
+
+    @source_meta_data.setter
+    def source_meta_data(self, smd):
+        check_class(smd, SourceMetaData, allowNone=True)
+        self._source_meta_data = smd
+
+    @property
+    def rgb_data(self):
+        """ Gets the rgb data. Loads the data from file if needed.
+        """
+        if self._rgb_data is None:
+            self.load_rgb_data()
+        return self._rgb_data
+
+
+    def load_rgb_data(self, file_name=None):
+        """ Loads the rgb data from file.
+
+            :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
+        """
+        if file_name is None:
+            file_name = self.rgb_file_name
+        self._rgb_data = load_rgb_data(file_name)
+
+
+    def set_rgb_data(self, rgb_arr):
+        """ Explicitly sets the rgb data.
+
+            Typically not used directly because the rgb data is loaded automatically when needed.
+        """
+        check_is_an_array(rgb_arr)
+        assert rgb_arr.ndim == 2, "Expected 2D array. Got {}D".format(rgb_arr.ndim)
+        _, n_cols = rgb_arr.shape
+        assert n_cols == 3, "Expected 3 columns. Got: {}".format(n_cols)
+        self._rgb_data = rgb_arr
 
 
 class ColorLib():
@@ -185,12 +249,33 @@ class ColorLib():
 
         Consists of a list of color maps and a directory name where the data is stored.
     """
-    def __init__(self, data_dir):
-        self._data_dir = data_dir
+    def __init__(self):
         self._color_maps = []
+
 
     @property
     def color_maps(self):
         """ The list of color maps"""
         return self._color_maps
 
+
+    def load_catalog(self, catalog_dir):
+        """ Loads all color maps from a catalogue directory
+
+            Loads metadata. The actual color data is lazy loaded (i.e. when needed).
+        """
+        catalog_file = os.path.abspath(os.path.join(catalog_dir, SourceMetaData.DEFAULT_FILE_NAME))
+        smd = SourceMetaData.create_from_json(catalog_file)
+
+        json_files_glob = os.path.join(catalog_dir, '*.json')
+        for md_file_name in glob.iglob(json_files_glob):
+            if md_file_name.endswith(SourceMetaData.DEFAULT_FILE_NAME):
+                continue # skip catalog json file
+
+            md_file_path = os.path.join(catalog_dir, md_file_name)
+            md = CmMetaData.create_from_json(md_file_path)
+
+            rgb_file_path = os.path.join(catalog_dir, md.file_name)
+
+            colorMap = ColorMap(meta_data=md, source_meta_data=smd, rgb_file_name=rgb_file_path)
+            logger.info("Color map size: {}".format(colorMap.rgb_data.shape))

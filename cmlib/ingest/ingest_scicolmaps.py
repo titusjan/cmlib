@@ -4,7 +4,7 @@ import logging
 import os.path
 
 from cmlib.cmap import DataCategory, CmMetaData, SourceMetaData
-from cmlib.ingest import copy_data, LOG_FMT
+from ingest.misc import LOG_FMT, copy_data
 
 logger = logging.getLogger(__name__)
 
