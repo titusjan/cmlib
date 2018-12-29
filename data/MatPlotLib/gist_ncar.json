@@ -1,0 +1,11 @@
+{
+    "name": "gist_ncar",
+    "file_name": "gist_ncar.csv",
+    "category": "Other",
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

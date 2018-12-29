@@ -1,7 +1,4 @@
 """ Ingests the Scientific color maps into the data directory.
-
-    Since the source data is already in the common format (text files with RGB floats 0 to 1),
-    we only have to copy the files and add meta-data.
 """
 import logging
 import os.path

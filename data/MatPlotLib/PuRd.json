@@ -1,0 +1,11 @@
+{
+    "name": "PuRd",
+    "file_name": "PuRd.csv",
+    "category": "Sequential",
+    "perceptually_uniform": false,
+    "black_white_friendly": true,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

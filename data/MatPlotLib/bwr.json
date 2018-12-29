@@ -1,0 +1,11 @@
+{
+    "name": "bwr",
+    "file_name": "bwr.csv",
+    "category": "Diverging",
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}
