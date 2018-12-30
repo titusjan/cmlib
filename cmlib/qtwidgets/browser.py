@@ -81,7 +81,7 @@ class CmLibBrowser(QtWidgets.QWidget):
     def sizeHint(self):
         """ Holds the recommended size for the widget.
         """
-        return QtCore.QSize(800, 600)
+        return QtCore.QSize(1000, 600)
 
 
 
@@ -98,7 +98,8 @@ def main():
     win = CmLibBrowser(colorLib=colorLib)
     win.show()
     win.raise_()
-    win.setGeometry(10, 10, 800, 350)
+    #win.setGeometry(10, 10, 1000, 500)
+    win.move(10, 10)
     app.exec_()
 
 

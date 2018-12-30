@@ -13,14 +13,27 @@ from cmlib.qtwidgets.qimg import makeColorBarPixmap
 
 logger = logging.getLogger(__name__)
 
+_HW_BOOL = 80 # header width for boolean columns
+_ALIGN_STRING = Qt.AlignVCenter | Qt.AlignLeft
+_ALIGN_NUMBER = Qt.AlignVCenter | Qt.AlignRight
+_ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
 
 class ColorLibModel(QtCore.QAbstractTableModel):
-    """ A table model that contains a color lib
+    """ A table model that maps ColorLib data as a table.
     """
-    HEADERS = ['Key', 'Name', 'Catalog', 'Category']  # TODO: size
-    (COL_KEY, COL_NAME, COL_CATALOG, COL_CATEGORY) = range(len(HEADERS))
+    # TODO: size
+    HEADERS = ('Key', 'Catalog', 'Name', 'Category',
+               'P. Uniform', 'B&W', 'Color Blind', 'Isoluminant',
+               'Tags', 'Notes')
 
-    DEFAULT_WIDTHS = [175, 125, 125, 125]
+    HEADER_TOOL_TIPS = ('Key', 'Catalog', 'Name', 'Category', 'Perceptually uniform.',
+                        'Black & white Friendly', 'Color Blind friendly', 'Isoluminant',
+                        'Tags', 'Notes')
+
+    (COL_KEY, COL_CATALOG, COL_NAME, COL_CATEGORY, COL_UNIF, COL_BW, COL_COLOR_BLIND,
+     COL_ISOLUMINANT, COL_TAGS, COL_NOTES) = range(len(HEADERS))
+
+    DEFAULT_WIDTHS = [175, 100, 120, 100, _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
 
     def __init__(self, colorLib, parent=None):
         """ Constructor
@@ -32,6 +45,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         check_class(colorLib, ColorLib)
 
         assert len(self.HEADERS) == len(self.DEFAULT_WIDTHS), "sanity check failed."
+        assert len(self.HEADERS) == len(self.HEADER_TOOL_TIPS), "sanity check failed."
 
         self._colorLib = colorLib
         self._colorMaps = colorLib.color_maps # used often
@@ -42,6 +56,11 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         self.drawIconBarBorder = True
         self.iconBarWidth = 64
         self.iconBarHeight = 16
+
+        # Check mark for boolean columns
+        #   ✓ checkmark Unicode: U+2713, UTF-8: E2 9C 93
+        #   ✔︎ Heavy check mark Unicode: U+2714 U+FE0E, UTF-8: E2 9C 94 EF B8 8E
+        self.checkMarkChar = '✓︎'
 
 
     @property
@@ -90,12 +109,44 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
             if col == self.COL_KEY:
                 return colMap.key
+
             elif col == self.COL_NAME:
                 return md.pretty_name
+
             elif col == self.COL_CATALOG:
                 return colMap.catalog_meta_data.key
+
             elif col == self.COL_CATEGORY:
                 return md.category.name
+
+            elif col == self.COL_UNIF:
+                return self.boolToStr(md.perceptually_uniform)
+
+            elif col == self.COL_BW:
+                return self.boolToStr(md.black_white_friendly)
+
+            elif col == self.COL_COLOR_BLIND:
+                return self.boolToStr(md.color_blind_friendly)
+
+            elif col == self.COL_ISOLUMINANT:
+                return self.boolToStr(md.isoluminant)
+
+            elif col == self.COL_TAGS:
+                return ", ".join(md.tags)
+
+            elif col == self.COL_NOTES:
+                return md.notes
+
+            else:
+                raise AssertionError("Unexpected column: {}".format(col))
+
+        elif role == Qt.TextAlignmentRole:
+
+            if col in (self.COL_KEY, self.COL_CATALOG, self.COL_NAME, self.COL_CATEGORY,
+                       self.COL_TAGS, self.COL_NOTES):
+                return _ALIGN_STRING
+            elif col in (self.COL_ISOLUMINANT, self.COL_UNIF, self.COL_BW, self.COL_COLOR_BLIND):
+                return _ALIGN_BOOLEAN
             else:
                 raise AssertionError("Unexpected column: {}".format(col))
 
@@ -117,17 +168,28 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         return None
 
 
+    def boolToStr(self, value):
+        """ Shows a checkmark if value is True, the empty string otherwise
+        """
+        return self.checkMarkChar if value else ""
+
+
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         """ Header data given a orientation.
 
             :param section: row or column number, depending on orientation
             :param orientation: Qt.Horizontal or Qt.Vertical
         """
-        if role != Qt.DisplayRole:
+        if role not in (Qt.DisplayRole, Qt.ToolTipRole):
             return None
 
         if orientation == Qt.Horizontal:
-            return self.HEADERS[section]
+            if role == Qt.DisplayRole:
+                return self.HEADERS[section]
+            elif role == Qt.ToolTipRole: # doesn't seem to work (tried only on OS-X)
+                return self.HEADER_TOOL_TIPS[section]
+            else:
+                assert False, "Unexpected role: {}".format(role)
         else:
             return str(section)
 
@@ -223,6 +285,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
         enabled[headerNames[ColorLibModel.COL_NAME]] = False # Cannot be unchecked
         checked = dict((name, True) for name in headerNames)
         checked[headerNames[ColorLibModel.COL_KEY]] = False
+        checked[headerNames[ColorLibModel.COL_NOTES]] = False
         self.addHeaderContextMenu(checked=checked, enabled=enabled, checkable={})
 
         self.setContextMenuPolicy(Qt.DefaultContextMenu) # will call contextMenuEvent
