@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class ColorLibModel(QtCore.QAbstractTableModel):
     """ A table model that contains a color lib
     """
-    HEADERS = ['Key', 'Name', 'Catalog', 'Category']
+    HEADERS = ['Key', 'Name', 'Catalog', 'Category']  # TODO: size
     (COL_KEY, COL_NAME, COL_CATALOG, COL_CATEGORY) = range(len(HEADERS))
 
     DEFAULT_WIDTHS = [150, 150, 150, 150]

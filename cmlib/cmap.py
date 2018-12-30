@@ -64,7 +64,9 @@ import os.path
 
 from collections import OrderedDict
 
-from cmlib.misc import check_class, check_is_an_array, load_rgb_data
+import numpy as np
+
+from cmlib.misc import check_class, check_is_an_array, load_rgb_floats
 
 logger = logging.getLogger(__name__)
 
@@ -189,7 +191,8 @@ class ColorMap():
     """
     def __init__(self, meta_data, catalog_meta_data, rgb_file_name=None):
         self._key = None
-        self._rgb_data = None
+        self._rgb_float_array = None
+        self._argb_uint8_array = None
         self._meta_data = None
         self._catalog_meta_data = None
 
@@ -229,26 +232,28 @@ class ColorMap():
         self._catalog_meta_data = cmd
         self._key = None # invalidate cache
 
+
     @property
-    def rgb_data(self):
+    def rgb_float_array(self):
         """ Gets the rgb data. Loads the data from file if needed.
         """
-        if self._rgb_data is None:
-            self.load_rgb_data()
-        return self._rgb_data
+        if self._rgb_float_array is None:
+            self.load_rgb_float_array()
+        return self._rgb_float_array
 
 
-    def load_rgb_data(self, file_name=None):
+    def load_rgb_float_array(self, file_name=None):
         """ Loads the rgb data from file.
 
             :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
         """
         if file_name is None:
             file_name = self.rgb_file_name
-        self._rgb_data = load_rgb_data(file_name)
+
+        self.set_rgb_float_array(load_rgb_floats(file_name))
 
 
-    def set_rgb_data(self, rgb_arr):
+    def set_rgb_float_array(self, rgb_arr):
         """ Explicitly sets the rgb data.
 
             Typically not used directly because the rgb data is loaded automatically when needed.
@@ -257,7 +262,58 @@ class ColorMap():
         assert rgb_arr.ndim == 2, "Expected 2D array. Got {}D".format(rgb_arr.ndim)
         _, n_cols = rgb_arr.shape
         assert n_cols == 3, "Expected 3 columns. Got: {}".format(n_cols)
-        self._rgb_data = rgb_arr
+        if rgb_arr.dtype != np.float32:
+            raise TypeError("Expected np.float32. Got: {}".format(rgb_arr.dtype))
+
+        self._rgb_float_array = rgb_arr
+
+
+
+    @property
+    def argb_uint8_array(self):
+        """ Gets the argb data as bytes. Loads the data from file if needed.
+
+            Returns 4xN array (ARGB). This format can be used to create Qt images.
+        """
+        if self._argb_uint8_array is None:
+            self.load_argb_uint8_array()
+        return self._argb_uint8_array
+
+
+    def load_argb_uint8_array(self, file_name=None):
+        """ Loads the rgb data from file.
+
+            :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
+        """
+        if file_name is None:
+            file_name = self.rgb_file_name
+        rgb_floats = load_rgb_floats(file_name)
+
+        # Convert from float to bytes and append column
+        rgb_floats *= 256
+        rgb_floats = np.clip(rgb_floats, 0, 255)
+        n_rows, depth = rgb_floats.shape
+        assert depth == 3, "sanity check"
+
+        argb_ints = np.ones(shape=(n_rows, 4), dtype=np.uint8) * 255
+        argb_ints[:, 0:3] = rgb_floats.astype(np.uint8)
+
+        self.set_argb_unit8_array(argb_ints)
+
+
+    def set_argb_unit8_array(self, argb_arr):
+        """ Explicitly sets the ARGB uint8 data.
+
+            Typically not used directly because the argb data is loaded automatically when needed.
+        """
+        check_is_an_array(argb_arr)
+        assert argb_arr.ndim == 2, "Expected 2D array. Got {}D".format(argb_arr.ndim)
+        _, n_cols = argb_arr.shape
+        assert n_cols == 4, "Expected 3 columns. Got: {}".format(n_cols)
+        if argb_arr.dtype != np.uint8:
+            raise TypeError("Expected np.float32. Got: {}".format(argb_arr.dtype))
+
+        self._argb_uint8_array = argb_arr
 
 
 

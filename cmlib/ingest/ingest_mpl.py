@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
-from cmlib.misc import LOG_FMT, save_rgb_data
+from cmlib.misc import LOG_FMT, save_rgb_floats
 
 
 logger = logging.getLogger(__name__)
@@ -73,7 +73,7 @@ def create_files(names, category, bw_friendly=False):
         target_file = os.path.join(TARGET_DIR, data_file)
 
         array = make_cm_array(name)
-        save_rgb_data(target_file, array)
+        save_rgb_floats(target_file, array)
 
         md = CmMetaData(name)
         md.file_name = data_file

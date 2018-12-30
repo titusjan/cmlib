@@ -4,7 +4,7 @@ import logging
 import os.path
 
 from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
-from cmlib.misc import LOG_FMT, load_rgb_data, save_rgb_data
+from cmlib.misc import LOG_FMT, load_rgb_floats, save_rgb_floats
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +55,8 @@ def ingest_files():
         data_file = "{}.csv".format(name)
         source_file = os.path.join(SOURCE_DIR, name, "{}.txt".format(name))
         target_file = os.path.join(TARGET_DIR, data_file)
-        rgb_arr = load_rgb_data(source_file, delimiter=None)
-        save_rgb_data(target_file, rgb_arr)
+        rgb_arr = load_rgb_floats(source_file, delimiter=None)
+        save_rgb_floats(target_file, rgb_arr)
 
         md = CmMetaData(name)
         md.file_name = data_file

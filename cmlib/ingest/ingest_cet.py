@@ -7,7 +7,7 @@ import os.path
 import numpy as np
 
 from cmlib.cmap import DataCategory, CmMetaData, CatalogMetaData
-from cmlib.misc import LOG_FMT, save_rgb_data
+from cmlib.misc import LOG_FMT, save_rgb_floats
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ def ingest_files():
         target_file = os.path.join(TARGET_DIR, data_file)
 
         array = np.loadtxt(source_file, delimiter=',')
-        save_rgb_data(target_file, array)
+        save_rgb_floats(target_file, array)
 
         md = CmMetaData(name)
         md.file_name = data_file

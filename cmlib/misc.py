@@ -40,20 +40,25 @@ def copy_data(source_file, target_file): # TODO: obsolete
     """
     logger.info("Copying: {} -> {}".format(source_file, target_file))
     array = np.loadtxt(source_file)
-    save_rgb_data(target_file, array)
+    save_rgb_floats(target_file, array)
 
 
 
-def load_rgb_data(source_file, delimiter=', ', dtype=np.float32, **kwargs):
-    """ Saves a color map array to a target file
+def load_rgb_floats(source_file, delimiter=', ', dtype=np.float32, **kwargs):
+    """ Loads a color map array from a source file.
+        Returns Nx3 array of 32 bits floats
     """
     logger.debug("Loading: {}".format(os.path.abspath(source_file)))
     array = np.loadtxt(source_file, delimiter=delimiter, dtype=dtype, **kwargs)
     return array
 
 
-def save_rgb_data(target_file, array):
-    """ Saves a color map array to a target file
+def save_rgb_floats(target_file, array):
+    """ Saves a color map array to a target file.
+
+        The array is expected to consist of floats.
     """
     logger.debug("Saving: {}".format(os.path.abspath(target_file)))
     np.savetxt(target_file, array, delimiter=', ', fmt='%8.6f')
+
+
