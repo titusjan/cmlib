@@ -4,7 +4,7 @@
 import logging
 import numpy as np
 
-from PyQt5 import QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ def arrayToQImage(arr, share_memory=True, format = None):
         logger.warning("Converting array from Fortan contiguous to C contiguous")
         arr = np.ascontiguousarray(arr)
 
-    assert arr.flags['C_CONTIGUOUS'], "expected c_contigous array"
+    assert arr.flags['C_CONTIGUOUS'], "expected C-contiguous array"
 
     buf = arr.data
     qimg = QtGui.QImage(buf, arr_width, arr_height, format)
@@ -50,3 +50,34 @@ def arrayToQImage(arr, share_memory=True, format = None):
 
 
 
+def makeColorBarPixMap(colorMap, width=None, height=None):
+    """ Creates a PixMap that visualizes the color map.
+        This can be used in a QLabel to draw a legend.
+
+        The resulting pixmap will be 1xN ARGB
+    """
+    rgba_arr = colorMap.argb_uint8_array
+
+    # Shuffle dimensions to BGRA from RGBA  (which what Qt uses for ARGB in little-endian mode)
+    # Do this by swapping index 0 and 2. If using bgra_arr = rgba_arr[:, [2, 1, 0, 3]], the
+    # resulting bgra_arr will be fortran-contiguous, which would have to fixed later on.
+    # Swapping dimensions is faster
+    bgra_arr = np.copy(rgba_arr)
+    bgra_arr[:, 0] = rgba_arr[:, 2]
+    bgra_arr[:, 2] = rgba_arr[:, 0]
+    del rgba_arr
+    imageArr = np.expand_dims(bgra_arr, 0)  # Add a dimension to get a N x 1 x 4 array
+
+    assert imageArr.flags['C_CONTIGUOUS'], "expected C-contiguous array"
+
+    image = arrayToQImage(imageArr, share_memory=True)
+
+    if width is not None or height is not None:
+        if width is None:
+            width = image.width()
+        if height is None:
+            height = image.height()
+
+        image = image.scaled(width, height)
+
+    return QtGui.QPixmap.fromImage(image)

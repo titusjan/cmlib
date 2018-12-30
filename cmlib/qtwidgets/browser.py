@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt
 
 from cmlib.cmap import ColorLib, ColorMap
 from cmlib.misc import LOG_FMT, check_class
-from cmlib.qtwidgets.qimg import arrayToQImage
+from cmlib.qtwidgets.qimg import makeColorBarPixMap
 from cmlib.qtwidgets.table import ColorLibModel, ColorLibTableViewer
 
 
@@ -33,17 +33,32 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.tableView = ColorLibTableViewer(model=self._colorLibModel)
         self.tableView.sigColorMapSelected.connect(self._onColorMapSelected)
 
+        self.colorMapNameLabel = QtWidgets.QLabel()
+        self.colorMapNameLabel.setAlignment(Qt.AlignCenter)
+        self.colorMapNameLabel.setStyleSheet("font-size: x-large; color: redl")
+        font = self.colorMapNameLabel.font()
+        font.setPointSizeF(font.pointSize() * 1.5)
+        self.colorMapNameLabel.setFont(font)
+
         self.colorMapImageLabel = QtWidgets.QLabel()
+        self.colorMapImageLabel.setScaledContents(True)
         self.colorMapImageLabel.setFrameStyle(QtWidgets.QFrame.Panel)
         self.colorMapImageLabel.setLineWidth(1)
+        self.colorMapNameLabel.setMinimumHeight(10)
 
         # Layout
-        self.verSplitter = QtWidgets.QSplitter(orientation=Qt.Vertical)
-        self.verSplitter.setChildrenCollapsible(False)
-        self.verSplitter.addWidget(self.tableView)
-        self.verSplitter.addWidget(self.colorMapImageLabel)
+        # self.verSplitter = QtWidgets.QSplitter(orientation=Qt.Vertical)
+        # self.verSplitter.setChildrenCollapsible(False)
+        # self.verSplitter.addWidget(self.tableView)
+        # self.verSplitter.addWidget(self.colorMapImageLabel)
+        #self.mainLayout.addWidget(self.verSplitter)
+
         self.mainLayout = QtWidgets.QVBoxLayout()
-        self.mainLayout.addWidget(self.verSplitter)
+        mar = 10
+        self.mainLayout.setContentsMargins(mar, mar, mar, mar)
+        self.mainLayout.addWidget(self.colorMapNameLabel)
+        self.mainLayout.addWidget(self.colorMapImageLabel)
+        self.mainLayout.addWidget(self.tableView)
         self.setLayout(self.mainLayout)
 
 
@@ -58,25 +73,11 @@ class CmLibBrowser(QtWidgets.QWidget):
         """ Updates the color map image label with the selected color map
         """
         logger.debug("Selected ColorMap: {}".format(colorMap))
-        rgba_arr = colorMap.argb_uint8_array
-
-        # Shuffle dimensions to BGRA from RGBA  (which what Qt uses for ARGB in little-endian mode)
-        # Do this by swapping index 0 and 2. If using bgra_arr = rgba_arr[:, [2, 1, 0, 3]], the
-        # resulting bgra_arr will be fortran-contiguous, which would have to fixed later on.
-        # Swapping dimensions is faster
-        bgra_arr = np.copy(rgba_arr)
-        bgra_arr[:, 0] = rgba_arr[:, 2]
-        bgra_arr[:, 2] = rgba_arr[:, 0]
-        del rgba_arr
-        imageArr = np.expand_dims(bgra_arr, 0)  # Add a dimension to get a N x 1 x 4 array
-
-        assert imageArr.flags['C_CONTIGUOUS'], "expected c_contigous array"
-
-        image = arrayToQImage(imageArr, share_memory=True)
-        labelSize = self.colorMapImageLabel.size()
-        image = image.scaled(labelSize.width()-2, labelSize.height()-2)
-        pixMap = QtGui.QPixmap.fromImage(image)
+        pixMap = makeColorBarPixMap(colorMap, width=256, height=25)
         self.colorMapImageLabel.setPixmap(pixMap)
+
+        md = colorMap.meta_data
+        self.colorMapNameLabel.setText(md.name)
 
 
     def sizeHint(self):
