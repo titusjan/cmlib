@@ -3,6 +3,7 @@
     "pretty_name": "OrRd",
     "file_name": "OrRd.csv",
     "category": "Sequential",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": true,
     "color_blind_friendly": false,

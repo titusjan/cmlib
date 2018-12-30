@@ -3,6 +3,7 @@
     "pretty_name": "Blues",
     "file_name": "Blues.csv",
     "category": "Sequential",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": true,
     "color_blind_friendly": false,

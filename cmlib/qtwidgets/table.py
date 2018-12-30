@@ -1,4 +1,5 @@
 """ Table model and view classes for examining the color map library
+
 """
 import logging
 
@@ -21,18 +22,19 @@ _ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
 class ColorLibModel(QtCore.QAbstractTableModel):
     """ A table model that maps ColorLib data as a table.
     """
-    HEADERS = ('Key', 'Catalog', 'Name', 'Category', 'Size',
+    HEADERS = ('Favorite', 'Key', 'Catalog', 'Name', 'Category', 'Size', 'Recommended',
                'P. Uniform', 'B & W', 'Color Blind', 'Isoluminant',
                'Tags', 'Notes')
 
-    HEADER_TOOL_TIPS = ('Key', 'Catalog', 'Name', 'Category', 'Size', 'Perceptually uniform.',
-                        'Black & white Friendly', 'Color Blind friendly', 'Isoluminant',
-                        'Tags', 'Notes')
+    HEADER_TOOL_TIPS = ('Favorite', 'Key', 'Catalog', 'Name', 'Category', 'Size', 'Recommended',
+                        'Perceptually uniform.', 'Black & white Friendly', 'Color Blind friendly',
+                        'Isoluminant', 'Tags', 'Notes')
 
-    (COL_KEY, COL_CATALOG, COL_NAME, COL_CATEGORY, COL_SIZE, COL_UNIF, COL_BW, COL_COLOR_BLIND,
-     COL_ISOLUMINANT, COL_TAGS, COL_NOTES) = range(len(HEADERS))
+    (COL_FAV, COL_KEY, COL_CATALOG, COL_NAME, COL_CATEGORY, COL_SIZE, COL_RECOMMENDED,
+     COL_UNIF, COL_BW, COL_COLOR_BLIND, COL_ISOLUMINANT, COL_TAGS, COL_NOTES) = range(len(HEADERS))
 
-    DEFAULT_WIDTHS = [175, 100, 120, 100, 50, _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
+    DEFAULT_WIDTHS = [_HW_BOOL, 175, 100, 120, 100, 50, _HW_BOOL + 10,
+                      _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
 
     def __init__(self, colorLib, parent=None):
         """ Constructor
@@ -139,6 +141,12 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             elif col == self.COL_NOTES:
                 return md.notes
 
+            elif col == self.COL_FAV:
+                return self.boolToStr(md.favorite)
+
+            elif col == self.COL_RECOMMENDED:
+                return self.boolToStr(md.recommended)
+
             else:
                 raise AssertionError("Unexpected column: {}".format(col))
 
@@ -147,7 +155,8 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             if col in (self.COL_KEY, self.COL_CATALOG, self.COL_NAME, self.COL_CATEGORY,
                        self.COL_TAGS, self.COL_NOTES):
                 return _ALIGN_STRING
-            elif col in (self.COL_ISOLUMINANT, self.COL_UNIF, self.COL_BW, self.COL_COLOR_BLIND):
+            elif col in (self.COL_FAV, self.COL_RECOMMENDED, self.COL_ISOLUMINANT,
+                         self.COL_UNIF, self.COL_BW, self.COL_COLOR_BLIND):
                 return _ALIGN_BOOLEAN
             elif col is self.COL_SIZE:
                 return _ALIGN_NUMBER
@@ -246,6 +255,7 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
             return None
 
 
+# TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py
 class ColorLibTableViewer(ToggleColumnTableView):
 
     sigColorMapSelected = pyqtSignal(ColorMap)

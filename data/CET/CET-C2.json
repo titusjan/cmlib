@@ -3,6 +3,7 @@
     "pretty_name": "CET-C2",
     "file_name": "CET-C2.csv",
     "category": "Cyclic",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,
     "color_blind_friendly": false,

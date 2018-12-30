@@ -32,6 +32,7 @@ class CmLibBrowser(QtWidgets.QWidget):
 
         self.tableView = ColorLibTableViewer(model=self._colorLibModel)
         self.tableView.sigColorMapSelected.connect(self._onColorMapSelected)
+        self.tableView.verticalHeader().show()
 
         self.colorMapNameLabel = QtWidgets.QLabel()
         self.colorMapNameLabel.setAlignment(Qt.AlignCenter)

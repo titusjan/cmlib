@@ -3,6 +3,7 @@
     "pretty_name": "CET-CBL2",
     "file_name": "CET-CBL2.csv",
     "category": "Sequential",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,
     "color_blind_friendly": true,

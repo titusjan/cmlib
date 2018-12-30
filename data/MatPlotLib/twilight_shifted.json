@@ -3,6 +3,7 @@
     "pretty_name": "Twilight-Shifted",
     "file_name": "twilight_shifted.csv",
     "category": "Cyclic",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

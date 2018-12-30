@@ -82,6 +82,7 @@ def create_files(names, category, bw_friendly=False):
         md.black_white_friendly = bw_friendly
 
         if name in ['viridis', 'plasma', 'inferno', 'magma', 'cividis']:
+            md.recommended = True
             md.perceptually_uniform = True
 
         if name in ['gist_rainbow', 'rainbow', 'jet', 'nipy_spectral']:

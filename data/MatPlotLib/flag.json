@@ -3,6 +3,7 @@
     "pretty_name": "Flag",
     "file_name": "flag.csv",
     "category": "Other",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

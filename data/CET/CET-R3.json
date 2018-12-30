@@ -3,6 +3,7 @@
     "pretty_name": "CET-R3",
     "file_name": "CET-R3.csv",
     "category": "Diverging",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,
     "color_blind_friendly": false,

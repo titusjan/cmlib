@@ -3,6 +3,7 @@
     "pretty_name": "Cividis",
     "file_name": "cividis.csv",
     "category": "Sequential",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": true,
     "color_blind_friendly": false,

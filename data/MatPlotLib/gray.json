@@ -3,6 +3,7 @@
     "pretty_name": "Gray",
     "file_name": "gray.csv",
     "category": "Sequential",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

@@ -3,6 +3,7 @@
     "pretty_name": "Broc",
     "file_name": "broc.csv",
     "category": "Diverging",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,
     "color_blind_friendly": false,

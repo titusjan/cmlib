@@ -3,6 +3,7 @@
     "pretty_name": "Seismic",
     "file_name": "seismic.csv",
     "category": "Diverging",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

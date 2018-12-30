@@ -3,6 +3,7 @@
     "pretty_name": "Imola",
     "file_name": "imola.csv",
     "category": "Sequential",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,
     "color_blind_friendly": false,

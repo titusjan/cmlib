@@ -61,6 +61,7 @@ def ingest_files():
         md = CmMetaData(name)
         md.file_name = data_file
         md.category = category
+        md.recommended = True
         md.perceptually_uniform = True
 
         md.black_white_friendly = name in ("oslo", "grayC", "turku")

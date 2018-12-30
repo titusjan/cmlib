@@ -3,6 +3,7 @@
     "pretty_name": "Tab20c",
     "file_name": "tab20c.csv",
     "category": "Qualitative",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

@@ -3,6 +3,7 @@
     "pretty_name": "Gist-Ncar",
     "file_name": "gist_ncar.csv",
     "category": "Other",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

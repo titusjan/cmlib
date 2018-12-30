@@ -106,6 +106,7 @@ def ingest_files():
         md.file_name = data_file
         md.category = category
         md.notes = notes
+        md.recommended = True
         md.perceptually_uniform = True
 
         if name.startswith('CET-L'):

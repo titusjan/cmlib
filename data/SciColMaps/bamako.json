@@ -3,6 +3,7 @@
     "pretty_name": "Bamako",
     "file_name": "bamako.csv",
     "category": "Sequential",
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,
     "color_blind_friendly": false,

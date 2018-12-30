@@ -3,6 +3,7 @@
     "pretty_name": "Gnuplot2",
     "file_name": "gnuplot2.csv",
     "category": "Other",
+    "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,

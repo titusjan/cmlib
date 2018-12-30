@@ -112,6 +112,7 @@ class CmMetaData(AbstractMetaData):
         self.name = name
         self.pretty_name = self.make_pretty_name(name)
         self.file_name = ""
+        self.recommended = False
         self.category = DataCategory.Other
         self.perceptually_uniform = False
         self.black_white_friendly = False
@@ -119,6 +120,7 @@ class CmMetaData(AbstractMetaData):
         self.isoluminant = False
         self.notes = ''
         self.tags = []
+        self.favorite = None # Not persistent unless explicitly set to True or False
 
 
     @classmethod
@@ -140,26 +142,36 @@ class CmMetaData(AbstractMetaData):
         self.pretty_name = dct['pretty_name']
         self.file_name = dct['file_name']
         self.category = DataCategory[dct['category']]
+        self.recommended = dct.get('recommended', False)
         self.perceptually_uniform = dct.get('perceptually_uniform', False)
         self.black_white_friendly = dct.get('black_white_friendly', False)
         self.color_blind_friendly = dct.get('color_blind_friendly', False)
         self.isoluminant = dct.get('isoluminant', False)
         self.notes = dct.get('notes', '')
         self.tags = dct.get('tags', [])
+        self.favorite = dct.get('favorite', False)
 
 
     def as_dict(self):
-        return OrderedDict(
+        dct = OrderedDict(
             name = self.name,
             pretty_name = self.pretty_name,
             file_name = self.file_name,
             category = self.category.name,
+            recommended = self.recommended,
             perceptually_uniform = self.perceptually_uniform,
             black_white_friendly = self.black_white_friendly,
             color_blind_friendly = self.color_blind_friendly,
             isoluminant = self.isoluminant,
             notes = self.notes,
             tags = self.tags)
+
+        # Only persistent if explicitly set to True or False
+        if self.favorite is not None:
+            dct['favorite'] = self.favorite
+
+        return dct
+
 
 
 class CatalogMetaData(AbstractMetaData):
