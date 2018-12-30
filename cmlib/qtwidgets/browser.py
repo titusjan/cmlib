@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt
 
 from cmlib.cmap import ColorLib, ColorMap
 from cmlib.misc import LOG_FMT, check_class
-from cmlib.qtwidgets.qimg import makeColorBarPixMap
+from cmlib.qtwidgets.qimg import makeColorBarPixmap
 from cmlib.qtwidgets.table import ColorLibModel, ColorLibTableViewer
 
 
@@ -72,7 +72,7 @@ class CmLibBrowser(QtWidgets.QWidget):
         """ Updates the color map image label with the selected color map
         """
         logger.debug("Selected ColorMap: {}".format(colorMap))
-        pixMap = makeColorBarPixMap(colorMap, width=256, height=25)
+        pixMap = makeColorBarPixmap(colorMap, width=256, height=25)
         self.colorMapImageLabel.setPixmap(pixMap)
 
         self.colorMapNameLabel.setText(colorMap.pretty_name)

@@ -4,7 +4,8 @@
 import logging
 import numpy as np
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import Qt
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +51,7 @@ def arrayToQImage(arr, share_memory=True, format = None):
 
 
 
-def makeColorBarPixMap(colorMap, width=None, height=None):
+def makeColorBarPixmap(colorMap, width=None, height=None, drawBorder=False):
     """ Creates a PixMap that visualizes the color map.
         This can be used in a QLabel to draw a legend.
 
@@ -80,4 +81,13 @@ def makeColorBarPixMap(colorMap, width=None, height=None):
 
         image = image.scaled(width, height)
 
-    return QtGui.QPixmap.fromImage(image)
+    pixmap = QtGui.QPixmap.fromImage(image)
+
+    if drawBorder:
+        painter = QtGui.QPainter(pixmap)
+        painter.setPen(Qt.black)
+        painter.setBrush(Qt.NoBrush)
+        painter.drawRect(QtCore.QRect(0, 0, width-1, height-1))
+        painter.end()
+
+    return pixmap

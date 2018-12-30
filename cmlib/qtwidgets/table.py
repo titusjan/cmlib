@@ -3,12 +3,13 @@
 import logging
 
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 
 from cmlib.cmap import ColorLib, ColorMap
-from cmlib.misc import LOG_FMT, check_class
+from cmlib.misc import check_class
 from cmlib.qtwidgets.toggle_column_mixin import ToggleColumnTableView
+from cmlib.qtwidgets.qimg import makeColorBarPixmap
 
 logger = logging.getLogger(__name__)
 
@@ -34,6 +35,13 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
         self._colorLib = colorLib
         self._colorMaps = colorLib.color_maps # used often
+
+        # Parameters that defined the legend bars. You should dataChanged on the column
+        # that contains the icons (COL_NAME) if you change these (or just reset the entire model.)
+        self.showIconBars = True
+        self.drawIconBarBorder = True
+        self.iconBarWidth = 64
+        self.iconBarHeight = 16
 
 
     @property
@@ -96,6 +104,15 @@ class ColorLibModel(QtCore.QAbstractTableModel):
                 colMap = self._colorMaps[row]
                 cmd = colMap.catalog_meta_data
                 return " ".join([cmd.name, cmd.version, cmd.date])
+
+        elif role == Qt.DecorationRole:
+            if col == self.COL_NAME and self.showIconBars:
+                colMap = self._colorMaps[row]
+                pixmap = makeColorBarPixmap(colMap,
+                                            width=self.iconBarWidth,
+                                            height=self.iconBarHeight,
+                                            drawBorder=self.drawIconBarBorder)
+                return pixmap
 
         return None
 
@@ -168,6 +185,10 @@ class ColorLibTableViewer(ToggleColumnTableView):
     sigColorMapSelected = pyqtSignal(ColorMap)
 
     def __init__(self, model=None, parent=None):
+        """ Constructor
+
+            :param ColorLibModel model: the item model
+        """
         super().__init__(parent=parent)
 
         check_class(model, ColorLibModel)
@@ -192,6 +213,11 @@ class ColorLibTableViewer(ToggleColumnTableView):
         for col, width in enumerate(ColorLibModel.DEFAULT_WIDTHS):
             treeHeader.resizeSection(col, width)
 
+        # Make the 'name' color wider because of the legend bar.
+        treeHeader.resizeSection(
+            ColorLibModel.COL_NAME,
+            self._sourceModel.iconBarWidth + ColorLibModel.DEFAULT_WIDTHS[ColorLibModel.COL_NAME])
+
         headerNames = ColorLibModel.HEADERS
         enabled = dict((name, True) for name in headerNames)
         enabled[headerNames[ColorLibModel.COL_NAME]] = False # Cannot be unchecked
@@ -214,7 +240,10 @@ class ColorLibTableViewer(ToggleColumnTableView):
         if not curIdx.isValid():
             return None
 
-        row = curIdx.row()
+        sourceIdx = self._proxyModel.mapToSource(curIdx)
+        assert sourceIdx.isValid(), "Source Index not valid"
+
+        row = sourceIdx.row()
         colorMap = self._sourceModel.colorLib.color_maps[row]
 
         logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))

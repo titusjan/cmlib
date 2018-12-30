@@ -42,15 +42,13 @@
         structures induced by the relief shading. The relief shading provides the structural
         information and the colours provide the data classification information.
 
-    Texture: useful as textures on 3D object or in combination with hill shading. This category
-        includes rainbow color maps.
-        color maps that have a medium to lightness (L*) over the complete range. Are
-        The ideal texture map has a constant lightness (so that the
-        rendered lightness is fully dependend on 3D shadows) and varies perceptually uniform
-        in hue. Most (older) rainbow maps do not meet these criteria.
+
+    Tags:
+        - GeoGraphical:
+        - 3D friendly: for use as textures on 3D objects and hill shading
 
 
-    Recommended
+    Recommended:
 
     Avoid the dreaded rainbow.
     https://github.com/djoshea/matlab-utils/blob/master/libs/perceptuallyImprovedColormaps/Rainbow%20Color%20Map%20-Still-%20Considered%20Harmful.pdf
