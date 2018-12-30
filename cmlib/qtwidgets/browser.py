@@ -44,7 +44,6 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.colorMapImageLabel.setScaledContents(True)
         self.colorMapImageLabel.setFrameStyle(QtWidgets.QFrame.Panel)
         self.colorMapImageLabel.setLineWidth(1)
-        self.colorMapNameLabel.setMinimumHeight(10)
 
         # Layout
         # self.verSplitter = QtWidgets.QSplitter(orientation=Qt.Vertical)

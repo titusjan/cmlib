@@ -112,7 +112,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         if orientation == Qt.Horizontal:
             return self.HEADERS[section]
         else:
-            return None #str(section)
+            return str(section)
 
 
 
@@ -158,7 +158,7 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
             if orientation == Qt.Horizontal:
                 return self.sourceModel().headerData(section, orientation, role)
             else:
-                return None # str(section + 1)
+                return str(section + 1)
         else:
             return None
 
@@ -183,6 +183,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
         self.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
 
+        self.verticalHeader().hide()
         treeHeader = self.horizontalHeader()
         treeHeader.setSectionsMovable(True)
         treeHeader.setStretchLastSection(True)
