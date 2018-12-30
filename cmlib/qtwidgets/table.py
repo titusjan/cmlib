@@ -21,19 +21,18 @@ _ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
 class ColorLibModel(QtCore.QAbstractTableModel):
     """ A table model that maps ColorLib data as a table.
     """
-    # TODO: size
-    HEADERS = ('Key', 'Catalog', 'Name', 'Category',
-               'P. Uniform', 'B&W', 'Color Blind', 'Isoluminant',
+    HEADERS = ('Key', 'Catalog', 'Name', 'Category', 'Size',
+               'P. Uniform', 'B & W', 'Color Blind', 'Isoluminant',
                'Tags', 'Notes')
 
-    HEADER_TOOL_TIPS = ('Key', 'Catalog', 'Name', 'Category', 'Perceptually uniform.',
+    HEADER_TOOL_TIPS = ('Key', 'Catalog', 'Name', 'Category', 'Size', 'Perceptually uniform.',
                         'Black & white Friendly', 'Color Blind friendly', 'Isoluminant',
                         'Tags', 'Notes')
 
-    (COL_KEY, COL_CATALOG, COL_NAME, COL_CATEGORY, COL_UNIF, COL_BW, COL_COLOR_BLIND,
+    (COL_KEY, COL_CATALOG, COL_NAME, COL_CATEGORY, COL_SIZE, COL_UNIF, COL_BW, COL_COLOR_BLIND,
      COL_ISOLUMINANT, COL_TAGS, COL_NOTES) = range(len(HEADERS))
 
-    DEFAULT_WIDTHS = [175, 100, 120, 100, _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
+    DEFAULT_WIDTHS = [175, 100, 120, 100, 50, _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
 
     def __init__(self, colorLib, parent=None):
         """ Constructor
@@ -119,6 +118,9 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             elif col == self.COL_CATEGORY:
                 return md.category.name
 
+            elif col == self.COL_SIZE:
+                return len(colMap.argb_uint8_array)
+
             elif col == self.COL_UNIF:
                 return self.boolToStr(md.perceptually_uniform)
 
@@ -147,6 +149,8 @@ class ColorLibModel(QtCore.QAbstractTableModel):
                 return _ALIGN_STRING
             elif col in (self.COL_ISOLUMINANT, self.COL_UNIF, self.COL_BW, self.COL_COLOR_BLIND):
                 return _ALIGN_BOOLEAN
+            elif col is self.COL_SIZE:
+                return _ALIGN_NUMBER
             else:
                 raise AssertionError("Unexpected column: {}".format(col))
 
@@ -285,6 +289,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
         enabled[headerNames[ColorLibModel.COL_NAME]] = False # Cannot be unchecked
         checked = dict((name, True) for name in headerNames)
         checked[headerNames[ColorLibModel.COL_KEY]] = False
+        checked[headerNames[ColorLibModel.COL_SIZE]] = False
         checked[headerNames[ColorLibModel.COL_NOTES]] = False
         self.addHeaderContextMenu(checked=checked, enabled=enabled, checkable={})
 
@@ -293,8 +298,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
         self._selectionModel = self.selectionModel()
         self._selectionModel.currentChanged.connect(self._onCurrentChanged)
 
-        self.sortByColumn(ColorLibModel.COL_NAME, Qt.AscendingOrder)
-
+        self.sortByColumn(ColorLibModel.COL_CATEGORY, Qt.AscendingOrder)
 
 
     def _onCurrentChanged(self, curIdx, _prevIdx):
