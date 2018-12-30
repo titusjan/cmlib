@@ -1,5 +1,6 @@
 {
     "name": "Paired",
+    "pretty_name": "Paired",
     "file_name": "Paired.csv",
     "category": "Qualitative",
     "perceptually_uniform": false,

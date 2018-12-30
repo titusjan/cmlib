@@ -1,5 +1,6 @@
 {
     "name": "magma",
+    "pretty_name": "Magma",
     "file_name": "magma.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

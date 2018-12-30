@@ -1,5 +1,6 @@
 {
     "name": "afmhot",
+    "pretty_name": "Afmhot",
     "file_name": "afmhot.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

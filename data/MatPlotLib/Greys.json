@@ -1,5 +1,6 @@
 {
     "name": "Greys",
+    "pretty_name": "Greys",
     "file_name": "Greys.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

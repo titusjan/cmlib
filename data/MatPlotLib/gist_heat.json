@@ -1,5 +1,6 @@
 {
     "name": "gist_heat",
+    "pretty_name": "Gist-Heat",
     "file_name": "gist_heat.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

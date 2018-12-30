@@ -1,5 +1,6 @@
 {
     "name": "cork",
+    "pretty_name": "Cork",
     "file_name": "cork.csv",
     "category": "Diverging",
     "perceptually_uniform": true,

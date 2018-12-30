@@ -1,5 +1,6 @@
 {
     "name": "Dark2",
+    "pretty_name": "Dark2",
     "file_name": "Dark2.csv",
     "category": "Qualitative",
     "perceptually_uniform": false,

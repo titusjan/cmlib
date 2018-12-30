@@ -1,5 +1,6 @@
 {
     "name": "PuOr",
+    "pretty_name": "PuOr",
     "file_name": "PuOr.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

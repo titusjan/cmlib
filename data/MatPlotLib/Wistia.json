@@ -1,5 +1,6 @@
 {
     "name": "Wistia",
+    "pretty_name": "Wistia",
     "file_name": "Wistia.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

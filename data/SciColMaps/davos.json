@@ -1,5 +1,6 @@
 {
     "name": "davos",
+    "pretty_name": "Davos",
     "file_name": "davos.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

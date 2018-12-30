@@ -1,5 +1,6 @@
 {
     "name": "gnuplot",
+    "pretty_name": "Gnuplot",
     "file_name": "gnuplot.csv",
     "category": "Other",
     "perceptually_uniform": false,

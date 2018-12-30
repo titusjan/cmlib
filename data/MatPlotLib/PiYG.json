@@ -1,5 +1,6 @@
 {
     "name": "PiYG",
+    "pretty_name": "PiYG",
     "file_name": "PiYG.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

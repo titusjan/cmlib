@@ -1,5 +1,6 @@
 {
     "name": "BuPu",
+    "pretty_name": "BuPu",
     "file_name": "BuPu.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

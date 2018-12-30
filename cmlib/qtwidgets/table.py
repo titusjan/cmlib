@@ -19,7 +19,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
     HEADERS = ['Key', 'Name', 'Catalog', 'Category']  # TODO: size
     (COL_KEY, COL_NAME, COL_CATALOG, COL_CATEGORY) = range(len(HEADERS))
 
-    DEFAULT_WIDTHS = [150, 150, 150, 150]
+    DEFAULT_WIDTHS = [175, 125, 125, 125]
 
     def __init__(self, colorLib, parent=None):
         """ Constructor
@@ -83,7 +83,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             if col == self.COL_KEY:
                 return colMap.key
             elif col == self.COL_NAME:
-                return md.name
+                return md.pretty_name
             elif col == self.COL_CATALOG:
                 return colMap.catalog_meta_data.key
             elif col == self.COL_CATEGORY:

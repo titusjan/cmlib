@@ -1,5 +1,6 @@
 {
     "name": "coolwarm",
+    "pretty_name": "Coolwarm",
     "file_name": "coolwarm.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

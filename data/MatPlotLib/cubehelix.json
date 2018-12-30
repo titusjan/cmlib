@@ -1,5 +1,6 @@
 {
     "name": "cubehelix",
+    "pretty_name": "Cubehelix",
     "file_name": "cubehelix.csv",
     "category": "Other",
     "perceptually_uniform": false,

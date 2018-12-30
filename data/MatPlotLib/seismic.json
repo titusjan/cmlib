@@ -1,5 +1,6 @@
 {
     "name": "seismic",
+    "pretty_name": "Seismic",
     "file_name": "seismic.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

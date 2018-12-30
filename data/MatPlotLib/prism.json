@@ -1,5 +1,6 @@
 {
     "name": "prism",
+    "pretty_name": "Prism",
     "file_name": "prism.csv",
     "category": "Other",
     "perceptually_uniform": false,

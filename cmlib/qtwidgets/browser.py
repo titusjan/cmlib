@@ -76,8 +76,7 @@ class CmLibBrowser(QtWidgets.QWidget):
         pixMap = makeColorBarPixMap(colorMap, width=256, height=25)
         self.colorMapImageLabel.setPixmap(pixMap)
 
-        md = colorMap.meta_data
-        self.colorMapNameLabel.setText(md.name)
+        self.colorMapNameLabel.setText(colorMap.pretty_name)
 
 
     def sizeHint(self):

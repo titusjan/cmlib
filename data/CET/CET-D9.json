@@ -1,5 +1,6 @@
 {
     "name": "CET-D9",
+    "pretty_name": "CET-D9",
     "file_name": "CET-D9.csv",
     "category": "Diverging",
     "perceptually_uniform": true,

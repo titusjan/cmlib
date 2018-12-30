@@ -1,5 +1,6 @@
 {
     "name": "RdBu",
+    "pretty_name": "RdBu",
     "file_name": "RdBu.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

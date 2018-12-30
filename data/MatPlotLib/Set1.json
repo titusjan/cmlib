@@ -1,5 +1,6 @@
 {
     "name": "Set1",
+    "pretty_name": "Set1",
     "file_name": "Set1.csv",
     "category": "Qualitative",
     "perceptually_uniform": false,

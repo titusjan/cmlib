@@ -112,6 +112,7 @@ class CmMetaData(AbstractMetaData):
 
     def __init__(self, name=""):
         self.name = name
+        self.pretty_name = self.make_pretty_name(name)
         self.file_name = ""
         self.category = DataCategory.Other
         self.perceptually_uniform = False
@@ -122,8 +123,23 @@ class CmMetaData(AbstractMetaData):
         self.tags = []
 
 
+    @classmethod
+    def make_pretty_name(cls, name):
+        """ Replaces underscore with hyphens. Capitalizes the first letter and after hyphens.
+        """
+        partsIn = name.replace('_', '-').split('-')
+        partsOut = []
+
+        for part in partsIn:
+            # We cant user string.capitalize because it will make lower case of some letters
+            partsOut.append(part[:1].upper() + part[1:])
+
+        return "-".join(partsOut)
+
+
     def from_dict(self, dct):
         self.name = dct['name']
+        self.pretty_name = dct['pretty_name']
         self.file_name = dct['file_name']
         self.category = DataCategory[dct['category']]
         self.perceptually_uniform = dct.get('perceptually_uniform', False)
@@ -137,6 +153,7 @@ class CmMetaData(AbstractMetaData):
     def as_dict(self):
         return OrderedDict(
             name = self.name,
+            pretty_name = self.pretty_name,
             file_name = self.file_name,
             category = self.category.name,
             perceptually_uniform = self.perceptually_uniform,
@@ -161,6 +178,7 @@ class CatalogMetaData(AbstractMetaData):
         self.url = ""
         self.doi = ""  # Digital Object Identifier (e.g. from Zenodo)
         self.license = ""
+
 
     def from_dict(self, dct):
         self.key = dct['key']
@@ -191,6 +209,7 @@ class ColorMap():
     """
     def __init__(self, meta_data, catalog_meta_data, rgb_file_name=None):
         self._key = None
+        self._prettyName = None
         self._rgb_float_array = None
         self._argb_uint8_array = None
         self._meta_data = None
@@ -200,21 +219,29 @@ class ColorMap():
         self.meta_data = meta_data
         self.catalog_meta_data = catalog_meta_data
 
-
     def __repr__(self):
         return "<ColorMap {}>".format(self.key)
+
+
+    @property
+    def pretty_name(self):
+        """ The pretty name from the metadata."""
+        return self.meta_data.pretty_name
 
 
     @property
     def key(self):
         """ Uniquely identifies the map."""
         if self._key is None:
-            self._key = "{}/{}".format(self.catalog_meta_data.key, self.meta_data.name)
+            # Using pretty_name which all start with capitals. This yields better sorting.
+            self._key = "{}/{}".format(self.catalog_meta_data.key, self.meta_data.pretty_name)
         return self._key
+
 
     @property
     def meta_data(self):
         return self._meta_data
+
 
     @meta_data.setter
     def meta_data(self, md):
@@ -222,9 +249,11 @@ class ColorMap():
         self._meta_data = md
         self._key = None # invalidate cache
 
+
     @property
     def catalog_meta_data(self):
         return self._catalog_meta_data
+
 
     @catalog_meta_data.setter
     def catalog_meta_data(self, cmd):

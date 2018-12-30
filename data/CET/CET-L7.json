@@ -1,5 +1,6 @@
 {
     "name": "CET-L7",
+    "pretty_name": "CET-L7",
     "file_name": "CET-L7.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

@@ -1,5 +1,6 @@
 {
     "name": "vik",
+    "pretty_name": "Vik",
     "file_name": "vik.csv",
     "category": "Diverging",
     "perceptually_uniform": true,

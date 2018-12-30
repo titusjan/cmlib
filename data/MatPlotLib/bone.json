@@ -1,5 +1,6 @@
 {
     "name": "bone",
+    "pretty_name": "Bone",
     "file_name": "bone.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

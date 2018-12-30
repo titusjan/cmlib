@@ -1,5 +1,6 @@
 {
     "name": "brg",
+    "pretty_name": "Brg",
     "file_name": "brg.csv",
     "category": "Other",
     "perceptually_uniform": false,

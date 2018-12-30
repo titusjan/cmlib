@@ -1,5 +1,6 @@
 {
     "name": "jet",
+    "pretty_name": "Jet",
     "file_name": "jet.csv",
     "category": "Other",
     "perceptually_uniform": false,

@@ -1,5 +1,6 @@
 {
     "name": "broc",
+    "pretty_name": "Broc",
     "file_name": "broc.csv",
     "category": "Diverging",
     "perceptually_uniform": true,

@@ -1,5 +1,6 @@
 {
     "name": "bilbao",
+    "pretty_name": "Bilbao",
     "file_name": "bilbao.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

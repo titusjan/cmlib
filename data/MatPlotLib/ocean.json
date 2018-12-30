@@ -1,5 +1,6 @@
 {
     "name": "ocean",
+    "pretty_name": "Ocean",
     "file_name": "ocean.csv",
     "category": "Other",
     "perceptually_uniform": false,

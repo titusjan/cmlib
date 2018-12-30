@@ -1,5 +1,6 @@
 {
     "name": "binary",
+    "pretty_name": "Binary",
     "file_name": "binary.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

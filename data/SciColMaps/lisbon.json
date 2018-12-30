@@ -1,5 +1,6 @@
 {
     "name": "lisbon",
+    "pretty_name": "Lisbon",
     "file_name": "lisbon.csv",
     "category": "Diverging",
     "perceptually_uniform": true,

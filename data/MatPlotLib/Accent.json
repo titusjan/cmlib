@@ -1,5 +1,6 @@
 {
     "name": "Accent",
+    "pretty_name": "Accent",
     "file_name": "Accent.csv",
     "category": "Qualitative",
     "perceptually_uniform": false,

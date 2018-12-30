@@ -1,5 +1,6 @@
 {
     "name": "spring",
+    "pretty_name": "Spring",
     "file_name": "spring.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

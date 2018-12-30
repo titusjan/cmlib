@@ -1,5 +1,6 @@
 {
     "name": "CET-CBL1",
+    "pretty_name": "CET-CBL1",
     "file_name": "CET-CBL1.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

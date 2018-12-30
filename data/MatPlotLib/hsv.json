@@ -1,5 +1,6 @@
 {
     "name": "hsv",
+    "pretty_name": "Hsv",
     "file_name": "hsv.csv",
     "category": "Cyclic",
     "perceptually_uniform": false,

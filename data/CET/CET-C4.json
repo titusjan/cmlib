@@ -1,5 +1,6 @@
 {
     "name": "CET-C4",
+    "pretty_name": "CET-C4",
     "file_name": "CET-C4.csv",
     "category": "Cyclic",
     "perceptually_uniform": true,

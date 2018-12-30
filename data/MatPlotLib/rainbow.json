@@ -1,5 +1,6 @@
 {
     "name": "rainbow",
+    "pretty_name": "Rainbow",
     "file_name": "rainbow.csv",
     "category": "Other",
     "perceptually_uniform": false,

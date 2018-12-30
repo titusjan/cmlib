@@ -1,5 +1,6 @@
 {
     "name": "twilight_shifted",
+    "pretty_name": "Twilight-Shifted",
     "file_name": "twilight_shifted.csv",
     "category": "Cyclic",
     "perceptually_uniform": false,

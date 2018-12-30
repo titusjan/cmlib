@@ -1,5 +1,6 @@
 {
     "name": "CET-CBTC2",
+    "pretty_name": "CET-CBTC2",
     "file_name": "CET-CBTC2.csv",
     "category": "Cyclic",
     "perceptually_uniform": true,

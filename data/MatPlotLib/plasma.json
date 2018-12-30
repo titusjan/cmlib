@@ -1,5 +1,6 @@
 {
     "name": "plasma",
+    "pretty_name": "Plasma",
     "file_name": "plasma.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

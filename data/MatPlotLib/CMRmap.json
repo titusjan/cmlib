@@ -1,5 +1,6 @@
 {
     "name": "CMRmap",
+    "pretty_name": "CMRmap",
     "file_name": "CMRmap.csv",
     "category": "Other",
     "perceptually_uniform": false,

@@ -1,5 +1,6 @@
 {
     "name": "gist_gray",
+    "pretty_name": "Gist-Gray",
     "file_name": "gist_gray.csv",
     "category": "Sequential",
     "perceptually_uniform": false,

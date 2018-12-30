@@ -1,5 +1,6 @@
 {
     "name": "imola",
+    "pretty_name": "Imola",
     "file_name": "imola.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

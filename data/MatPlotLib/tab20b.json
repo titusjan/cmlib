@@ -1,5 +1,6 @@
 {
     "name": "tab20b",
+    "pretty_name": "Tab20b",
     "file_name": "tab20b.csv",
     "category": "Qualitative",
     "perceptually_uniform": false,

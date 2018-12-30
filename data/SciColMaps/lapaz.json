@@ -1,5 +1,6 @@
 {
     "name": "lapaz",
+    "pretty_name": "Lapaz",
     "file_name": "lapaz.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

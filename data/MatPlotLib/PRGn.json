@@ -1,5 +1,6 @@
 {
     "name": "PRGn",
+    "pretty_name": "PRGn",
     "file_name": "PRGn.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

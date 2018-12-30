@@ -1,5 +1,6 @@
 {
     "name": "nuuk",
+    "pretty_name": "Nuuk",
     "file_name": "nuuk.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

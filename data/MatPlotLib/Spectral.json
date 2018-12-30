@@ -1,5 +1,6 @@
 {
     "name": "Spectral",
+    "pretty_name": "Spectral",
     "file_name": "Spectral.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

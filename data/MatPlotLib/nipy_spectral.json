@@ -1,5 +1,6 @@
 {
     "name": "nipy_spectral",
+    "pretty_name": "Nipy-Spectral",
     "file_name": "nipy_spectral.csv",
     "category": "Other",
     "perceptually_uniform": false,

@@ -1,5 +1,6 @@
 {
     "name": "roma",
+    "pretty_name": "Roma",
     "file_name": "roma.csv",
     "category": "Sequential",
     "perceptually_uniform": true,

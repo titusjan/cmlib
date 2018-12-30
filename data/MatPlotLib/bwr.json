@@ -1,5 +1,6 @@
 {
     "name": "bwr",
+    "pretty_name": "Bwr",
     "file_name": "bwr.csv",
     "category": "Diverging",
     "perceptually_uniform": false,

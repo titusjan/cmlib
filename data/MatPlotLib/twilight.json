@@ -1,5 +1,6 @@
 {
     "name": "twilight",
+    "pretty_name": "Twilight",
     "file_name": "twilight.csv",
     "category": "Cyclic",
     "perceptually_uniform": false,

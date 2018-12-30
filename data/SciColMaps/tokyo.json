@@ -1,5 +1,6 @@
 {
     "name": "tokyo",
+    "pretty_name": "Tokyo",
     "file_name": "tokyo.csv",
     "category": "Sequential",
     "perceptually_uniform": true,
