@@ -116,6 +116,52 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
 
 
+class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
+    """ Proxy model that overrides the sorting.
+    """
+    def __init__(self, parent):
+        super(ColorLibProxyModel, self).__init__(parent)
+
+
+    def lessThan(self, leftIndex, rightIndex):
+        """ Returns true if the value of the item referred to by the given index left is less than
+            the value of the item referred to by the given index right, otherwise returns false.
+
+            Sorts first by the desired column and uses the Key as tie breaker
+        """
+        sourceModel = self.sourceModel()
+        leftData  = sourceModel.data(leftIndex)
+        rightData = sourceModel.data(rightIndex)
+
+        leftKeyIndex = sourceModel.index(leftIndex.row(), ColorLibModel.COL_KEY)
+        rightKeyIndex = sourceModel.index(rightIndex.row(), ColorLibModel.COL_KEY)
+
+        leftKey  = sourceModel.data(leftKeyIndex)
+        rightKey = sourceModel.data(rightKeyIndex)
+
+        logger.debug("lessThan: {} <? {} = {}".format(
+            (leftData, leftKey), (rightData, rightKey),
+            (leftData, leftKey) < (rightData, rightKey)
+        ))
+
+        return (leftData, leftKey) < (rightData, rightKey)
+
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        """ Returns the data for the given role and section in the header with the
+            specified orientation.
+
+            Needed to override the vertical header to always be increasing.
+        """
+        # Take horizontal headers from the source model but override the vertical header
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return self.sourceModel().headerData(section, orientation, role)
+            else:
+                return None # str(section + 1)
+        else:
+            return None
+
 
 class ColorLibTableViewer(ToggleColumnTableView):
 
@@ -125,9 +171,12 @@ class ColorLibTableViewer(ToggleColumnTableView):
         super().__init__(parent=parent)
 
         check_class(model, ColorLibModel)
-        self._model = model
-        self.setModel(model)
+        self._sourceModel = model
+        self._proxyModel = ColorLibProxyModel(parent=self)
+        self._proxyModel.setSourceModel(self._sourceModel)
+        self.setModel(self._proxyModel)
 
+        self.setSortingEnabled(True)
         self.setShowGrid(False)
         self.setCornerButtonEnabled(True)
         self.setAlternatingRowColors(True)
@@ -154,6 +203,9 @@ class ColorLibTableViewer(ToggleColumnTableView):
         self._selectionModel = self.selectionModel()
         self._selectionModel.currentChanged.connect(self._onCurrentChanged)
 
+        self.sortByColumn(ColorLibModel.COL_NAME, Qt.AscendingOrder)
+
+
 
     def _onCurrentChanged(self, curIdx, _prevIdx):
         """ Emits sigColorMapSelected if a valid row has been selected
@@ -162,7 +214,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
             return None
 
         row = curIdx.row()
-        colorMap = self._model.colorLib.color_maps[row]
+        colorMap = self._sourceModel.colorLib.color_maps[row]
 
         logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))
         self.sigColorMapSelected.emit(colorMap)

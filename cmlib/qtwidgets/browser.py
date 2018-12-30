@@ -100,6 +100,7 @@ def main():
     win = CmLibBrowser(colorLib=colorLib)
     win.show()
     win.raise_()
+    win.setGeometry(10, 10, 800, 350)
     app.exec_()
 
 
