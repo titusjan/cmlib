@@ -35,6 +35,7 @@ Scientific Colour-Maps, Crameri, F. (https://peterkovesi.com/projects/colourmaps
 Categories by CmLib
 
 DataCategory:
+    - Sequential
     - Diverging
     - Qualitative
     - Cyclic
@@ -47,9 +48,11 @@ Remarks:
 Perceptually uniform
 BW-friendly (strict increasing lightness)
 Texture friendly Isoluminant (constant lightness)
-
+Color blind friendly
 
 
 Recommended:
-    Either isoluminant, perceptually uniform or BW-friendly
+    Typically designed to be perceptually uniform, black & white or color blind friendly.
+
+Favorites    
     

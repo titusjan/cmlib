@@ -96,6 +96,11 @@ def main():
     colorLib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
     colorLib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
 
+    # Set some favorites to test
+    for colorMap in colorLib.color_maps:
+        if colorMap.key in ['SciColMaps/Oleron', 'CET/CET-CBL1', 'MatPlotLib/Cubehelix']:
+            colorMap.meta_data.favorite = True
+
     win = CmLibBrowser(colorLib=colorLib)
     win.show()
     win.raise_()
@@ -103,6 +108,10 @@ def main():
     win.move(10, 10)
     app.exec_()
 
+    logger.debug("Favorites:")
+    for colorMap in colorLib.color_maps:
+        if colorMap.meta_data.favorite:
+            logger.debug("  {}".format(colorMap.meta_data.name))
 
 
 if __name__ == "__main__":

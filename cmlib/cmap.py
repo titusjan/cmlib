@@ -1,5 +1,11 @@
 """ Classes to represent color maps and meta data from various sources in uniform way.
 
+
+    How to pick a good color map:
+        1) Select a map category depending on your data: sequenitial, diverging, cyclic
+        2) Select a good quality map.
+        3) Select a map for your domain and application. Geographical, textures.
+
     Color maps are divided in categories. Which category is the best depends on the data that
     you want to visualise. There is no consensus on the different categories. The categories here
     are based on Peter Kovesi's (https://peterkovesi.com/projects/colourmaps/), the MatPlotLib
@@ -28,13 +34,12 @@
             in hue. Therefore the Sequential maps should be preferred to visualize ordered data.
 
 
+    2) Quality:
+
     Perceptually uniform: maps in which equal steps in data are perceived as equal steps in the
         color space. For many applications, a perceptually uniform colormap is the best choice.
 
-    Black & white friendly: color maps where the lightness strictly increases over the range.
-        Only sequential maps can be bw-friendly, but not all sequential maps are.
-
-    Isoluminant: colour maps are constructed from colours of equal perceptual lightness. These
+    Isoluminant: color maps are constructed from colors of equal perceptual lightness. These
         colour maps are designed for use with relief shading. On their own these colour maps are
         not very useful because features in the data are very hard to discern. However, when used
         in conjunction with relief shading their constant lightness means that the colour map does
@@ -42,16 +47,20 @@
         structures induced by the relief shading. The relief shading provides the structural
         information and the colours provide the data classification information.
 
+    Black & white friendly: color maps where the lightness strictly increases over the range.
+        Only sequential maps can be bw-friendly, but not all sequential maps are.
 
+    Colorblind friendly: limited to colors that can be distinguished by most color blind people.
+
+    Recommended:
+        A color map that has been design with quality in mind. So not the dreaded rainbow.
+        https://github.com/djoshea/matlab-utils/blob/master/libs/perceptuallyImprovedColormaps/Rainbow%20Color%20Map%20-Still-%20Considered%20Harmful.pdf
+
+    3) Domain and application.
     Tags:
         - GeoGraphical:
         - 3D friendly: for use as textures on 3D objects and hill shading
 
-
-    Recommended:
-
-    Avoid the dreaded rainbow.
-    https://github.com/djoshea/matlab-utils/blob/master/libs/perceptuallyImprovedColormaps/Rainbow%20Color%20Map%20-Still-%20Considered%20Harmful.pdf
 """
 import abc
 import enum

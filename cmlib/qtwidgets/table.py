@@ -19,6 +19,7 @@ _ALIGN_STRING = Qt.AlignVCenter | Qt.AlignLeft
 _ALIGN_NUMBER = Qt.AlignVCenter | Qt.AlignRight
 _ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
 
+
 class ColorLibModel(QtCore.QAbstractTableModel):
     """ A table model that maps ColorLib data as a table.
     """
@@ -35,6 +36,8 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
     DEFAULT_WIDTHS = [_HW_BOOL, 175, 100, 120, 100, 50, _HW_BOOL + 10,
                       _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
+
+    SORT_ROLE = Qt.UserRole
 
     def __init__(self, colorLib, parent=None):
         """ Constructor
@@ -61,7 +64,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         # Check mark for boolean columns
         #   ✓ checkmark Unicode: U+2713, UTF-8: E2 9C 93
         #   ✔︎ Heavy check mark Unicode: U+2714 U+FE0E, UTF-8: E2 9C 94 EF B8 8E
-        self.checkMarkChar = '✓︎'
+        self.checkmarkChar = '✓︎'
 
 
     @property
@@ -83,14 +86,11 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         return len(self.HEADERS)
 
 
-    def flags(self, index):
-        """ Returns the item flags for the given index
-        """
-        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+    def _posFromIndex(self, index):
+        """ Returns the (row, col) given the index
 
-
-    def data(self, index, role=Qt.DisplayRole):
-        """ Returns the data stored under the given role for the item referred to by the index.
+            Returns None if the index is invalid or row or column are negative or larger than the
+            number of rows/cols
         """
         if not index.isValid():
             return None
@@ -103,8 +103,45 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         if row < 0 or row >= self.rowCount():
             return None
 
-        if role == Qt.DisplayRole or role == Qt.EditRole:
+        return row, col
 
+
+    def flags(self, index):
+        """ Returns the item flags for the given index
+        """
+        pos = self._posFromIndex(index)
+        if pos is None:
+            return None
+        else:
+            row, col = pos
+
+        result = Qt.ItemIsEnabled | Qt.ItemIsSelectable
+
+        if col == self.COL_FAV:
+            result = result | Qt.ItemIsUserCheckable | Qt.ItemIsEditable
+        return result
+
+
+    def _boolToData(self, value, role=Qt.DisplayRole):
+        """ If role is the display roel it shows a checkmark if value is True, the empty string
+            otherwise. For other roles it just returns the boolean value
+        """
+        if role == Qt.DisplayRole:
+            return self.checkmarkChar if value else ""
+        else:
+            return bool(value) # convert to bool just in case
+
+
+    def data(self, index, role=Qt.DisplayRole):
+        """ Returns the data stored under the given role for the item referred to by the index.
+        """
+        pos = self._posFromIndex(index)
+        if pos is None:
+            return None
+        else:
+            row, col = pos
+
+        if role == Qt.DisplayRole or role == self.SORT_ROLE:
             colMap = self._colorMaps[row]
             md = colMap.meta_data
 
@@ -124,16 +161,16 @@ class ColorLibModel(QtCore.QAbstractTableModel):
                 return len(colMap.argb_uint8_array)
 
             elif col == self.COL_UNIF:
-                return self.boolToStr(md.perceptually_uniform)
+                return self._boolToData(md.perceptually_uniform)
 
             elif col == self.COL_BW:
-                return self.boolToStr(md.black_white_friendly)
+                return self._boolToData(md.black_white_friendly)
 
             elif col == self.COL_COLOR_BLIND:
-                return self.boolToStr(md.color_blind_friendly)
+                return self._boolToData(md.color_blind_friendly)
 
             elif col == self.COL_ISOLUMINANT:
-                return self.boolToStr(md.isoluminant)
+                return self._boolToData(md.isoluminant)
 
             elif col == self.COL_TAGS:
                 return ", ".join(md.tags)
@@ -142,16 +179,28 @@ class ColorLibModel(QtCore.QAbstractTableModel):
                 return md.notes
 
             elif col == self.COL_FAV:
-                return self.boolToStr(md.favorite)
+                if role == Qt.DisplayRole:
+                    return "" # A checkbox will be shown instead
+                else:
+                    return md.favorite
 
             elif col == self.COL_RECOMMENDED:
-                return self.boolToStr(md.recommended)
+                return self._boolToData(md.recommended)
 
             else:
                 raise AssertionError("Unexpected column: {}".format(col))
 
-        elif role == Qt.TextAlignmentRole:
+        elif role == Qt.CheckStateRole:
+            colMap = self._colorMaps[row]
+            isFav = colMap.meta_data.favorite
 
+            if col == self.COL_FAV:
+                if isFav:
+                    return Qt.Checked
+                else:
+                    return Qt.Unchecked
+
+        elif role == Qt.TextAlignmentRole:
             if col in (self.COL_KEY, self.COL_CATALOG, self.COL_NAME, self.COL_CATEGORY,
                        self.COL_TAGS, self.COL_NOTES):
                 return _ALIGN_STRING
@@ -181,10 +230,34 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         return None
 
 
-    def boolToStr(self, value):
-        """ Shows a checkmark if value is True, the empty string otherwise
+    def setData(self, index, value, role=Qt.EditRole):
+        """ Sets the data of the item at the index to the given value.
+            Emits the dataChanged signal.
         """
-        return self.checkMarkChar if value else ""
+        logger.debug("setDataCalled(value={} ({}), role={}".format(value, type(value), role))
+
+        if role != Qt.CheckStateRole:
+            return 0
+
+        pos = self._posFromIndex(index)
+        if pos is None:
+            return 0
+        else:
+            row, col = pos
+
+        logger.debug("setDataCalled(row={}, col={}, value={}".format(row, col, value))
+
+        if col != self.COL_FAV:
+            return 0
+
+        colMap = self._colorMaps[row]
+        md = colMap.meta_data
+        md.favorite = (value == Qt.Checked)
+
+        logger.debug("{} emitting dataChanged signal for cell: ({}, {})".format(self, row, col))
+        self.dataChanged.emit(index, index)
+
+        return True
 
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
@@ -222,14 +295,14 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
             Sorts first by the desired column and uses the Key as tie breaker
         """
         sourceModel = self.sourceModel()
-        leftData  = sourceModel.data(leftIndex)
-        rightData = sourceModel.data(rightIndex)
+        leftData  = sourceModel.data(leftIndex, role=ColorLibModel.SORT_ROLE)
+        rightData = sourceModel.data(rightIndex, role=ColorLibModel.SORT_ROLE)
 
         leftKeyIndex = sourceModel.index(leftIndex.row(), ColorLibModel.COL_KEY)
         rightKeyIndex = sourceModel.index(rightIndex.row(), ColorLibModel.COL_KEY)
 
-        leftKey  = sourceModel.data(leftKeyIndex)
-        rightKey = sourceModel.data(rightKeyIndex)
+        leftKey  = sourceModel.data(leftKeyIndex, role=ColorLibModel.SORT_ROLE)
+        rightKey = sourceModel.data(rightKeyIndex, role=ColorLibModel.SORT_ROLE)
 
         logger.debug("lessThan: {} <? {} = {}".format(
             (leftData, leftKey), (rightData, rightKey),
