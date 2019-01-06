@@ -365,17 +365,20 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
 
         colMap = self.sourceModel().colorLib.color_maps[sourceRow]
         md = colMap.meta_data
+        catMd = colMap.catalog_meta_data
 
-        accept = False
-        for attrName, desiredValue in self._filters[ColorLibProxyModel.FT_CATEGORY]:
-            actualValue = getattr(md, attrName)
-            accept = accept or (actualValue == desiredValue)
+        acceptCatalog = any([catMd.name == desired for _, desired in
+                             self._filters[ColorLibProxyModel.FT_CATALOG]])
 
-        for attrName, desiredValue in self._filters[ColorLibProxyModel.FT_PROP]:
-            actualValue = getattr(md, attrName)
-            accept = accept and (actualValue == desiredValue)
+        acceptCategory = any([getattr(md, attrName) == desired for attrName, desired in
+                              self._filters[ColorLibProxyModel.FT_CATEGORY]])
 
-        logger.debug("filterAcceptsRow = {}: {} {}".format(accept, md.pretty_name, self._filters[ColorLibProxyModel.FT_CATEGORY]))
+        acceptProps = all([getattr(md, attrName) == desired for attrName, desired in
+                           self._filters[ColorLibProxyModel.FT_PROP]])  # Note test for all
+
+        accept = all([acceptCatalog, acceptCategory, acceptProps])
+
+        logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, md.pretty_name))
         return accept
 
 

@@ -38,9 +38,17 @@ class FilterForm(QtWidgets.QWidget):
         self._colorLib = self._sourceModel.colorLib
         colMaps = self._colorLib.color_maps
 
-        # self.catalogsGroupBox = QtWidgets.QGroupBox("Catalogs")
-        # self.catalogsLayout = QtWidgets.QVBoxLayout(self.catalogsGroupBox)
-        # allCataglogs = uniqueSort([cm.])
+        self.catalogsGroupBox = QtWidgets.QGroupBox("Catalogs")
+        self.catalogsLayout = QtWidgets.QVBoxLayout(self.catalogsGroupBox)
+        allCataglogs = uniqueSort([cm.catalog_meta_data.name for cm in colMaps])
+
+        for catalog in allCataglogs:
+            checkBox = self._createFilterCheckbox(
+                ColorLibProxyModel.FT_CATALOG, None, catalog)
+            checkBox.setText(catalog)
+            checkBox.setChecked(True)
+            self._defaultOnCheckboxes.append(checkBox)
+            self.catalogsLayout.addWidget(checkBox)
 
         self.categoriesGroupBox = QtWidgets.QGroupBox("Categories")
         self.categoriesLayout = QtWidgets.QVBoxLayout(self.categoriesGroupBox)
@@ -73,6 +81,7 @@ class FilterForm(QtWidgets.QWidget):
         self.mainLayout = QtWidgets.QVBoxLayout()
         #self.mainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.mainLayout)
+        self.mainLayout.addWidget(self.catalogsGroupBox)
         self.mainLayout.addWidget(self.categoriesGroupBox)
         self.mainLayout.addWidget(self.showOnlyGroupBox)
         self.mainLayout.addStretch()
