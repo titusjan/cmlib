@@ -78,9 +78,8 @@ class FilterForm(QtWidgets.QWidget):
         """ Creates checkbox that filters on attrName with the and-operator.
         """
         checkBox = QtWidgets.QCheckBox(text)
-        checkBox.stateChanged.connect(
-            lambda state: self._proxyModel.toggleAndFilter(attrName, desiredValue,
-                                                           _isChecked(state)))
+        checkBox.toggled.connect(
+            lambda checked: self._proxyModel.toggleAndFilter(attrName, desiredValue, checked))
         return checkBox
 
     # TODO: used toggled
@@ -89,9 +88,8 @@ class FilterForm(QtWidgets.QWidget):
             The checkbox will be unchecked by default (filter off)
         """
         checkBox = QtWidgets.QCheckBox(text)
-        checkBox.stateChanged.connect(
-            lambda state: self._proxyModel.toggleOrFilter(attrName, desiredValue,
-                                                          _isChecked(state)))
+        checkBox.toggled.connect(
+            lambda checked: self._proxyModel.toggleOrFilter(attrName, desiredValue, checked))
         checkBox.setChecked(True)
         return checkBox
 
