@@ -367,7 +367,7 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         md = colMap.meta_data
         catMd = colMap.catalog_meta_data
 
-        acceptCatalog = any([catMd.name == desired for _, desired in
+        acceptCatalog = any([catMd.key == desired for _, desired in
                              self._filters[ColorLibProxyModel.FT_CATALOG]])
 
         acceptCategory = any([getattr(md, attrName) == desired for attrName, desired in
