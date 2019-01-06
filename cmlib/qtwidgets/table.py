@@ -287,6 +287,25 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
     def __init__(self, parent):
         super(ColorLibProxyModel, self).__init__(parent)
 
+        self._andFilters = {}
+        #self._andFilters = {'favorite': True}
+
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        """ Returns the data for the given role and section in the header with the
+            specified orientation.
+
+            Needed to override the vertical header to always be increasing.
+        """
+        # Take horizontal headers from the source model but override the vertical header
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return self.sourceModel().headerData(section, orientation, role)
+            else:
+                return str(section + 1)
+        else:
+            return None
+
 
     def lessThan(self, leftIndex, rightIndex):
         """ Returns true if the value of the item referred to by the given index left is less than
@@ -312,20 +331,36 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         return (leftData, leftKey) < (rightData, rightKey)
 
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        """ Returns the data for the given role and section in the header with the
-            specified orientation.
-
-            Needed to override the vertical header to always be increasing.
+    def toggleAndFilter(self, attrName, isFilterAdded):
+        """ Adds or removes an 'And' filter (depending on isFilterAdded).
+            Rows are accept if all of the metadata attributes have their desired value.
         """
-        # Take horizontal headers from the source model but override the vertical header
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
-                return self.sourceModel().headerData(section, orientation, role)
-            else:
-                return str(section + 1)
+        if isFilterAdded:
+            logger.debug("Adding filter on {}".format(attrName))
+            self._andFilters[attrName] = True
         else:
-            return None
+            logger.debug("Remoginv filter on {}".format(attrName))
+            del self._andFilters[attrName]
+        self.invalidateFilter()
+
+
+    def filterAcceptsRow(self, sourceRow, sourceParentIndex):
+        """ Returns true if the item in the row indicated by the given source_row and
+            source_parent should be included in the model.
+        """
+        assert not sourceParentIndex.isValid(), "sourceParentIndex is not the root index"
+
+        colMap = self.sourceModel().colorLib.color_maps[sourceRow]
+        md = colMap.meta_data
+
+        accept = True
+        for attrName, desiredValue in self._andFilters.items():
+            actualValue = getattr(md, attrName)
+            accept = accept and (actualValue == desiredValue)
+
+        logger.debug("filterAcceptsRow = {}: {}".format(accept, md.pretty_name))
+        return accept
+
 
 
 # TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py

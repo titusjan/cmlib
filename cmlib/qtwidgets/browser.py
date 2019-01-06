@@ -11,12 +11,55 @@ from PyQt5.QtCore import Qt
 from cmlib.cmap import ColorLib, ColorMap
 from cmlib.misc import LOG_FMT, check_class
 from cmlib.qtwidgets.qimg import makeColorBarPixmap
-from cmlib.qtwidgets.table import ColorLibModel, ColorLibTableViewer
+from cmlib.qtwidgets.table import ColorLibModel, ColorLibProxyModel, ColorLibTableViewer
 
 
 logger = logging.getLogger(__name__)
 
+def _isChecked(checkState):
+    """ Returns if checkState == Qt.﻿Checked """
+    return checkState == Qt.Checked
 
+
+class FilterForm(QtWidgets.QWidget):
+    """ Form with widgets to filter the color bars
+    """
+    def __init__(self, proxyModel: ColorLibProxyModel, parent=None):
+        super().__init__(parent=parent)
+
+        self._proxyModel = proxyModel
+        self._sourceModel = self._proxyModel.sourceModel()
+        self._colorLib = self._sourceModel.colorLib
+
+        # Show only
+        self.showOnlyGroupBox = QtWidgets.QGroupBox("Show Only")
+        self.showOnlyLayout = QtWidgets.QVBoxLayout(self.showOnlyGroupBox)
+
+        infoList = [
+            ("Favorites", "favorite"),
+            ("Recommended", "recommended"),
+            ("Perceptually Uniform", "perceptually_uniform"),
+            ("Black & white friendly", "black_white_friendly"),
+            ("Color blind friendly", "color_blind_friendly"),
+            ("Isoluminant", "isoluminant"),
+        ]
+        for text, attrName in infoList:
+            self.showOnlyLayout.addWidget(self._createAndFilterCheckbox(text, attrName))
+
+        self.mainLayout = QtWidgets.QVBoxLayout()
+        #self.mainLayout.setContentsMargins(0, 0, 0, 0)
+
+        self.setLayout(self.mainLayout)
+
+        self.mainLayout.addWidget(self.showOnlyGroupBox)
+        self.mainLayout.addStretch()
+
+    def _createAndFilterCheckbox(self, text, attrName):
+        """ Creates checkbox that filters on attrName"""
+        checkBox = QtWidgets.QCheckBox(text)
+        checkBox.stateChanged.connect(
+            lambda state: self._proxyModel.toggleAndFilter(attrName, _isChecked(state)))
+        return checkBox
 
 
 class CmLibBrowser(QtWidgets.QWidget):
@@ -32,7 +75,7 @@ class CmLibBrowser(QtWidgets.QWidget):
 
         self.tableView = ColorLibTableViewer(model=self._colorLibModel)
         self.tableView.sigColorMapSelected.connect(self._onColorMapSelected)
-        self.tableView.verticalHeader().show()
+        #self.tableView.verticalHeader().show()
 
         self.colorMapNameLabel = QtWidgets.QLabel()
         self.colorMapNameLabel.setAlignment(Qt.AlignCenter)
@@ -46,6 +89,9 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.colorMapImageLabel.setFrameStyle(QtWidgets.QFrame.Panel)
         self.colorMapImageLabel.setLineWidth(1)
 
+        self.filterForm = FilterForm(self.tableView._proxyModel)
+
+
         # Layout
         # self.verSplitter = QtWidgets.QSplitter(orientation=Qt.Vertical)
         # self.verSplitter.setChildrenCollapsible(False)
@@ -53,13 +99,18 @@ class CmLibBrowser(QtWidgets.QWidget):
         # self.verSplitter.addWidget(self.colorMapImageLabel)
         #self.mainLayout.addWidget(self.verSplitter)
 
-        self.mainLayout = QtWidgets.QVBoxLayout()
-        mar = 10
-        self.mainLayout.setContentsMargins(mar, mar, mar, mar)
-        self.mainLayout.addWidget(self.colorMapNameLabel)
-        self.mainLayout.addWidget(self.colorMapImageLabel)
-        self.mainLayout.addWidget(self.tableView)
+        self.mainLayout = QtWidgets.QHBoxLayout()
         self.setLayout(self.mainLayout)
+        self.mainLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainLayout.addWidget(self.filterForm)
+
+        self.rightLayout = QtWidgets.QVBoxLayout()
+        self.mainLayout.addLayout(self.rightLayout)
+        mar = 10
+        self.rightLayout.setContentsMargins(mar, mar, mar, mar)
+        self.rightLayout.addWidget(self.colorMapNameLabel)
+        self.rightLayout.addWidget(self.colorMapImageLabel)
+        self.rightLayout.addWidget(self.tableView)
 
 
     @property
@@ -104,7 +155,7 @@ def main():
     win = CmLibBrowser(colorLib=colorLib)
     win.show()
     win.raise_()
-    #win.setGeometry(10, 10, 1000, 500)
+    win.setGeometry(10, 10, 1200, 500)
     win.move(10, 10)
     app.exec_()
 
