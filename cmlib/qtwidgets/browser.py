@@ -38,6 +38,9 @@ class FilterForm(QtWidgets.QWidget):
         self._colorLib = self._sourceModel.colorLib
         colMaps = self._colorLib.color_maps
 
+        self.resetButton = QtWidgets.QPushButton("Reset Filters")
+        self.resetButton.clicked.connect(self.resetCheckboxes)
+
         self.catalogsGroupBox = QtWidgets.QGroupBox("Show catalogs")
         self.catalogsLayout = QtWidgets.QVBoxLayout(self.catalogsGroupBox)
         allCatalogs = uniqueSort([(cm.catalog_meta_data.key, cm.catalog_meta_data.name)
@@ -48,7 +51,6 @@ class FilterForm(QtWidgets.QWidget):
                 ColorLibProxyModel.FT_CATALOG, None, catalogKey)
             checkBox.setText(catalogKey)
             checkBox.setToolTip(catalogName)
-            checkBox.setChecked(True)
             self._defaultOnCheckboxes.append(checkBox)
             self.catalogsLayout.addWidget(checkBox)
 
@@ -59,7 +61,6 @@ class FilterForm(QtWidgets.QWidget):
             checkBox = self._createFilterCheckbox(
                 ColorLibProxyModel.FT_CATEGORY, 'category', category)
             checkBox.setText(category.name)
-            checkBox.setChecked(True)
             self._defaultOnCheckboxes.append(checkBox)
             self.categoriesLayout.addWidget(checkBox)
 
@@ -77,7 +78,10 @@ class FilterForm(QtWidgets.QWidget):
         for text, attrName in infoList:
             checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_QUALITY, attrName, True)
             checkBox.setText(text)
-            self._defaultOffCheckboxes.append(checkBox)
+            if attrName == "recommended":
+                self._defaultOnCheckboxes.append(checkBox)
+            else:
+                self._defaultOffCheckboxes.append(checkBox)
             self.qualityLayout.addWidget(checkBox)
 
         self.tagsGroupBox = QtWidgets.QGroupBox("Tag filter")
@@ -102,7 +106,10 @@ class FilterForm(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.categoriesGroupBox)
         self.mainLayout.addWidget(self.qualityGroupBox)
         self.mainLayout.addWidget(self.tagsGroupBox)
+        self.mainLayout.addWidget(self.resetButton)
         self.mainLayout.addStretch()
+
+        self.resetCheckboxes()
 
 
     def _createFilterCheckbox(self, filterType, attrName, desiredValue):
@@ -112,6 +119,16 @@ class FilterForm(QtWidgets.QWidget):
         checkBox.toggled.connect(lambda checked:
             self._proxyModel.toggleFilter(filterType, attrName, desiredValue, checked))
         return checkBox
+
+
+    def resetCheckboxes(self):
+        """ Resets all checkboxes to their initial values
+        """
+        for checkbox in self._defaultOnCheckboxes:
+            checkbox.setChecked(True)
+
+        for checkbox in self._defaultOffCheckboxes:
+            checkbox.setChecked(False)
 
 
 class CmLibBrowser(QtWidgets.QWidget):
