@@ -63,8 +63,8 @@ class FilterForm(QtWidgets.QWidget):
             self._defaultOnCheckboxes.append(checkBox)
             self.categoriesLayout.addWidget(checkBox)
 
-        self.showOnlyGroupBox = QtWidgets.QGroupBox("Quality filter")
-        self.showOnlyLayout = QtWidgets.QVBoxLayout(self.showOnlyGroupBox)
+        self.qualityGroupBox = QtWidgets.QGroupBox("Quality filter")
+        self.qualityLayout = QtWidgets.QVBoxLayout(self.qualityGroupBox)
 
         infoList = [
             ("Favorite (★)", "favorite"),
@@ -75,10 +75,10 @@ class FilterForm(QtWidgets.QWidget):
             ("Isoluminant", "isoluminant"),
         ]
         for text, attrName in infoList:
-            checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_PROP, attrName, True)
+            checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_QUALITY, attrName, True)
             checkBox.setText(text)
             self._defaultOffCheckboxes.append(checkBox)
-            self.showOnlyLayout.addWidget(checkBox)
+            self.qualityLayout.addWidget(checkBox)
 
         self.tagsGroupBox = QtWidgets.QGroupBox("Tag filter")
         self.tagsLayout = QtWidgets.QVBoxLayout(self.tagsGroupBox)
@@ -100,7 +100,7 @@ class FilterForm(QtWidgets.QWidget):
         self.setLayout(self.mainLayout)
         self.mainLayout.addWidget(self.catalogsGroupBox)
         self.mainLayout.addWidget(self.categoriesGroupBox)
-        self.mainLayout.addWidget(self.showOnlyGroupBox)
+        self.mainLayout.addWidget(self.qualityGroupBox)
         self.mainLayout.addWidget(self.tagsGroupBox)
         self.mainLayout.addStretch()
 

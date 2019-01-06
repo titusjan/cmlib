@@ -288,8 +288,8 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
     # Filter types
     FT_CATALOG = "ft_catalog"
     FT_CATEGORY = "ft_category"
+    FT_QUALITY = "ft_quality"
     FT_TAG = "ft_tag"
-    FT_PROP = "ft_prop"
 
     def __init__(self, parent):
         super(ColorLibProxyModel, self).__init__(parent)
@@ -298,7 +298,7 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
             ColorLibProxyModel.FT_CATALOG: [],
             ColorLibProxyModel.FT_CATEGORY: [],
             ColorLibProxyModel.FT_TAG: [],
-            ColorLibProxyModel.FT_PROP: [],
+            ColorLibProxyModel.FT_QUALITY: [],
         }
 
 
@@ -373,13 +373,13 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         acceptCategory = any([getattr(md, attrName) == desired for attrName, desired in
                               self._filters[ColorLibProxyModel.FT_CATEGORY]])
 
-        acceptProps = all([getattr(md, attrName) == desired for attrName, desired in
-                           self._filters[ColorLibProxyModel.FT_PROP]])  # Note test for all
+        acceptQuality = all([getattr(md, attrName) == desired for attrName, desired in
+                             self._filters[ColorLibProxyModel.FT_QUALITY]])  # Note test for all
 
         acceptTags = all([desired in md.tags for _, desired in
                           self._filters[ColorLibProxyModel.FT_TAG]])  # Note test for all
 
-        accept = all([acceptCatalog, acceptCategory, acceptProps, acceptTags])
+        accept = all([acceptCatalog, acceptCategory, acceptQuality, acceptTags])
 
         logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, md.pretty_name))
         return accept
