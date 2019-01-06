@@ -3,12 +3,11 @@
 
 import logging
 import os.path
-import numpy as np
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 
-from cmlib.cmap import ColorLib, ColorMap
+from cmlib.cmap import ColorLib, DataCategory
 from cmlib.misc import LOG_FMT, check_class
 from cmlib.qtwidgets.qimg import makeColorBarPixmap
 from cmlib.qtwidgets.table import ColorLibModel, ColorLibProxyModel, ColorLibTableViewer
@@ -20,6 +19,10 @@ def _isChecked(checkState):
     """ Returns if checkState == Qt.﻿Checked """
     return checkState == Qt.Checked
 
+def uniqueSort(lst):
+    """ Returns the sorted list of unique list entries"""
+    return sorted(list(set(lst)))
+
 
 class FilterForm(QtWidgets.QWidget):
     """ Form with widgets to filter the color bars
@@ -27,38 +30,69 @@ class FilterForm(QtWidgets.QWidget):
     def __init__(self, proxyModel: ColorLibProxyModel, parent=None):
         super().__init__(parent=parent)
 
+        self._defaultOnCheckboxes = []
+        self._defaultOffCheckboxes = []
+
         self._proxyModel = proxyModel
         self._sourceModel = self._proxyModel.sourceModel()
         self._colorLib = self._sourceModel.colorLib
+        colMaps = self._colorLib.color_maps
 
-        # Show only
-        self.showOnlyGroupBox = QtWidgets.QGroupBox("Show Only")
+        # self.catalogsGroupBox = QtWidgets.QGroupBox("Catalogs")
+        # self.catalogsLayout = QtWidgets.QVBoxLayout(self.catalogsGroupBox)
+        # allCataglogs = uniqueSort([cm.])
+
+        self.categoriesGroupBox = QtWidgets.QGroupBox("Categories")
+        self.categoriesLayout = QtWidgets.QVBoxLayout(self.categoriesGroupBox)
+
+        for category in list(DataCategory):
+            checkBox = self._createOrFilterCheckbox(category.name, 'category', category)
+            self._defaultOnCheckboxes.append(checkBox)
+            self.categoriesLayout.addWidget(checkBox)
+
+        self.showOnlyGroupBox = QtWidgets.QGroupBox("Show Only If")
         self.showOnlyLayout = QtWidgets.QVBoxLayout(self.showOnlyGroupBox)
 
         infoList = [
             ("Favorites", "favorite"),
             ("Recommended", "recommended"),
             ("Perceptually Uniform", "perceptually_uniform"),
-            ("Black & white friendly", "black_white_friendly"),
-            ("Color blind friendly", "color_blind_friendly"),
+            ("Black && White Friendly", "black_white_friendly"),
+            ("Color Blind Friendly", "color_blind_friendly"),
             ("Isoluminant", "isoluminant"),
         ]
         for text, attrName in infoList:
-            self.showOnlyLayout.addWidget(self._createAndFilterCheckbox(text, attrName))
+            checkBox = self._createAndFilterCheckbox(text, attrName, True)
+            self._defaultOffCheckboxes.append(checkBox)
+            self.showOnlyLayout.addWidget(checkBox)
 
         self.mainLayout = QtWidgets.QVBoxLayout()
         #self.mainLayout.setContentsMargins(0, 0, 0, 0)
-
         self.setLayout(self.mainLayout)
-
+        self.mainLayout.addWidget(self.categoriesGroupBox)
         self.mainLayout.addWidget(self.showOnlyGroupBox)
         self.mainLayout.addStretch()
 
-    def _createAndFilterCheckbox(self, text, attrName):
-        """ Creates checkbox that filters on attrName"""
+
+    def _createAndFilterCheckbox(self, text, attrName, desiredValue):
+        """ Creates checkbox that filters on attrName with the and-operator.
+        """
         checkBox = QtWidgets.QCheckBox(text)
         checkBox.stateChanged.connect(
-            lambda state: self._proxyModel.toggleAndFilter(attrName, _isChecked(state)))
+            lambda state: self._proxyModel.toggleAndFilter(attrName, desiredValue,
+                                                           _isChecked(state)))
+        return checkBox
+
+    # TODO: used toggled
+    def _createOrFilterCheckbox(self, text, attrName, desiredValue=True):
+        """ Creates checkbox that filters on attrName with the or-operator
+            The checkbox will be unchecked by default (filter off)
+        """
+        checkBox = QtWidgets.QCheckBox(text)
+        checkBox.stateChanged.connect(
+            lambda state: self._proxyModel.toggleOrFilter(attrName, desiredValue,
+                                                          _isChecked(state)))
+        checkBox.setChecked(True)
         return checkBox
 
 
@@ -75,7 +109,7 @@ class CmLibBrowser(QtWidgets.QWidget):
 
         self.tableView = ColorLibTableViewer(model=self._colorLibModel)
         self.tableView.sigColorMapSelected.connect(self._onColorMapSelected)
-        #self.tableView.verticalHeader().show()
+        self.tableView.verticalHeader().show()
 
         self.colorMapNameLabel = QtWidgets.QLabel()
         self.colorMapNameLabel.setAlignment(Qt.AlignCenter)
@@ -147,6 +181,7 @@ def main():
     colorLib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
     colorLib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
 
+    logger.debug("Number of color maps: {}".format(len(colorLib.color_maps)))
     # Set some favorites to test
     for colorMap in colorLib.color_maps:
         if colorMap.key in ['SciColMaps/Oleron', 'CET/CET-CBL1', 'MatPlotLib/Cubehelix']:

@@ -287,8 +287,8 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
     def __init__(self, parent):
         super(ColorLibProxyModel, self).__init__(parent)
 
-        self._andFilters = {}
-        #self._andFilters = {'favorite': True}
+        self._andFilters = []
+        self._orFilters = []
 
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
@@ -323,24 +323,39 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         leftKey  = sourceModel.data(leftKeyIndex, role=ColorLibModel.SORT_ROLE)
         rightKey = sourceModel.data(rightKeyIndex, role=ColorLibModel.SORT_ROLE)
 
-        logger.debug("lessThan: {} <? {} = {}".format(
-            (leftData, leftKey), (rightData, rightKey),
-            (leftData, leftKey) < (rightData, rightKey)
-        ))
+        # logger.debug("lessThan: {} <? {} = {}".format(
+        #     (leftData, leftKey), (rightData, rightKey),
+        #     (leftData, leftKey) < (rightData, rightKey)
+        # ))
 
         return (leftData, leftKey) < (rightData, rightKey)
 
 
-    def toggleAndFilter(self, attrName, isFilterAdded):
+    def toggleAndFilter(self, attrName, desiredValue, isFilterAdded):
         """ Adds or removes an 'And' filter (depending on isFilterAdded).
             Rows are accept if all of the metadata attributes have their desired value.
         """
+        key = (attrName, desiredValue)
         if isFilterAdded:
-            logger.debug("Adding filter on {}".format(attrName))
-            self._andFilters[attrName] = True
+            logger.debug("Adding and-filter {}".format(key))
+            self._andFilters.append(key)
         else:
-            logger.debug("Remoginv filter on {}".format(attrName))
-            del self._andFilters[attrName]
+            logger.debug("Removing and-filter {}".format(key))
+            self._andFilters.remove(key)
+        self.invalidateFilter()
+
+
+    def toggleOrFilter(self, attrName, desiredValue, isFilterAdded):
+        """ Adds or removes an 'Or' filter (depending on isFilterAdded).
+            Rows are accept if one of the metadata attributes have their desired value.
+        """
+        key = (attrName, desiredValue)
+        if isFilterAdded:
+            logger.debug("Adding or-filter {}".format(key))
+            self._orFilters.append(key)
+        else:
+            logger.debug("Removing or-filter {}".format(key))
+            self._orFilters.remove(key)
         self.invalidateFilter()
 
 
@@ -353,12 +368,16 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         colMap = self.sourceModel().colorLib.color_maps[sourceRow]
         md = colMap.meta_data
 
-        accept = True
-        for attrName, desiredValue in self._andFilters.items():
+        accept = False
+        for attrName, desiredValue in self._orFilters:
+            actualValue = getattr(md, attrName)
+            accept = accept or (actualValue == desiredValue)
+
+        for attrName, desiredValue in self._andFilters:
             actualValue = getattr(md, attrName)
             accept = accept and (actualValue == desiredValue)
 
-        logger.debug("filterAcceptsRow = {}: {}".format(accept, md.pretty_name))
+        # logger.debug("filterAcceptsRow = {}: {}".format(accept, md.pretty_name))
         return accept
 
 
