@@ -284,11 +284,22 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
     """ Proxy model that overrides the sorting.
     """
+
+    # Filter types
+    FT_CATALOG = "ft_catalog"
+    FT_CATEGORY = "ft_category"
+    FT_TAG = "ft_tag"
+    FT_PROP = "ft_prop"
+
     def __init__(self, parent):
         super(ColorLibProxyModel, self).__init__(parent)
 
-        self._andFilters = []
-        self._orFilters = []
+        self._filters = {
+            ColorLibProxyModel.FT_CATALOG: [],
+            ColorLibProxyModel.FT_CATEGORY: [],
+            ColorLibProxyModel.FT_TAG: [],
+            ColorLibProxyModel.FT_PROP: [],
+        }
 
 
     def headerData(self, section, orientation, role=Qt.DisplayRole):
@@ -331,31 +342,18 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         return (leftData, leftKey) < (rightData, rightKey)
 
 
-    def toggleAndFilter(self, attrName, desiredValue, isFilterAdded):
+
+    def toggleFilter(self, filterType, attrName, desiredValue, isFilterAdded):
         """ Adds or removes an 'And' filter (depending on isFilterAdded).
             Rows are accept if all of the metadata attributes have their desired value.
         """
-        key = (attrName, desiredValue)
+        filt = (attrName, desiredValue)
         if isFilterAdded:
-            logger.debug("Adding and-filter {}".format(key))
-            self._andFilters.append(key)
+            logger.debug("Adding {}-filter {}".format(filterType, filt))
+            self._filters[filterType].append(filt)
         else:
-            logger.debug("Removing and-filter {}".format(key))
-            self._andFilters.remove(key)
-        self.invalidateFilter()
-
-
-    def toggleOrFilter(self, attrName, desiredValue, isFilterAdded):
-        """ Adds or removes an 'Or' filter (depending on isFilterAdded).
-            Rows are accept if one of the metadata attributes have their desired value.
-        """
-        key = (attrName, desiredValue)
-        if isFilterAdded:
-            logger.debug("Adding or-filter {}".format(key))
-            self._orFilters.append(key)
-        else:
-            logger.debug("Removing or-filter {}".format(key))
-            self._orFilters.remove(key)
+            logger.debug("Removing {}-filter {}".format(filterType, filt))
+            self._filters[filterType].remove(filt)
         self.invalidateFilter()
 
 
@@ -369,15 +367,15 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         md = colMap.meta_data
 
         accept = False
-        for attrName, desiredValue in self._orFilters:
+        for attrName, desiredValue in self._filters[ColorLibProxyModel.FT_CATEGORY]:
             actualValue = getattr(md, attrName)
             accept = accept or (actualValue == desiredValue)
 
-        for attrName, desiredValue in self._andFilters:
+        for attrName, desiredValue in self._filters[ColorLibProxyModel.FT_PROP]:
             actualValue = getattr(md, attrName)
             accept = accept and (actualValue == desiredValue)
 
-        # logger.debug("filterAcceptsRow = {}: {}".format(accept, md.pretty_name))
+        logger.debug("filterAcceptsRow = {}: {} {}".format(accept, md.pretty_name, self._filters[ColorLibProxyModel.FT_CATEGORY]))
         return accept
 
 

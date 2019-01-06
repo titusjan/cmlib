@@ -46,7 +46,10 @@ class FilterForm(QtWidgets.QWidget):
         self.categoriesLayout = QtWidgets.QVBoxLayout(self.categoriesGroupBox)
 
         for category in list(DataCategory):
-            checkBox = self._createOrFilterCheckbox(category.name, 'category', category)
+            checkBox = self._createFilterCheckbox(
+                ColorLibProxyModel.FT_CATEGORY, 'category', category)
+            checkBox.setText(category.name)
+            checkBox.setChecked(True)
             self._defaultOnCheckboxes.append(checkBox)
             self.categoriesLayout.addWidget(checkBox)
 
@@ -62,7 +65,8 @@ class FilterForm(QtWidgets.QWidget):
             ("Isoluminant", "isoluminant"),
         ]
         for text, attrName in infoList:
-            checkBox = self._createAndFilterCheckbox(text, attrName, True)
+            checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_PROP, attrName, True)
+            checkBox.setText(text)
             self._defaultOffCheckboxes.append(checkBox)
             self.showOnlyLayout.addWidget(checkBox)
 
@@ -74,23 +78,12 @@ class FilterForm(QtWidgets.QWidget):
         self.mainLayout.addStretch()
 
 
-    def _createAndFilterCheckbox(self, text, attrName, desiredValue):
+    def _createFilterCheckbox(self, filterType, attrName, desiredValue):
         """ Creates checkbox that filters on attrName with the and-operator.
         """
-        checkBox = QtWidgets.QCheckBox(text)
-        checkBox.toggled.connect(
-            lambda checked: self._proxyModel.toggleAndFilter(attrName, desiredValue, checked))
-        return checkBox
-
-    # TODO: used toggled
-    def _createOrFilterCheckbox(self, text, attrName, desiredValue=True):
-        """ Creates checkbox that filters on attrName with the or-operator
-            The checkbox will be unchecked by default (filter off)
-        """
-        checkBox = QtWidgets.QCheckBox(text)
-        checkBox.toggled.connect(
-            lambda checked: self._proxyModel.toggleOrFilter(attrName, desiredValue, checked))
-        checkBox.setChecked(True)
+        checkBox = QtWidgets.QCheckBox()
+        checkBox.toggled.connect(lambda checked:
+            self._proxyModel.toggleFilter(filterType, attrName, desiredValue, checked))
         return checkBox
 
 
