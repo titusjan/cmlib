@@ -38,19 +38,21 @@ class FilterForm(QtWidgets.QWidget):
         self._colorLib = self._sourceModel.colorLib
         colMaps = self._colorLib.color_maps
 
-        self.catalogsGroupBox = QtWidgets.QGroupBox("Catalogs")
+        self.catalogsGroupBox = QtWidgets.QGroupBox("Show catalogs")
         self.catalogsLayout = QtWidgets.QVBoxLayout(self.catalogsGroupBox)
-        allCataglogs = uniqueSort([cm.catalog_meta_data.name for cm in colMaps])
+        allCatalogs = uniqueSort([(cm.catalog_meta_data.key, cm.catalog_meta_data.name)
+                                   for cm in colMaps])
 
-        for catalog in allCataglogs:
+        for catalogKey, catalogName in allCatalogs:
             checkBox = self._createFilterCheckbox(
-                ColorLibProxyModel.FT_CATALOG, None, catalog)
-            checkBox.setText(catalog)
+                ColorLibProxyModel.FT_CATALOG, None, catalogKey)
+            checkBox.setText(catalogKey)
+            checkBox.setToolTip(catalogName)
             checkBox.setChecked(True)
             self._defaultOnCheckboxes.append(checkBox)
             self.catalogsLayout.addWidget(checkBox)
 
-        self.categoriesGroupBox = QtWidgets.QGroupBox("Categories")
+        self.categoriesGroupBox = QtWidgets.QGroupBox("Show categories")
         self.categoriesLayout = QtWidgets.QVBoxLayout(self.categoriesGroupBox)
 
         for category in list(DataCategory):
@@ -61,11 +63,11 @@ class FilterForm(QtWidgets.QWidget):
             self._defaultOnCheckboxes.append(checkBox)
             self.categoriesLayout.addWidget(checkBox)
 
-        self.showOnlyGroupBox = QtWidgets.QGroupBox("Show Only If")
+        self.showOnlyGroupBox = QtWidgets.QGroupBox("Quality filter")
         self.showOnlyLayout = QtWidgets.QVBoxLayout(self.showOnlyGroupBox)
 
         infoList = [
-            ("Favorites", "favorite"),
+            ("Favorite (★)", "favorite"),
             ("Recommended", "recommended"),
             ("Perceptually Uniform", "perceptually_uniform"),
             ("Black && White Friendly", "black_white_friendly"),
@@ -78,12 +80,28 @@ class FilterForm(QtWidgets.QWidget):
             self._defaultOffCheckboxes.append(checkBox)
             self.showOnlyLayout.addWidget(checkBox)
 
+        self.tagsGroupBox = QtWidgets.QGroupBox("Tag filter")
+        self.tagsLayout = QtWidgets.QVBoxLayout(self.tagsGroupBox)
+
+        tagSet = set([])
+        for cm in colMaps:
+            for tag in cm.meta_data.tags:
+                tagSet.add(tag)
+        allTags = sorted(list(tagSet))
+
+        for tag in allTags:
+            checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_TAG, None, tag)
+            checkBox.setText(tag)
+            self._defaultOffCheckboxes.append(checkBox)
+            self.tagsLayout.addWidget(checkBox)
+
         self.mainLayout = QtWidgets.QVBoxLayout()
         #self.mainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.mainLayout)
         self.mainLayout.addWidget(self.catalogsGroupBox)
         self.mainLayout.addWidget(self.categoriesGroupBox)
         self.mainLayout.addWidget(self.showOnlyGroupBox)
+        self.mainLayout.addWidget(self.tagsGroupBox)
         self.mainLayout.addStretch()
 
 

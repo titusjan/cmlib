@@ -23,7 +23,7 @@ _ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
 class ColorLibModel(QtCore.QAbstractTableModel):
     """ A table model that maps ColorLib data as a table.
     """
-    HEADERS = ('Favorite', 'Key', 'Catalog', 'Name', 'Category', 'Size', 'Recommended',
+    HEADERS = ('★', 'Key', 'Catalog', 'Name', 'Category', 'Size', 'Recommended',
                'P. Uniform', 'B & W', 'Color Blind', 'Isoluminant',
                'Tags', 'Notes')
 
@@ -34,7 +34,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
     (COL_FAV, COL_KEY, COL_CATALOG, COL_NAME, COL_CATEGORY, COL_SIZE, COL_RECOMMENDED,
      COL_UNIF, COL_BW, COL_COLOR_BLIND, COL_ISOLUMINANT, COL_TAGS, COL_NOTES) = range(len(HEADERS))
 
-    DEFAULT_WIDTHS = [_HW_BOOL, 175, 100, 120, 100, 50, _HW_BOOL + 10,
+    DEFAULT_WIDTHS = [32, 175, 100, 120, 100, 50, _HW_BOOL + 10,
                       _HW_BOOL, _HW_BOOL, _HW_BOOL, _HW_BOOL, 100, 200]
 
     SORT_ROLE = Qt.UserRole
@@ -376,7 +376,10 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         acceptProps = all([getattr(md, attrName) == desired for attrName, desired in
                            self._filters[ColorLibProxyModel.FT_PROP]])  # Note test for all
 
-        accept = all([acceptCatalog, acceptCategory, acceptProps])
+        acceptTags = all([desired in md.tags for _, desired in
+                          self._filters[ColorLibProxyModel.FT_TAG]])  # Note test for all
+
+        accept = all([acceptCatalog, acceptCategory, acceptProps, acceptTags])
 
         logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, md.pretty_name))
         return accept
