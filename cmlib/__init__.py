@@ -11,3 +11,6 @@
         https://matplotlib.org/tutorials/colors/colormapnorms.html
 
 """
+
+from misc import __version__
+

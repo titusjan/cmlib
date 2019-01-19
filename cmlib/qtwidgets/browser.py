@@ -181,6 +181,8 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.rightLayout.addWidget(self.colorMapImageLabel)
         self.rightLayout.addWidget(self.tableView)
 
+        self.tableView.selectRow(0)
+
 
     @property
     def colorLib(self):

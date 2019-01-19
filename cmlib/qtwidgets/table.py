@@ -2,13 +2,14 @@
 
 """
 import logging
-
+import numpy as np
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 
-from cmlib.cmap import ColorLib, ColorMap
-from cmlib.misc import check_class
+
+from cmlib.cmap import ColorLib, ColorMap, CatalogMetaData, CmMetaData
+from cmlib.misc import check_class, __version__
 from cmlib.qtwidgets.toggle_column_mixin import ToggleColumnTableView
 from cmlib.qtwidgets.qimg import makeColorBarPixmap
 
@@ -18,6 +19,25 @@ _HW_BOOL = 80 # header width for boolean columns
 _ALIGN_STRING = Qt.AlignVCenter | Qt.AlignLeft
 _ALIGN_NUMBER = Qt.AlignVCenter | Qt.AlignRight
 _ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
+
+#
+# def createTransparentColorMap():
+#     """ Creates a color map to use for when not color map is selected"""
+#
+#     cmMd = CmMetaData(name = "")
+#     cmMd.notes = "Transparent color map to use when no color map is selected"
+#
+#     catMd = CatalogMetaData(key="CmLib", name="ColorMapLib")
+#     catMd.version = __version__
+#     catMd.license = "BSD"
+#
+#     colorMap = ColorMap(meta_data=cmMd, catalog_meta_data=catMd)
+#
+#     colorMap.set_argb_unit8_array(np.zeros(dtype=np.uint8, shape=(16, 4)))
+#     return colorMap
+#
+
+
 
 
 class ColorLibModel(QtCore.QAbstractTableModel):
@@ -381,7 +401,7 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
 
         accept = all([acceptCatalog, acceptCategory, acceptQuality, acceptTags])
 
-        logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, md.pretty_name))
+        # logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, md.pretty_name))
         return accept
 
 
@@ -397,6 +417,8 @@ class ColorLibTableViewer(ToggleColumnTableView):
             :param ColorLibModel model: the item model
         """
         super().__init__(parent=parent)
+
+        self._colorMapNoneSelected = self.createTransparentColorMap()
 
         check_class(model, ColorLibModel)
         self._sourceModel = model
@@ -442,20 +464,37 @@ class ColorLibTableViewer(ToggleColumnTableView):
         self.sortByColumn(ColorLibModel.COL_CATEGORY, Qt.AscendingOrder)
 
 
+    @classmethod
+    def createTransparentColorMap(cls):
+        """ Creates a color map to use for when not color map is selected
+        """
+
+        cmMd = CmMetaData(name = "")
+        cmMd.notes = "Transparent color map to use when no color map is selected"
+
+        catMd = CatalogMetaData(key="CmLib", name="ColorMapLib")
+        catMd.version = __version__
+        catMd.license = "BSD"
+
+        colorMap = ColorMap(meta_data=cmMd, catalog_meta_data=catMd)
+
+        colorMap.set_argb_unit8_array(np.zeros(dtype=np.uint8, shape=(16, 4)))
+        return colorMap
+
+
     def _onCurrentChanged(self, curIdx, _prevIdx):
         """ Emits sigColorMapSelected if a valid row has been selected
         """
         if not curIdx.isValid():
-            return None
+            logger.info("NONE selected")
+            colorMap = self._colorMapNoneSelected
+        else:
+            sourceIdx = self._proxyModel.mapToSource(curIdx)
+            assert sourceIdx.isValid(), "Source Index not valid"
 
-        sourceIdx = self._proxyModel.mapToSource(curIdx)
-        assert sourceIdx.isValid(), "Source Index not valid"
-
-        row = sourceIdx.row()
-        colorMap = self._sourceModel.colorLib.color_maps[row]
+            row = sourceIdx.row()
+            colorMap = self._sourceModel.colorLib.color_maps[row]
 
         logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))
         self.sigColorMapSelected.emit(colorMap)
-
-
 

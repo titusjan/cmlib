@@ -316,7 +316,6 @@ class ColorMap():
         self._rgb_float_array = rgb_arr
 
 
-
     @property
     def argb_uint8_array(self):
         """ Gets the argb data as bytes. Loads the data from file if needed.

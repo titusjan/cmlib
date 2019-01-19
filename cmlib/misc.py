@@ -5,6 +5,9 @@ import os.path
 
 import numpy as np
 
+# Put here so we can import it in the rest of the library
+__version__ = "0.9.0"
+
 
 logger = logging.getLogger(__name__)
 LOG_FMT = '%(asctime)s %(filename)25s:%(lineno)-4d : %(levelname)-7s: %(message)s'
