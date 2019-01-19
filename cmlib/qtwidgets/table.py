@@ -82,8 +82,8 @@ class ColorLibModel(QtCore.QAbstractTableModel):
         self.iconBarHeight = 16
 
         # Check mark for boolean columns
-        #   ✓ checkmark Unicode: U+2713, UTF-8: E2 9C 93
-        #   ✔︎ Heavy check mark Unicode: U+2714 U+FE0E, UTF-8: E2 9C 94 EF B8 8E
+        #   ✓ checkmark Unicode: U+2713
+        #   ✔︎ Heavy check mark Unicode: U+2714
         self.checkmarkChar = '✓︎'
 
 

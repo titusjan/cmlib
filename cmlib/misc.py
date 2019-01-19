@@ -10,7 +10,6 @@ __version__ = "0.9.0"
 
 
 logger = logging.getLogger(__name__)
-LOG_FMT = '%(asctime)s %(filename)25s:%(lineno)-4d : %(levelname)-7s: %(message)s'
 
 
 def is_an_array(var, allow_none=False):
@@ -51,7 +50,7 @@ def load_rgb_floats(source_file, delimiter=', ', dtype=np.float32, **kwargs):
     """ Loads a color map array from a source file.
         Returns Nx3 array of 32 bits floats
     """
-    logger.debug("Loading: {}".format(os.path.abspath(source_file)))
+    logger.debug("Loading RGB values: {}".format(os.path.abspath(source_file)))
     array = np.loadtxt(source_file, delimiter=delimiter, dtype=dtype, **kwargs)
     return array
 
@@ -61,7 +60,7 @@ def save_rgb_floats(target_file, array):
 
         The array is expected to consist of floats.
     """
-    logger.debug("Saving: {}".format(os.path.abspath(target_file)))
+    logger.debug("Saving RGB values: {}".format(os.path.abspath(target_file)))
     np.savetxt(target_file, array, delimiter=', ', fmt='%8.6f')
 
 

@@ -99,7 +99,7 @@ class AbstractMetaData(metaclass=abc.ABCMeta):
         raise NotImplementedError()
 
     def load_from_json(self, file_name):
-        logger.debug("Loading: {}".format(os.path.abspath(file_name)))
+        logger.debug("Loading meta data: {}".format(os.path.abspath(file_name)))
         with open(file_name, 'r') as fp:
             return self.from_dict(json.load(fp))
 

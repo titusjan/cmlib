@@ -2,13 +2,12 @@
 """
 
 import logging
-import os.path
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 
-from cmlib.cmap import ColorLib, DataCategory
-from cmlib.misc import LOG_FMT, check_class
+from cmlib.cmap import DataCategory
+from cmlib.misc import check_class
 from cmlib.qtwidgets.qimg import makeColorBarPixmap
 from cmlib.qtwidgets.table import ColorLibModel, ColorLibProxyModel, ColorLibTableViewer
 
@@ -135,16 +134,15 @@ class CmLibBrowser(QtWidgets.QWidget):
     """ Widget to browse the though the color library
     """
 
-    def __init__(self, colorLib, parent=None):
+    def __init__(self, colorLibModel: ColorLibModel, parent=None):
         super().__init__(parent=parent)
 
-        check_class(colorLib, ColorLib)
-        self._colorLib = colorLib
-        self._colorLibModel = ColorLibModel(colorLib, parent=self)
+        check_class(colorLibModel, ColorLibModel)
+        self._colorLibModel = colorLibModel
 
         self.tableView = ColorLibTableViewer(model=self._colorLibModel)
         self.tableView.sigColorMapSelected.connect(self._onColorMapSelected)
-        self.tableView.verticalHeader().show()
+        self.tableView.verticalHeader().hide()
 
         self.colorMapNameLabel = QtWidgets.QLabel()
         self.colorMapNameLabel.setAlignment(Qt.AlignCenter)
@@ -159,7 +157,6 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.colorMapImageLabel.setLineWidth(1)
 
         self.filterForm = FilterForm(self.tableView._proxyModel)
-
 
         # Layout
         # self.verSplitter = QtWidgets.QSplitter(orientation=Qt.Vertical)
@@ -181,14 +178,13 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.rightLayout.addWidget(self.colorMapImageLabel)
         self.rightLayout.addWidget(self.tableView)
 
-        self.tableView.selectRow(0)
 
 
     @property
     def colorLib(self):
         """ Returns the underlying ColorLib
         """
-        return self._colorLib
+        return self._colorLibModel.colorLib
 
 
     def _onColorMapSelected(self, colorMap):
@@ -205,40 +201,4 @@ class CmLibBrowser(QtWidgets.QWidget):
         """ Holds the recommended size for the widget.
         """
         return QtCore.QSize(1000, 600)
-
-
-
-def main():
-    app = QtWidgets.QApplication([])
-
-    data_dir=os.path.abspath("../../data")
-
-    colorLib = ColorLib()
-    colorLib.load_catalog(os.path.join(data_dir, 'CET'))
-    colorLib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
-    colorLib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
-
-    logger.debug("Number of color maps: {}".format(len(colorLib.color_maps)))
-    # Set some favorites to test
-    for colorMap in colorLib.color_maps:
-        if colorMap.key in ['SciColMaps/Oleron', 'CET/CET-CBL1', 'MatPlotLib/Cubehelix']:
-            colorMap.meta_data.favorite = True
-
-    win = CmLibBrowser(colorLib=colorLib)
-    win.show()
-    win.raise_()
-    win.setGeometry(10, 10, 1200, 500)
-    win.move(10, 10)
-    app.exec_()
-
-    logger.debug("Favorites:")
-    for colorMap in colorLib.color_maps:
-        if colorMap.meta_data.favorite:
-            logger.debug("  {}".format(colorMap.meta_data.name))
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level='DEBUG', format=LOG_FMT)
-    main()
-
 
