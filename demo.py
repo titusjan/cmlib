@@ -31,13 +31,16 @@ class DemoWindow(QtWidgets.QWidget):
 
         self.selectionWidget.sigColorMapChanged.connect(self.updateLabel)
 
-        self.selectionWidget.comboBox.setCurrentIndex(1)
+        self.updateLabel(self.selectionWidget.getCurrentColorMap())
 
 
-    def updateLabel(self, colorMap):
+    def updateLabel(self, colorMap=None):
         """ Updates the label to show which cm has been selected
         """
-        self.label.setText("Selected: {}".format(colorMap.pretty_name))
+        if colorMap:
+            self.label.setText("Selected: {}".format(colorMap.pretty_name))
+        else:
+            self.label.setText("")
 
 
 

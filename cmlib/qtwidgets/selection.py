@@ -109,7 +109,17 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         """ Shows the color browser dialog
         """
         self.browser.show()
-        self.browser.tableView.selectRow(0)
+        curRow = self.comboBox.currentIndex()
+        proxyIdx = self._proxyModel.index(curRow, self.comboBox.modelColumn())
+        sourceIdx = self._proxyModel.mapToSource(proxyIdx)
+
+        filterIdx = self.browser.tableView.model().mapFromSource(sourceIdx)
+        if filterIdx.isValid():
+
+            self.browser.tableView.selectRow(filterIdx.row())
+        else:
+            logger.warning("Unable to select color map of combobox in dialog box: {}"
+                           .format(curRow))
 
 
     @pyqtSlot(int)
@@ -122,3 +132,14 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         except IndexError as ex:
             logger.warning("No color map found for row: {}".format(row))
 
+
+    def getCurrentColorMap(self):
+        """ Gets the current colorMap
+
+            Returns None if None selected.
+        """
+        row = self.comboBox.currentIndex()
+        try:
+            return self._proxyModel.getColorMapByRow(row)
+        except IndexError:
+            return None
