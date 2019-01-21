@@ -3,7 +3,9 @@
 import logging
 
 from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
+from cmlib.cmap import ColorMap
 from cmlib.misc import check_class
 from cmlib.qtwidgets.browser import CmLibBrowser
 from cmlib.qtwidgets.table import ColorLibModel
@@ -50,12 +52,25 @@ class ComboProxyModel(QtCore.QSortFilterProxyModel):
         return accept
 
 
+    def getColorMapByRow(self, row):
+        """ Returns a color map at row of the given index.
+
+            Raises IndexError if the index is not valid
+        """
+        proxyIdx = self.index(row, 0)
+        sourceIdx = self.mapToSource(proxyIdx)
+        colorMap = self.sourceModel().getColorMapByIndex(sourceIdx)
+        return colorMap
+
+
 
 class ColorSelectionWidget(QtWidgets.QWidget):
     """ Widget to select a color map.
 
         Consists of Combobox and a button that pop ups a selection dialog.
     """
+    sigColorMapChanged = pyqtSignal(ColorMap)
+
     def __init__(self, colorLibModel: ColorLibModel, **kwargs):
         """ Constructor
         """
@@ -87,9 +102,23 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
 
+        self.comboBox.currentIndexChanged.connect(self._onCurrentChanged)
+
 
     def showDialog(self):
         """ Shows the color browser dialog
         """
         self.browser.show()
         self.browser.tableView.selectRow(0)
+
+
+    @pyqtSlot(int)
+    def _onCurrentChanged(self, row):
+        """ Emits sigColorMapSelected if a valid row has been selected
+        """
+        try:
+            colorMap = self._proxyModel.getColorMapByRow(row)
+            self.sigColorMapChanged.emit(colorMap)
+        except IndexError as ex:
+            logger.warning("No color map found for row: {}".format(row))
+

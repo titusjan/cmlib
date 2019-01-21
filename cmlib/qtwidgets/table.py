@@ -300,6 +300,16 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             return str(section)
 
 
+    def getColorMapByIndex(self, index):
+        """ Returns a color map at row of the given index.
+
+            Raises IndexError if the index is not valid
+        """
+        if not index.isValid():
+            raise IndexError()
+
+        return self._colorMaps[index.row()]
+
 
 class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
     """ Proxy model that overrides the sorting.

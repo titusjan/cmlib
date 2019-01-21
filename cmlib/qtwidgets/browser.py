@@ -130,10 +130,10 @@ class FilterForm(QtWidgets.QWidget):
             checkbox.setChecked(False)
 
 
+
 class CmLibBrowser(QtWidgets.QWidget):
     """ Widget to browse the though the color library
     """
-
     def __init__(self, colorLibModel: ColorLibModel, parent=None):
         super().__init__(parent=parent)
 
@@ -177,7 +177,6 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.rightLayout.addWidget(self.colorMapNameLabel)
         self.rightLayout.addWidget(self.colorMapImageLabel)
         self.rightLayout.addWidget(self.tableView)
-
 
 
     @property

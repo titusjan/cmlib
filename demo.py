@@ -13,6 +13,34 @@ from cmlib import ColorLib, ColorLibModel, ColorSelectionWidget, CmLibBrowser
 logger = logging.getLogger("demo")
 
 
+
+class DemoWindow(QtWidgets.QWidget):
+    """ Demo window
+    """
+    def __init__(self, colorLibModel: ColorLibModel, **kwargs):
+        """ Constructor
+        """
+        super().__init__(**kwargs)
+
+        self.label = QtWidgets.QLabel()
+        self.selectionWidget = ColorSelectionWidget(colorLibModel=colorLibModel)
+
+        self.mainLayout = QtWidgets.QVBoxLayout(self)
+        self.mainLayout.addWidget(self.label)
+        self.mainLayout.addWidget(self.selectionWidget)
+
+        self.selectionWidget.sigColorMapChanged.connect(self.updateLabel)
+
+        self.selectionWidget.comboBox.setCurrentIndex(1)
+
+
+    def updateLabel(self, colorMap):
+        """ Updates the label to show which cm has been selected
+        """
+        self.label.setText("Selected: {}".format(colorMap.pretty_name))
+
+
+
 def main():
     app = QtWidgets.QApplication([])
 
@@ -33,7 +61,7 @@ def main():
 
     colorLibModel = ColorLibModel(colorLib)
     if 1:
-        win = ColorSelectionWidget(colorLibModel=colorLibModel)
+        win = DemoWindow(colorLibModel=colorLibModel)
         win.move(10, 200)
     else:
         win = CmLibBrowser(colorLibModel=colorLibModel)
