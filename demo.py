@@ -98,27 +98,28 @@ def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
 
         The resulting pixmap will be WxHxN ARGB
     """
-    #rgba_arr = colorMap.argb_uint8_array
-
-    # # Shuffle dimensions to BGRA from RGBA  (which what Qt uses for ARGB in little-endian mode)
-    # # Do this by swapping index 0 and 2. If using bgra_arr = rgba_arr[:, [2, 1, 0, 3]], the
-    # # resulting bgra_arr will be fortran-contiguous, which would have to fixed later on.
-    # # Swapping dimensions is faster
-    # bgra_arr = np.copy(rgba_arr)
-    # bgra_arr[:, 0] = rgba_arr[:, 2]
-    # bgra_arr[:, 2] = rgba_arr[:, 0]
-    # del rgba_arr
-    # imageArr = np.expand_dims(bgra_arr, 0)  # Add a dimension to get a N x 1 x 4 array
-
     assert imageArr.flags['C_CONTIGUOUS'], "expected C-contiguous array"
-
     imageArray256 = np.clip(imageArr * 256, 0, 255).astype(np.uint8)
 
-    imageArrBGRA = np.multiply.outer(imageArray256, np.ones(shape=(4,), dtype=np.uint8))
-    imageArrBGRA[:, :, 3] = 255  # Set all alpha values to 255
+    if colorMap is None:
+        imageArrBGRA = np.multiply.outer(imageArray256, np.ones(shape=(4,), dtype=np.uint8))
+        imageArrBGRA[:, :, 3] = 255  # Set all alpha values to 255
+    else:
+        # Apply colormap
+        rgba_arr = colorMap.argb_uint8_array
 
-    print(imageArrBGRA)
+        # Shuffle dimensions to BGRA from RGBA  (which is what Qt uses for ARGB in little-endian mode)
+        # Do this by swapping index 0 and 2. If using bgra_arr = rgba_arr[:, [2, 1, 0, 3]], the
+        # resulting bgra_arr will be fortran-contiguous, which would have to be fixed later on.
+        # Swapping dimensions is faster
+        bgra_arr = np.copy(rgba_arr)
+        bgra_arr[:, 0] = rgba_arr[:, 2]
+        bgra_arr[:, 2] = rgba_arr[:, 0]
+        del rgba_arr
 
+        imageArrBGRA = np.take(bgra_arr, imageArray256, axis=0, mode='clip')
+
+    assert imageArrBGRA.flags['C_CONTIGUOUS'], "expected C-contiguous array"
     image = arrayToQImage(imageArrBGRA, share_memory=False)
 
     # Scale image if height of width are defined
@@ -152,11 +153,10 @@ class DemoWindow(QtWidgets.QWidget):
         """
         super().__init__(**kwargs)
 
-        #pixMap = makeColorBarPixmap(colorMap, width=256, height=25)
+        self._drawBorder = True
+        self._imageArray = makeRamp()
+
         self.imageLabel = QtWidgets.QLabel()
-        imageArrayFloat = makeRamp()
-        pixMap = colorizeImageArray(imageArrayFloat, drawBorder=True)
-        self.imageLabel.setPixmap(pixMap)
 
         self.highLightedLabel = QtWidgets.QLabel()
         self.selectedLabel = QtWidgets.QLabel()
@@ -183,6 +183,8 @@ class DemoWindow(QtWidgets.QWidget):
         else:
             self.highLightedLabel.setText("Highlighted: <NONE>")
 
+        self.updateImageLabel(colorMap)
+
 
     def updateSelectedLabel(self, colorMap=None):
         """ Updates the label to show which cm has been selected
@@ -192,6 +194,15 @@ class DemoWindow(QtWidgets.QWidget):
         else:
             self.selectedLabel.setText("Selected: <NONE>")
 
+        self.updateImageLabel(colorMap)
+
+
+    def updateImageLabel(self, colorMap=None):
+        """ Colorizes the image with the color map.
+        """
+        pixMap = colorizeImageArray(self._imageArray, colorMap=colorMap,
+                                    drawBorder=self._drawBorder)
+        self.imageLabel.setPixmap(pixMap)
 
 
 def main():
