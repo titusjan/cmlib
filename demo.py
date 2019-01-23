@@ -22,25 +22,38 @@ class DemoWindow(QtWidgets.QWidget):
         """
         super().__init__(**kwargs)
 
-        self.label = QtWidgets.QLabel()
+        self.highLightedLabel = QtWidgets.QLabel()
+        self.selectedLabel = QtWidgets.QLabel()
         self.selectionWidget = ColorSelectionWidget(colorLibModel=colorLibModel)
 
         self.mainLayout = QtWidgets.QVBoxLayout(self)
-        self.mainLayout.addWidget(self.label)
+        self.mainLayout.addWidget(self.highLightedLabel)
+        self.mainLayout.addWidget(self.selectedLabel)
         self.mainLayout.addWidget(self.selectionWidget)
 
-        self.selectionWidget.sigColorMapChanged.connect(self.updateLabel)
+        self.selectionWidget.sigColorMapHighlighted.connect(self.updateHighlightedLabel)
+        self.selectionWidget.sigColorMapChanged.connect(self.updateSelectedLabel)
 
-        self.updateLabel(self.selectionWidget.getCurrentColorMap())
+        self.updateHighlightedLabel()
+        self.updateSelectedLabel(self.selectionWidget.getCurrentColorMap())
 
 
-    def updateLabel(self, colorMap=None):
+    def updateHighlightedLabel(self, colorMap=None):
+        """ Updates the label to show which cm has been highlighted in the table
+        """
+        if colorMap:
+            self.highLightedLabel.setText("Highlighted: {}".format(colorMap.pretty_name))
+        else:
+            self.highLightedLabel.setText("Highlighted: <NONE>")
+
+
+    def updateSelectedLabel(self, colorMap=None):
         """ Updates the label to show which cm has been selected
         """
         if colorMap:
-            self.label.setText("Selected: {}".format(colorMap.pretty_name))
+            self.selectedLabel.setText("Selected: {}".format(colorMap.pretty_name))
         else:
-            self.label.setText("")
+            self.selectedLabel.setText("Selected: <NONE>")
 
 
 

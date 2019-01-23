@@ -141,7 +141,7 @@ class CmLibBrowser(QtWidgets.QDialog):
         self._colorLibModel = colorLibModel
 
         self.tableView = ColorLibTableViewer(model=self._colorLibModel)
-        self.tableView.sigColorMapSelected.connect(self._onColorMapSelected)
+        self.tableView.sigColorMapHighlighted.connect(self._onColorMapSelected)
         self.tableView.verticalHeader().hide()
 
         self.colorMapNameLabel = QtWidgets.QLabel()

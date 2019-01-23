@@ -70,7 +70,15 @@ class ColorSelectionWidget(QtWidgets.QWidget):
     """ Widget to select a color map.
 
         Consists of Combobox and a button that pop ups a selection dialog.
+
+        The sigColorMapChanged signal is emitted when the user selects a color map in the combobox,
+        clicks Ok in the browser dialog, or double clicks a row in the browser dialog.
+
+        The sigColorMapHighlighted is emitted when the user selects a row in the browser dialog.
+        It is also emitted when the user clicks Cancel with the color map that was active when the
+        dialog is shown.
     """
+    sigColorMapHighlighted = pyqtSignal(ColorMap)
     sigColorMapChanged = pyqtSignal(ColorMap)
 
     def __init__(self, colorLibModel: ColorLibModel, **kwargs):
@@ -82,6 +90,8 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self._sourceModel = colorLibModel
         self._proxyModel = ComboProxyModel(parent=self)
         self._proxyModel.setSourceModel(self._sourceModel)
+
+        self._colorMapAtShow = None # The current color map at the moment the browser is shown
 
         self.comboBox = QtWidgets.QComboBox()
         self.comboBox.setModel(self._proxyModel)
@@ -105,14 +115,16 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
 
         self.comboBox.currentIndexChanged.connect(self._onCurrentChanged)
-
+        self.browser.tableView.sigColorMapHighlighted.connect(self.sigColorMapHighlighted)
         self.browser.accepted.connect(self._onDialogAccepted)
+        self.browser.rejected.connect(self._onDialogRejected)
 
 
     def showDialog(self):
         """ Shows the color browser dialog
         """
         self.browser.show()
+        self._colorMapAtShow = self.getCurrentColorMap()
         curRow = self.comboBox.currentIndex()
         proxyIdx = self._proxyModel.index(curRow, self.comboBox.modelColumn())
         sourceIdx = self._proxyModel.mapToSource(proxyIdx)
@@ -158,3 +170,9 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self._proxyModel.invalidateFilter()
         self.comboBox.setCurrentText(colorMap.pretty_name)
 
+
+
+    def _onDialogRejected(self):
+        """ Sets the color that was selected to the combobox.
+        """
+        self.sigColorMapHighlighted.emit(self._colorMapAtShow)

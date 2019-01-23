@@ -428,7 +428,7 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
 # TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py
 class ColorLibTableViewer(ToggleColumnTableView):
 
-    sigColorMapSelected = pyqtSignal(ColorMap)
+    sigColorMapHighlighted = pyqtSignal(ColorMap)
 
     def __init__(self, model=None, parent=None):
         """ Constructor
@@ -515,7 +515,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
             colorMap = self._sourceModel.colorLib.color_maps[row]
 
         logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))
-        self.sigColorMapSelected.emit(colorMap)
+        self.sigColorMapHighlighted.emit(colorMap)
 
 
     def getCurrentColorMap(self):
