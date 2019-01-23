@@ -131,7 +131,7 @@ class FilterForm(QtWidgets.QWidget):
 
 
 
-class CmLibBrowser(QtWidgets.QDialog):
+class CmLibBrowserDialog(QtWidgets.QDialog):
     """ Widget to browse the though the color library
     """
     def __init__(self, colorLibModel: ColorLibModel, parent=None):

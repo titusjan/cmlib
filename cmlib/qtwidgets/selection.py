@@ -7,7 +7,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 from cmlib.cmap import ColorMap
 from cmlib.misc import check_class
-from cmlib.qtwidgets.browser import CmLibBrowser
+from cmlib.qtwidgets.browser import CmLibBrowserDialog
 from cmlib.qtwidgets.table import ColorLibModel
 
 logger = logging.getLogger(__name__)
@@ -101,7 +101,7 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self.comboBox.setIconSize(
             QtCore.QSize(colorLibModel.iconBarWidth * scale, colorLibModel.iconBarHeight * scale))
 
-        self.browser = CmLibBrowser(colorLibModel=colorLibModel)
+        self.browser = CmLibBrowserDialog(colorLibModel=colorLibModel)
 
         self.openDialogButton = QtWidgets.QToolButton()
         self.openDialogButton.setText("...")
