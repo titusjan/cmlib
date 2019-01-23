@@ -23,6 +23,9 @@ class ComboProxyModel(QtCore.QSortFilterProxyModel):
     def __init__(self, parent):
         super(ComboProxyModel, self).__init__(parent)
 
+        # The color map selected from the browser dialog box
+        self.colorMapFromDialog = None
+
 
     def lessThan(self, leftIndex, rightIndex):
         """ Returns true if the value of the item referred to by the given index left is less than
@@ -47,15 +50,14 @@ class ComboProxyModel(QtCore.QSortFilterProxyModel):
         """ Returns true if the item is a favorite
         """
         colMap = self.sourceModel().colorLib.color_maps[sourceRow]
-        accept = colMap.meta_data.favorite
+        accept = colMap.meta_data.favorite or colMap == self.colorMapFromDialog
         #logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, colMap.meta_data.pretty_name))
         return accept
 
 
     def getColorMapByRow(self, row):
         """ Returns a color map at row of the given index.
-
-            Raises IndexError if the index is not valid
+            Returns None if no colormap is found
         """
         proxyIdx = self.index(row, 0)
         sourceIdx = self.mapToSource(proxyIdx)
@@ -104,6 +106,8 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
         self.comboBox.currentIndexChanged.connect(self._onCurrentChanged)
 
+        self.browser.accepted.connect(self._onDialogAccepted)
+
 
     def showDialog(self):
         """ Shows the color browser dialog
@@ -115,7 +119,6 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
         filterIdx = self.browser.tableView.model().mapFromSource(sourceIdx)
         if filterIdx.isValid():
-
             self.browser.tableView.selectRow(filterIdx.row())
         else:
             logger.warning("Unable to select color map of combobox in dialog box: {}"
@@ -143,3 +146,15 @@ class ColorSelectionWidget(QtWidgets.QWidget):
             return self._proxyModel.getColorMapByRow(row)
         except IndexError:
             return None
+
+
+    def _onDialogAccepted(self):
+        """ Sets the color that was selected to the combobox.
+        """
+        colorMap = self.browser.tableView.getCurrentColorMap()
+        logger.debug("Accepted color map from dialog: {}".format(colorMap.pretty_name))
+
+        self._proxyModel.colorMapFromDialog = colorMap
+        self._proxyModel.invalidateFilter()
+        self.comboBox.setCurrentText(colorMap.pretty_name)
+

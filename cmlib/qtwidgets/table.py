@@ -306,9 +306,10 @@ class ColorLibModel(QtCore.QAbstractTableModel):
             Raises IndexError if the index is not valid
         """
         if not index.isValid():
-            raise IndexError()
+            return None
+        else:
+            return self._colorMaps[index.row()]
 
-        return self._colorMaps[index.row()]
 
 
 class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
@@ -415,6 +416,14 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         return accept
 
 
+    def getColorMapByProxyIndex(self, proxyIdx):
+        """ Returns a color map given an index of the proxy model
+        """
+        sourceIdx = self.mapToSource(proxyIdx)
+        colorMap = self.sourceModel().getColorMapByIndex(sourceIdx)
+        return colorMap
+
+
 
 # TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py
 class ColorLibTableViewer(ToggleColumnTableView):
@@ -508,3 +517,13 @@ class ColorLibTableViewer(ToggleColumnTableView):
         logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))
         self.sigColorMapSelected.emit(colorMap)
 
+
+    def getCurrentColorMap(self):
+        """ Gets the current colorMap
+
+            Returns None if None selected.
+        """
+        try:
+            return self._proxyModel.getColorMapByProxyIndex(self.currentIndex())
+        except IndexError:
+            return None

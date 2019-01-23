@@ -131,7 +131,7 @@ class FilterForm(QtWidgets.QWidget):
 
 
 
-class CmLibBrowser(QtWidgets.QWidget):
+class CmLibBrowser(QtWidgets.QDialog):
     """ Widget to browse the though the color library
     """
     def __init__(self, colorLibModel: ColorLibModel, parent=None):
@@ -177,6 +177,18 @@ class CmLibBrowser(QtWidgets.QWidget):
         self.rightLayout.addWidget(self.colorMapNameLabel)
         self.rightLayout.addWidget(self.colorMapImageLabel)
         self.rightLayout.addWidget(self.tableView)
+
+        self.buttonBox = QtWidgets.QDialogButtonBox(
+            QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
+        self.rightLayout.addWidget(self.buttonBox)
+
+        self.okButton = self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok)
+        self.cancelButton = self.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel)
+
+        self.tableView.doubleClicked.connect(self.accept)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+        #self.discardButton.clicked.connect(self.reject)
 
 
     @property
