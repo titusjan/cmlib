@@ -6,7 +6,7 @@ import os.path
 
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSlot
 
 from cmlib import ColorLib, ColorLibModel, ColorSelectionWidget, CmLibBrowserDialog
 from cmlib.qtwidgets.qimg import arrayToQImage
@@ -15,19 +15,18 @@ logger = logging.getLogger("demo")
 
 
 # the size of the colormap test images
-SIZE_X = 500
-SIZE_Y = 500
+SIZE_X = 350
+SIZE_Y = 350
 
-def makeConcentricCircles():
-    """ Creates concentric cricle pattern.
 
-        :return: 2D numpy array
+def normalize(img):
+    """ Normalized imaga values to be between 0 and 1
     """
-    x = np.linspace(-10, 10, num=SIZE_X)
-    y = np.linspace(-10, 10, num=SIZE_Y)
-    xx, yy = np.meshgrid(x, y, sparse=False)
-    z = np.sin(xx**2 + yy**2) / (xx**2 + yy**2)
-    return z
+    zMin, zMax = np.amin(img), np.amax(img)
+    offset = zMin
+    zRange = zMax - zMin
+    return (img - offset )/ zRange
+
 
 
 def makeRamp():
@@ -43,11 +42,39 @@ def makeRamp():
         :return: 2D numpy array
     """
     x = np.linspace(0, 1, num=SIZE_X)
-    y = np.linspace(0, 1, num=SIZE_Y)
+    y = np.linspace(1, 0, num=SIZE_Y)
     xx, yy = np.meshgrid(x, y, sparse=False)
-    #z = yy + xx**2  # demonstrates banding
-    z = yy + (xx**2) * np.sin(64 * 2 * np.pi * yy) / 12
+    #z = yy + (xx**2) * np.sin(64 * 2 * np.pi * yy) / 12
+    z = xx + (yy**2) * np.sin(64 * 2 * np.pi * xx) / 12  # Transposed
     # z = np.clip(z, 0.0, 1.0) # Fails in PyQtGraph 2D plot :-/
+    return z
+
+
+def makeBandTest():
+    """ Create 'ramp' function from Peter Karpov's blog http://inversed.ru/Blog_2.htm
+
+        Slightly modified version of the test function introduced by Peter Kovesi
+        Good Colour Maps: How to Design Them. Peter Kovesi, arxiv.org, 2015.
+        http://arxiv.org/abs/1509.03700
+
+        :return: 2D numpy array
+    """
+    x = np.linspace(0, 1, num=SIZE_X)
+    y = np.linspace(1, 0, num=SIZE_Y)
+    xx, yy = np.meshgrid(x, y, sparse=False)
+    z = yy + xx**2  # demonstrates banding
+    return z
+
+
+def makeConcentricCircles():
+    """ Creates concentric cricle pattern.
+
+        :return: 2D numpy array
+    """
+    x = np.linspace(-10, 10, num=SIZE_X)
+    y = np.linspace(-10, 10, num=SIZE_Y)
+    xx, yy = np.meshgrid(x, y, sparse=False)
+    z = np.sin(xx**2 + yy**2) / (xx**2 + yy**2)
     return z
 
 
@@ -88,7 +115,7 @@ def makeSineProduct():
 def makeUniformNoise():
     """ Uniform noise between 0 and 1
     """
-    return np.random.uniform(0.0, 1.0, size=(400, 300))
+    return np.random.uniform(0.0, 1.0, size=(SIZE_X, SIZE_Y))
 
 
 def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
@@ -154,15 +181,28 @@ class DemoWindow(QtWidgets.QWidget):
         super().__init__(**kwargs)
 
         self._drawBorder = True
-        self._imageArray = makeRamp()
+        #self._imageArray = makeRamp()
+
+        self._currentColorMap = None
+
+        self.imageComboBox = QtWidgets.QComboBox()
+        self.imageComboBox.addItem("Ramp", userData=makeRamp)
+        self.imageComboBox.addItem("Banding", userData=makeBandTest)
+        self.imageComboBox.addItem("Concentric Circles", userData=makeConcentricCircles)
+        self.imageComboBox.addItem("ArcTan2", userData=makeArcTan2)
+        self.imageComboBox.addItem("Spirals", userData=makeSpiral)
+        self.imageComboBox.addItem("Sine Product", userData=makeSineProduct)
+        self.imageComboBox.addItem("Uniform Noise", userData=makeUniformNoise)
 
         self.imageLabel = QtWidgets.QLabel()
+        self.imageLabel.setScaledContents(True)
 
         self.highLightedLabel = QtWidgets.QLabel()
         self.selectedLabel = QtWidgets.QLabel()
         self.selectionWidget = ColorSelectionWidget(colorLibModel=colorLibModel)
 
         self.mainLayout = QtWidgets.QVBoxLayout(self)
+        self.mainLayout.addWidget(self.imageComboBox)
         self.mainLayout.addWidget(self.imageLabel)
         self.mainLayout.addWidget(self.highLightedLabel)
         self.mainLayout.addWidget(self.selectedLabel)
@@ -170,7 +210,9 @@ class DemoWindow(QtWidgets.QWidget):
 
         self.selectionWidget.sigColorMapHighlighted.connect(self.updateHighlightedLabel)
         self.selectionWidget.sigColorMapChanged.connect(self.updateSelectedLabel)
+        self.imageComboBox.currentIndexChanged.connect(self._onImageChanged)
 
+        self._onImageChanged()
         self.updateHighlightedLabel()
         self.updateSelectedLabel(self.selectionWidget.getCurrentColorMap())
 
@@ -200,9 +242,24 @@ class DemoWindow(QtWidgets.QWidget):
     def updateImageLabel(self, colorMap=None):
         """ Colorizes the image with the color map.
         """
+        self._currentColorMap = colorMap
         pixMap = colorizeImageArray(self._imageArray, colorMap=colorMap,
                                     drawBorder=self._drawBorder)
         self.imageLabel.setPixmap(pixMap)
+
+
+    @pyqtSlot()
+    def _onImageChanged(self):
+        """ Draws and colorizes the selected image
+        """
+        imgFunction = self.imageComboBox.currentData()
+        logger.debug("On image changed: {}".format(imgFunction))
+        self._imageArray = normalize(imgFunction())
+
+        logger.debug("Image value range: ({:5.2f}, {:5.2f})"
+                     .format(np.amin(self._imageArray), np.amax(self._imageArray)))
+
+        self.updateImageLabel(self._currentColorMap)
 
 
 def main():
