@@ -126,15 +126,17 @@ def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
         The resulting pixmap will be WxHxN ARGB
     """
     assert imageArr.flags['C_CONTIGUOUS'], "expected C-contiguous array"
-    imageArray256 = np.clip(imageArr * 256, 0, 255).astype(np.uint8)
 
     if colorMap is None:
+        imageArray256 = np.clip(imageArr * (256), 0, 255).astype(np.uint8)
+
         imageArrBGRA = np.multiply.outer(imageArray256, np.ones(shape=(4,), dtype=np.uint8))
         imageArrBGRA[:, :, 3] = 255  # Set all alpha values to 255
     else:
-        # Apply colormap
         rgba_arr = colorMap.argb_uint8_array
 
+        numColors = len(rgba_arr)
+        imageArray256 = np.clip(imageArr * (numColors), 0, numColors-1).astype(np.uint8)
         # Shuffle dimensions to BGRA from RGBA  (which is what Qt uses for ARGB in little-endian mode)
         # Do this by swapping index 0 and 2. If using bgra_arr = rgba_arr[:, [2, 1, 0, 3]], the
         # resulting bgra_arr will be fortran-contiguous, which would have to be fixed later on.
@@ -144,6 +146,7 @@ def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
         bgra_arr[:, 2] = rgba_arr[:, 0]
         del rgba_arr
 
+        # Apply colormap
         imageArrBGRA = np.take(bgra_arr, imageArray256, axis=0, mode='clip')
 
     assert imageArrBGRA.flags['C_CONTIGUOUS'], "expected C-contiguous array"
