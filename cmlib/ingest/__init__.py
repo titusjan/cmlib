@@ -19,6 +19,10 @@
     TODO:
         color brewer
         https://www.kennethmoreland.com/color-advice/
+
+    Color lib
+        https://github.com/colour-science/colour
+        https://github.com/colour-science/awesome-colour
 """
 
 
