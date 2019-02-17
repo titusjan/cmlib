@@ -8,10 +8,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
-from cmlib.cmap import ColorLib, ColorMap, CatalogMetaData, CmMetaData
-from cmlib.misc import check_class, __version__
-from cmlib.qtwidgets.toggle_column_mixin import ToggleColumnTableView
-from cmlib.qtwidgets.qimg import makeColorBarPixmap
+from ..cmap import ColorLib, ColorMap, CatalogMetaData, CmMetaData
+from ..misc import check_class, __version__
+from ..qtwidgets.toggle_column_mixin import ToggleColumnTableView
+from ..qtwidgets.qimg import makeColorBarPixmap
 
 logger = logging.getLogger(__name__)
 

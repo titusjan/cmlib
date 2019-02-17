@@ -21,7 +21,7 @@ from cmlib.misc import LOG_FMT, save_rgb_floats
 
 logger = logging.getLogger(__name__)
 
-TARGET_DIR = "../../data/MatPlotLib"
+TARGET_DIR = "../cmlib/data/MatPlotLib"
 
 MAPS = [ ('Perceptually Uniform Sequential', [
             'viridis', 'plasma', 'inferno', 'magma', 'cividis']),

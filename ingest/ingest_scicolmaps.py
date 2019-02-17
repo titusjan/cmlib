@@ -8,8 +8,8 @@ from cmlib.misc import LOG_FMT, load_rgb_floats, save_rgb_floats
 
 logger = logging.getLogger(__name__)
 
-SOURCE_DIR = "../../source_data/ScientificColourMaps4"
-TARGET_DIR = "../../data/SciColMaps"
+SOURCE_DIR = "../source_data/ScientificColourMaps4"
+TARGET_DIR = "../cmlib/data/SciColMaps"
 
 MAPS = [
     ("acton", DataCategory.Sequential),

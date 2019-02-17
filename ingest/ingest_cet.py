@@ -11,8 +11,8 @@ from cmlib.misc import LOG_FMT, save_rgb_floats
 
 logger = logging.getLogger(__name__)
 
-SOURCE_DIR = "../../source_data/CET"
-TARGET_DIR = "../../data/CET"
+SOURCE_DIR = "../source_data/CET"
+TARGET_DIR = "../cmlib/data/CET"
 
 MAPS = [
     # Linear

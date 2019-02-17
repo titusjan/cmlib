@@ -268,7 +268,7 @@ class DemoWindow(QtWidgets.QWidget):
 def main():
     app = QtWidgets.QApplication([])
 
-    data_dir=os.path.abspath("data")
+    data_dir = os.path.abspath("cmlib/data")
 
     colorLib = ColorLib()
     colorLib.load_catalog(os.path.join(data_dir, 'CET'))

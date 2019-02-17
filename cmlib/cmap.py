@@ -73,7 +73,7 @@ from collections import OrderedDict
 
 import numpy as np
 
-from cmlib.misc import check_class, check_is_an_array, load_rgb_floats
+from .misc import check_class, check_is_an_array, load_rgb_floats
 
 logger = logging.getLogger(__name__)
 

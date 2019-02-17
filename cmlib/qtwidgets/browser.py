@@ -6,10 +6,10 @@ import logging
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 
-from cmlib.cmap import DataCategory
-from cmlib.misc import check_class
-from cmlib.qtwidgets.qimg import makeColorBarPixmap
-from cmlib.qtwidgets.table import ColorLibModel, ColorLibProxyModel, ColorLibTableViewer
+from ..cmap import DataCategory
+from ..misc import check_class
+from ..qtwidgets.qimg import makeColorBarPixmap
+from ..qtwidgets.table import ColorLibModel, ColorLibProxyModel, ColorLibTableViewer
 
 
 logger = logging.getLogger(__name__)

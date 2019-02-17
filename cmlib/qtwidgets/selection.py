@@ -5,10 +5,10 @@ import logging
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
-from cmlib.cmap import ColorMap
-from cmlib.misc import check_class
-from cmlib.qtwidgets.browser import CmLibBrowserDialog
-from cmlib.qtwidgets.table import ColorLibModel
+from ..cmap import ColorMap
+from ..misc import check_class
+from ..qtwidgets.browser import CmLibBrowserDialog
+from ..qtwidgets.table import ColorLibModel
 
 logger = logging.getLogger(__name__)
 
