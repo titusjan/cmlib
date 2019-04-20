@@ -67,7 +67,7 @@ def makeBandTest():
 
 
 def makeConcentricCircles():
-    """ Creates concentric cricle pattern.
+    """ Creates a concentric circle pattern.
 
         :return: 2D numpy array
     """
@@ -79,7 +79,7 @@ def makeConcentricCircles():
 
 
 def makeArcTan2():
-    """ Create atan2(x, y), which is goog for testing circular color maps.
+    """ Create atan2(x, y), which is good for testing circular color maps.
         :return: 2D numpy array
     """
     x = np.linspace(-1, 1, num=SIZE_X)

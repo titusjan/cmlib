@@ -1,0 +1,30 @@
+git subtree add --prefix .vim/bundle/tpope-vim-surround https://bitbucket.org/vim-plugins-mirror/vim-surround.git master --squash
+
+git subtree add --prefix .vim/bundle/tpope-vim-surround tpope-vim-surround master --squash
+
+
+
+
+git remote add -f tpope-vim-surround https://bitbucket.org/vim-plugins-mirror/vim-surround.git
+
+git remote add    durdn-vim-surround ssh://git@bitbucket.org/durdn/vim-surround.git
+
+
+
+git remote add -f tpope-vim-surround https://bitbucket.org/vim-plugins-mirror/vim-surround.git
+
+git remote add core https://github.com/titusjan/cmlibcore.git
+git subtree add --prefix cmlibcore core master --squash
+
+
+# To update the subtree
+
+git subtree pull --prefix .vim/bundle/tpope-vim-surround tpope-vim-surround master --squash
+
+git subtree pull  --prefix cmlibcore core master --squash
+
+
+# Commit back to the sub tree
+
+git subtree push --prefix cmlibcore core master
+
