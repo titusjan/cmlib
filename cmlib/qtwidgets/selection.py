@@ -8,7 +8,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from ..cmap import ColorMap
 from ..misc import check_class
 from ..qtwidgets.browser import CmLibBrowserDialog
-from ..qtwidgets.table import ColorLibModel
+from ..qtwidgets.table import CmLibModel
 
 logger = logging.getLogger(__name__)
 
@@ -34,14 +34,14 @@ class ComboProxyModel(QtCore.QSortFilterProxyModel):
             Sorts first by the desired column and uses the Key as tie breaker
         """
         sourceModel = self.sourceModel()
-        leftData  = sourceModel.data(leftIndex, role=ColorLibModel.SORT_ROLE)
-        rightData = sourceModel.data(rightIndex, role=ColorLibModel.SORT_ROLE)
+        leftData  = sourceModel.data(leftIndex, role=CmLibModel.SORT_ROLE)
+        rightData = sourceModel.data(rightIndex, role=CmLibModel.SORT_ROLE)
 
-        leftKeyIndex = sourceModel.index(leftIndex.row(), ColorLibModel.COL_KEY)
-        rightKeyIndex = sourceModel.index(rightIndex.row(), ColorLibModel.COL_KEY)
+        leftKeyIndex = sourceModel.index(leftIndex.row(), CmLibModel.COL_KEY)
+        rightKeyIndex = sourceModel.index(rightIndex.row(), CmLibModel.COL_KEY)
 
-        leftKey  = sourceModel.data(leftKeyIndex, role=ColorLibModel.SORT_ROLE)
-        rightKey = sourceModel.data(rightKeyIndex, role=ColorLibModel.SORT_ROLE)
+        leftKey  = sourceModel.data(leftKeyIndex, role=CmLibModel.SORT_ROLE)
+        rightKey = sourceModel.data(rightKeyIndex, role=CmLibModel.SORT_ROLE)
 
         return (leftData, leftKey) < (rightData, rightKey)
 
@@ -49,7 +49,7 @@ class ComboProxyModel(QtCore.QSortFilterProxyModel):
     def filterAcceptsRow(self, sourceRow, sourceParentIndex):
         """ Returns true if the item is a favorite
         """
-        colMap = self.sourceModel().colorLib.color_maps[sourceRow]
+        colMap = self.sourceModel().cmLib.color_maps[sourceRow]
         accept = colMap.meta_data.favorite or colMap == self.colorMapFromDialog
         #logger.debug("filterAcceptsRow = {}: {:15s}".format(accept, colMap.meta_data.pretty_name))
         return accept
@@ -81,13 +81,13 @@ class ColorSelectionWidget(QtWidgets.QWidget):
     sigColorMapHighlighted = pyqtSignal(ColorMap)
     sigColorMapChanged = pyqtSignal(ColorMap)
 
-    def __init__(self, colorLibModel: ColorLibModel, **kwargs):
+    def __init__(self, cmLibModel: CmLibModel, **kwargs):
         """ Constructor
         """
         super().__init__(**kwargs)
 
-        check_class(colorLibModel, ColorLibModel)
-        self._sourceModel = colorLibModel
+        check_class(cmLibModel, CmLibModel)
+        self._sourceModel = cmLibModel
         self._proxyModel = ComboProxyModel(parent=self)
         self._proxyModel.setSourceModel(self._sourceModel)
 
@@ -95,13 +95,13 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
         self.comboBox = QtWidgets.QComboBox()
         self.comboBox.setModel(self._proxyModel)
-        self.comboBox.setModelColumn(ColorLibModel.COL_NAME)
+        self.comboBox.setModelColumn(CmLibModel.COL_NAME)
 
         scale = 0.65
         self.comboBox.setIconSize(
-            QtCore.QSize(colorLibModel.iconBarWidth * scale, colorLibModel.iconBarHeight * scale))
+            QtCore.QSize(cmLibModel.iconBarWidth * scale, cmLibModel.iconBarHeight * scale))
 
-        self.browser = CmLibBrowserDialog(colorLibModel=colorLibModel)
+        self.browser = CmLibBrowserDialog(cmLibModel=cmLibModel)
 
         self.openDialogButton = QtWidgets.QToolButton()
         self.openDialogButton.setText("...")

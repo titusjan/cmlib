@@ -8,7 +8,7 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, pyqtSlot
 
-from cmlib import ColorLib, ColorLibModel, ColorSelectionWidget, CmLibBrowserDialog
+from cmlib import CmLib, CmLibModel, ColorSelectionWidget, CmLibBrowserDialog
 from cmlib.qtwidgets.qimg import arrayToQImage
 
 logger = logging.getLogger("demo")
@@ -178,7 +178,7 @@ def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
 class DemoWindow(QtWidgets.QWidget):
     """ Demo window
     """
-    def __init__(self, colorLibModel: ColorLibModel, **kwargs):
+    def __init__(self, cmLibModel: CmLibModel, **kwargs):
         """ Constructor
         """
         super().__init__(**kwargs)
@@ -202,7 +202,7 @@ class DemoWindow(QtWidgets.QWidget):
 
         self.highLightedLabel = QtWidgets.QLabel()
         self.selectedLabel = QtWidgets.QLabel()
-        self.selectionWidget = ColorSelectionWidget(colorLibModel=colorLibModel)
+        self.selectionWidget = ColorSelectionWidget(cmLibModel=cmLibModel)
 
         self.mainLayout = QtWidgets.QVBoxLayout(self)
         self.mainLayout.addWidget(self.imageComboBox)
@@ -270,25 +270,25 @@ def main():
 
     data_dir = os.path.abspath("cmlib/data")
 
-    colorLib = ColorLib()
-    colorLib.load_catalog(os.path.join(data_dir, 'CET'))
-    colorLib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
-    colorLib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
+    cm_lib = CmLib()
+    cm_lib.load_catalog(os.path.join(data_dir, 'CET'))
+    cm_lib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
+    cm_lib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
 
-    logger.debug("Number of color maps: {}".format(len(colorLib.color_maps)))
+    logger.debug("Number of color maps: {}".format(len(cm_lib.color_maps)))
 
     # Set some random favorites to test the favorite checkbox
 
-    for colorMap in colorLib.color_maps:
+    for colorMap in cm_lib.color_maps:
         if colorMap.key in ['SciColMaps/Oleron', 'CET/CET-CBL1', 'MatPlotLib/Cubehelix']:
             colorMap.meta_data.favorite = True
 
-    colorLibModel = ColorLibModel(colorLib)
+    cmLibModel = CmLibModel(cm_lib)
     if 1:
-        win = DemoWindow(colorLibModel=colorLibModel)
+        win = DemoWindow(cmLibModel=cmLibModel)
         win.move(10, 200)
     else:
-        win = CmLibBrowserDialog(colorLibModel=colorLibModel)
+        win = CmLibBrowserDialog(cmLibModel=cmLibModel)
         win.setGeometry(10, 10, 1200, 500)
 
     win.show()
@@ -296,7 +296,7 @@ def main():
     app.exec_()
 
     logger.debug("Favorites:")
-    for colorMap in colorLib.color_maps:
+    for colorMap in cm_lib.color_maps:
         if colorMap.meta_data.favorite:
             logger.debug("  {}".format(colorMap.meta_data.name))
 

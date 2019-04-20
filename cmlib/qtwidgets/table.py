@@ -8,7 +8,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
-from ..cmap import ColorLib, ColorMap, CatalogMetaData, CmMetaData
+from ..cmap import CmLib, ColorMap, CatalogMetaData, CmMetaData
 from ..misc import check_class, __version__
 from ..qtwidgets.toggle_column_mixin import ToggleColumnTableView
 from ..qtwidgets.qimg import makeColorBarPixmap
@@ -40,8 +40,8 @@ _ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
 
 
 
-class ColorLibModel(QtCore.QAbstractTableModel):
-    """ A table model that maps ColorLib data as a table.
+class CmLibModel(QtCore.QAbstractTableModel):
+    """ A table model that maps CmLib data as a table.
     """
     HEADERS = ('★', 'Key', 'Catalog', 'Name', 'Category', 'Size', 'Recommended',
                'P. Uniform', 'B & W', 'Color Blind', 'Isoluminant',
@@ -59,20 +59,20 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
     SORT_ROLE = Qt.UserRole
 
-    def __init__(self, colorLib, parent=None):
+    def __init__(self, cmLib, parent=None):
         """ Constructor
 
-            :param ColorLib colorLib: the underlying color library
+            :param CmLib cmLib: the underlying color library
             :param QWidget parent: Qt parent widget
         """
         super().__init__(parent=parent)
-        check_class(colorLib, ColorLib)
+        check_class(cmLib, CmLib)
 
         assert len(self.HEADERS) == len(self.DEFAULT_WIDTHS), "sanity check failed."
         assert len(self.HEADERS) == len(self.HEADER_TOOL_TIPS), "sanity check failed."
 
-        self._colorLib = colorLib
-        self._colorMaps = colorLib.color_maps # used often
+        self._cmLib = cmLib
+        self._colorMaps = cmLib.color_maps # used often
 
         # Parameters that defined the legend bars. You should dataChanged on the column
         # that contains the icons (COL_NAME) if you change these (or just reset the entire model.)
@@ -88,10 +88,10 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
 
     @property
-    def colorLib(self):
-        """ Returns the underlying ColorLib
+    def cmLib(self):
+        """ Returns the underlying CmLib
         """
-        return self._colorLib
+        return self._cmLib
 
 
     def rowCount(self, _parent=None):
@@ -312,7 +312,7 @@ class ColorLibModel(QtCore.QAbstractTableModel):
 
 
 
-class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
+class CmLibProxyModel(QtCore.QSortFilterProxyModel):
     """ Proxy model that overrides the sorting.
     """
 
@@ -323,13 +323,13 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
     FT_TAG = "ft_tag"
 
     def __init__(self, parent):
-        super(ColorLibProxyModel, self).__init__(parent)
+        super(CmLibProxyModel, self).__init__(parent)
 
         self._filters = {
-            ColorLibProxyModel.FT_CATALOG: [],
-            ColorLibProxyModel.FT_CATEGORY: [],
-            ColorLibProxyModel.FT_TAG: [],
-            ColorLibProxyModel.FT_QUALITY: [],
+            CmLibProxyModel.FT_CATALOG: [],
+            CmLibProxyModel.FT_CATEGORY: [],
+            CmLibProxyModel.FT_TAG: [],
+            CmLibProxyModel.FT_QUALITY: [],
         }
 
 
@@ -356,14 +356,14 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
             Sorts first by the desired column and uses the Key as tie breaker
         """
         sourceModel = self.sourceModel()
-        leftData  = sourceModel.data(leftIndex, role=ColorLibModel.SORT_ROLE)
-        rightData = sourceModel.data(rightIndex, role=ColorLibModel.SORT_ROLE)
+        leftData  = sourceModel.data(leftIndex, role=CmLibModel.SORT_ROLE)
+        rightData = sourceModel.data(rightIndex, role=CmLibModel.SORT_ROLE)
 
-        leftKeyIndex = sourceModel.index(leftIndex.row(), ColorLibModel.COL_KEY)
-        rightKeyIndex = sourceModel.index(rightIndex.row(), ColorLibModel.COL_KEY)
+        leftKeyIndex = sourceModel.index(leftIndex.row(), CmLibModel.COL_KEY)
+        rightKeyIndex = sourceModel.index(rightIndex.row(), CmLibModel.COL_KEY)
 
-        leftKey  = sourceModel.data(leftKeyIndex, role=ColorLibModel.SORT_ROLE)
-        rightKey = sourceModel.data(rightKeyIndex, role=ColorLibModel.SORT_ROLE)
+        leftKey  = sourceModel.data(leftKeyIndex, role=CmLibModel.SORT_ROLE)
+        rightKey = sourceModel.data(rightKeyIndex, role=CmLibModel.SORT_ROLE)
 
         # logger.debug("lessThan: {} <? {} = {}".format(
         #     (leftData, leftKey), (rightData, rightKey),
@@ -394,21 +394,21 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
         """
         assert not sourceParentIndex.isValid(), "sourceParentIndex is not the root index"
 
-        colMap = self.sourceModel().colorLib.color_maps[sourceRow]
+        colMap = self.sourceModel().cmLib.color_maps[sourceRow]
         md = colMap.meta_data
         catMd = colMap.catalog_meta_data
 
         acceptCatalog = any([catMd.key == desired for _, desired in
-                             self._filters[ColorLibProxyModel.FT_CATALOG]])
+                             self._filters[CmLibProxyModel.FT_CATALOG]])
 
         acceptCategory = any([getattr(md, attrName) == desired for attrName, desired in
-                              self._filters[ColorLibProxyModel.FT_CATEGORY]])
+                              self._filters[CmLibProxyModel.FT_CATEGORY]])
 
         acceptQuality = all([getattr(md, attrName) == desired for attrName, desired in
-                             self._filters[ColorLibProxyModel.FT_QUALITY]])  # Note test for all
+                             self._filters[CmLibProxyModel.FT_QUALITY]])  # Note test for all
 
         acceptTags = all([desired in md.tags for _, desired in
-                          self._filters[ColorLibProxyModel.FT_TAG]])  # Note test for all
+                          self._filters[CmLibProxyModel.FT_TAG]])  # Note test for all
 
         accept = all([acceptCatalog, acceptCategory, acceptQuality, acceptTags])
 
@@ -426,22 +426,22 @@ class ColorLibProxyModel(QtCore.QSortFilterProxyModel):
 
 
 # TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py
-class ColorLibTableViewer(ToggleColumnTableView):
+class CmLibTableViewer(ToggleColumnTableView):
 
     sigColorMapHighlighted = pyqtSignal(ColorMap)
 
     def __init__(self, model=None, parent=None):
         """ Constructor
 
-            :param ColorLibModel model: the item model
+            :param CmLibModel model: the item model
         """
         super().__init__(parent=parent)
 
         self._colorMapNoneSelected = self.createTransparentColorMap()
 
-        check_class(model, ColorLibModel)
+        check_class(model, CmLibModel)
         self._sourceModel = model
-        self._proxyModel = ColorLibProxyModel(parent=self)
+        self._proxyModel = CmLibProxyModel(parent=self)
         self._proxyModel.setSourceModel(self._sourceModel)
         self.setModel(self._proxyModel)
 
@@ -458,21 +458,21 @@ class ColorLibTableViewer(ToggleColumnTableView):
         treeHeader.setStretchLastSection(True)
         treeHeader.setSectionResizeMode(QtWidgets.QHeaderView.Interactive) # don't set to stretch
 
-        for col, width in enumerate(ColorLibModel.DEFAULT_WIDTHS):
+        for col, width in enumerate(CmLibModel.DEFAULT_WIDTHS):
             treeHeader.resizeSection(col, width)
 
         # Make the 'name' color wider because of the legend bar.
         treeHeader.resizeSection(
-            ColorLibModel.COL_NAME,
-            self._sourceModel.iconBarWidth + ColorLibModel.DEFAULT_WIDTHS[ColorLibModel.COL_NAME])
+            CmLibModel.COL_NAME,
+            self._sourceModel.iconBarWidth + CmLibModel.DEFAULT_WIDTHS[CmLibModel.COL_NAME])
 
-        headerNames = ColorLibModel.HEADERS
+        headerNames = CmLibModel.HEADERS
         enabled = dict((name, True) for name in headerNames)
-        enabled[headerNames[ColorLibModel.COL_NAME]] = False # Cannot be unchecked
+        enabled[headerNames[CmLibModel.COL_NAME]] = False # Cannot be unchecked
         checked = dict((name, True) for name in headerNames)
-        checked[headerNames[ColorLibModel.COL_KEY]] = False
-        checked[headerNames[ColorLibModel.COL_SIZE]] = False
-        checked[headerNames[ColorLibModel.COL_NOTES]] = False
+        checked[headerNames[CmLibModel.COL_KEY]] = False
+        checked[headerNames[CmLibModel.COL_SIZE]] = False
+        checked[headerNames[CmLibModel.COL_NOTES]] = False
         self.addHeaderContextMenu(checked=checked, enabled=enabled, checkable={})
 
         self.setContextMenuPolicy(Qt.DefaultContextMenu) # will call contextMenuEvent
@@ -480,7 +480,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
         self._selectionModel = self.selectionModel()
         self._selectionModel.currentChanged.connect(self._onCurrentChanged)
 
-        self.sortByColumn(ColorLibModel.COL_CATEGORY, Qt.AscendingOrder)
+        self.sortByColumn(CmLibModel.COL_CATEGORY, Qt.AscendingOrder)
 
 
     @classmethod
@@ -512,7 +512,7 @@ class ColorLibTableViewer(ToggleColumnTableView):
             assert sourceIdx.isValid(), "Source Index not valid"
 
             row = sourceIdx.row()
-            colorMap = self._sourceModel.colorLib.color_maps[row]
+            colorMap = self._sourceModel.cmLib.color_maps[row]
 
         logger.debug("Emitting sigColorMapSelected: {}".format(colorMap))
         self.sigColorMapHighlighted.emit(colorMap)

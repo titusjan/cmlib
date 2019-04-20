@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 from ..cmap import DataCategory
 from ..misc import check_class
 from ..qtwidgets.qimg import makeColorBarPixmap
-from ..qtwidgets.table import ColorLibModel, ColorLibProxyModel, ColorLibTableViewer
+from ..qtwidgets.table import CmLibModel, CmLibProxyModel, CmLibTableViewer
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def uniqueSort(lst):
 class FilterForm(QtWidgets.QWidget):
     """ Form with widgets to filter the color bars
     """
-    def __init__(self, proxyModel: ColorLibProxyModel, parent=None):
+    def __init__(self, proxyModel: CmLibProxyModel, parent=None):
         super().__init__(parent=parent)
 
         self._defaultOnCheckboxes = []
@@ -34,8 +34,8 @@ class FilterForm(QtWidgets.QWidget):
 
         self._proxyModel = proxyModel
         self._sourceModel = self._proxyModel.sourceModel()
-        self._colorLib = self._sourceModel.colorLib
-        colMaps = self._colorLib.color_maps
+        self._cmLib = self._sourceModel.cmLib
+        colMaps = self._cmLib.color_maps
 
         self.resetButton = QtWidgets.QPushButton("Reset Filters")
         self.resetButton.clicked.connect(self.resetCheckboxes)
@@ -47,7 +47,7 @@ class FilterForm(QtWidgets.QWidget):
 
         for catalogKey, catalogName in allCatalogs:
             checkBox = self._createFilterCheckbox(
-                ColorLibProxyModel.FT_CATALOG, None, catalogKey)
+                CmLibProxyModel.FT_CATALOG, None, catalogKey)
             checkBox.setText(catalogKey)
             checkBox.setToolTip(catalogName)
             self._defaultOnCheckboxes.append(checkBox)
@@ -58,7 +58,7 @@ class FilterForm(QtWidgets.QWidget):
 
         for category in list(DataCategory):
             checkBox = self._createFilterCheckbox(
-                ColorLibProxyModel.FT_CATEGORY, 'category', category)
+                CmLibProxyModel.FT_CATEGORY, 'category', category)
             checkBox.setText(category.name)
             self._defaultOnCheckboxes.append(checkBox)
             self.categoriesLayout.addWidget(checkBox)
@@ -75,7 +75,7 @@ class FilterForm(QtWidgets.QWidget):
             ("Isoluminant", "isoluminant"),
         ]
         for text, attrName in infoList:
-            checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_QUALITY, attrName, True)
+            checkBox = self._createFilterCheckbox(CmLibProxyModel.FT_QUALITY, attrName, True)
             checkBox.setText(text)
             if attrName == "recommended":
                 self._defaultOnCheckboxes.append(checkBox)
@@ -93,7 +93,7 @@ class FilterForm(QtWidgets.QWidget):
         allTags = sorted(list(tagSet))
 
         for tag in allTags:
-            checkBox = self._createFilterCheckbox(ColorLibProxyModel.FT_TAG, None, tag)
+            checkBox = self._createFilterCheckbox(CmLibProxyModel.FT_TAG, None, tag)
             checkBox.setText(tag)
             self._defaultOffCheckboxes.append(checkBox)
             self.tagsLayout.addWidget(checkBox)
@@ -134,13 +134,13 @@ class FilterForm(QtWidgets.QWidget):
 class CmLibBrowserDialog(QtWidgets.QDialog):
     """ Widget to browse the though the color library
     """
-    def __init__(self, colorLibModel: ColorLibModel, parent=None):
+    def __init__(self, cmLibModel: CmLibModel, parent=None):
         super().__init__(parent=parent)
 
-        check_class(colorLibModel, ColorLibModel)
-        self._colorLibModel = colorLibModel
+        check_class(cmLibModel, CmLibModel)
+        self._cmLibModel = cmLibModel
 
-        self.tableView = ColorLibTableViewer(model=self._colorLibModel)
+        self.tableView = CmLibTableViewer(model=self._cmLibModel)
         self.tableView.sigColorMapHighlighted.connect(self._onColorMapSelected)
         self.tableView.verticalHeader().hide()
 
@@ -192,10 +192,10 @@ class CmLibBrowserDialog(QtWidgets.QDialog):
 
 
     @property
-    def colorLib(self):
-        """ Returns the underlying ColorLib
+    def cmLib(self):
+        """ Returns the underlying CmLib
         """
-        return self._colorLibModel.colorLib
+        return self._cmLibModel.cmLib
 
 
     def _onColorMapSelected(self, colorMap):

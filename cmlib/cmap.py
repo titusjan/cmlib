@@ -364,8 +364,8 @@ class ColorMap():
 
 
 
-class ColorLib():
-    """ The color library.
+class CmLib():
+    """ The color map library.
 
         Consists of a list of color maps and a directory name where the data is stored.
     """
