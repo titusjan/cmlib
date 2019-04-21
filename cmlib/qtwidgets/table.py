@@ -430,6 +430,7 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
 
     def getColorMapByProxyIndex(self, proxyIdx):
         """ Returns a color map given an index of the proxy model
+            Returns None if not found.
         """
         sourceIdx = self.mapToSource(proxyIdx)
         colorMap = self.sourceModel().getColorMapByIndex(sourceIdx)
@@ -535,7 +536,4 @@ class CmLibTableViewer(ToggleColumnTableView):
 
             Returns None if None selected.
         """
-        try:
-            return self._proxyModel.getColorMapByProxyIndex(self.currentIndex())
-        except IndexError:
-            return None
+        return self._proxyModel.getColorMapByProxyIndex(self.currentIndex())

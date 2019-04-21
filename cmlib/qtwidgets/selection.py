@@ -141,10 +141,10 @@ class ColorSelectionWidget(QtWidgets.QWidget):
     def _onCurrentChanged(self, row):
         """ Emits sigColorMapSelected if a valid row has been selected
         """
-        try:
-            colorMap = self._proxyModel.getColorMapByRow(row)
+        colorMap = self._proxyModel.getColorMapByRow(row)
+        if colorMap is not None:
             self.sigColorMapChanged.emit(colorMap)
-        except IndexError as ex:
+        else:
             logger.warning("No color map found for row: {}".format(row))
 
 
@@ -154,21 +154,19 @@ class ColorSelectionWidget(QtWidgets.QWidget):
             Returns None if None selected.
         """
         row = self.comboBox.currentIndex()
-        try:
-            return self._proxyModel.getColorMapByRow(row)
-        except IndexError:
-            return None
+        return self._proxyModel.getColorMapByRow(row)
 
 
     def _onDialogAccepted(self):
         """ Sets the color that was selected to the combobox.
         """
         colorMap = self.browser.tableView.getCurrentColorMap()
-        logger.debug("Accepted color map from dialog: {}".format(colorMap.pretty_name))
+        pretty_name = '' if colorMap is None else colorMap.pretty_name
+        logger.debug("Accepted color map from dialog: {}".format(pretty_name))
 
         self._proxyModel.colorMapFromDialog = colorMap
         self._proxyModel.invalidateFilter()
-        self.comboBox.setCurrentText(colorMap.pretty_name)
+        self.comboBox.setCurrentText(pretty_name)
 
 
 
