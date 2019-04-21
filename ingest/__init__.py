@@ -10,19 +10,7 @@
     Every source subdir also contains a metadata.json file.
 
 
-    Color maps on the internet:
 
-        https://github.com/jiffyclub/palettable/issues
-        http://www.fabiocrameri.ch/colourmaps.php
-        http://colorcet.pyviz.org/ which comes from https://peterkovesi.com/projects/colourmaps/
-
-    TODO:
-        color brewer
-        https://www.kennethmoreland.com/color-advice/
-
-    Color lib
-        https://github.com/colour-science/colour
-        https://github.com/colour-science/awesome-colour
 """
 
 

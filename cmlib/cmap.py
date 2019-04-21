@@ -367,7 +367,7 @@ class ColorMap():
 class CmLib():
     """ The color map library.
 
-        Consists of a list of color maps and a directory name where the data is stored.
+        Consists of a list of color maps.
     """
     def __init__(self):
         self._color_maps = []

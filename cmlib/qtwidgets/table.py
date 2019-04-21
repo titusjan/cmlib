@@ -303,12 +303,24 @@ class CmLibModel(QtCore.QAbstractTableModel):
     def getColorMapByIndex(self, index):
         """ Returns a color map at row of the given index.
 
-            Raises IndexError if the index is not valid
+            Returns None if the index is not valid
         """
         if not index.isValid():
             return None
         else:
             return self._colorMaps[index.row()]
+    #
+    #
+    # def getColorMapByKey(self, key): # TODO: use ordered dict?
+    #     """ Returns a color map ha a key.
+    #
+    #         Return None if no key is not found.
+    #     """
+    #     for cmap in self._colorMaps:
+    #         if cmap.key == key:
+    #             return key
+    #     else:
+    #         return None
 
 
 
