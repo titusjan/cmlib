@@ -57,7 +57,7 @@ def makeColorBarPixmap(colorMap, width=None, height=None, drawBorder=False):
 
         The resulting pixmap will be 1xN ARGB
     """
-    rgba_arr = colorMap.argb_uint8_array
+    rgba_arr = colorMap.rgba_uint8_array
 
     # Shuffle dimensions to BGRA from RGBA  (which is what Qt uses for ARGB in little-endian mode)
     # Do this by swapping index 0 and 2. If using bgra_arr = rgba_arr[:, [2, 1, 0, 3]], the

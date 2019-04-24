@@ -178,7 +178,7 @@ class CmLibModel(QtCore.QAbstractTableModel):
                 return md.category.name
 
             elif col == self.COL_SIZE:
-                return len(colMap.argb_uint8_array)
+                return len(colMap.rgba_uint8_array)
 
             elif col == self.COL_UNIF:
                 return self._boolToData(md.perceptually_uniform)
@@ -309,18 +309,18 @@ class CmLibModel(QtCore.QAbstractTableModel):
             return None
         else:
             return self._colorMaps[index.row()]
-    #
-    #
-    # def getColorMapByKey(self, key): # TODO: use ordered dict?
-    #     """ Returns a color map ha a key.
-    #
-    #         Return None if no key is not found.
-    #     """
-    #     for cmap in self._colorMaps:
-    #         if cmap.key == key:
-    #             return key
-    #     else:
-    #         return None
+
+
+    def getColorMapByKey(self, key): # TODO: use ordered dict?
+        """ Returns a color map ha a key.
+
+            Return None if no key is not found.
+        """
+        for cmap in self._colorMaps:
+            if cmap.key == key:
+                return key
+        else:
+            return None
 
 
     def getIndexByKey(self, key):
@@ -531,7 +531,7 @@ class CmLibTableViewer(ToggleColumnTableView):
 
         colorMap = ColorMap(meta_data=cmMd, catalog_meta_data=catMd)
 
-        colorMap.set_argb_unit8_array(np.zeros(dtype=np.uint8, shape=(16, 4)))
+        colorMap.set_rgba_uint8_array(np.zeros(dtype=np.uint8, shape=(16, 4)))
         return colorMap
 
 
@@ -567,7 +567,7 @@ class CmLibTableViewer(ToggleColumnTableView):
         """
         index = self._proxyModel.getProxyIndexByKey(key)
         if not index.isValid():
-            logger.warning("No color map found with key {!r}. Ignored selection.")
+            logger.warning("No color map found with key {!r}. Ignored selection.".format(key))
             return None
 
         self.selectRow(index.row())

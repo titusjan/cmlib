@@ -230,7 +230,8 @@ class ColorMap():
         self._key = None
         self._prettyName = None
         self._rgb_float_array = None
-        self._argb_uint8_array = None
+        self._rgb_uint8_array = None
+        self._rgba_uint8_array = None
         self._meta_data = None
         self._catalog_meta_data = None
 
@@ -316,19 +317,8 @@ class ColorMap():
         self._rgb_float_array = rgb_arr
 
 
-    @property
-    def argb_uint8_array(self):
-        """ Gets the argb data as bytes. Loads the data from file if needed.
-
-            Returns 4xN array (ARGB). This format can be used to create Qt images.
-        """
-        if self._argb_uint8_array is None:
-            self.load_argb_uint8_array()
-        return self._argb_uint8_array
-
-
-    def load_argb_uint8_array(self, file_name=None):
-        """ Loads the rgb data from file.
+    def _read_rgb_uint8_file(self, file_name=None):
+        """ Loads the RGB data from file.
 
             :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
         """
@@ -342,25 +332,79 @@ class ColorMap():
         n_rows, depth = rgb_floats.shape
         assert depth == 3, "sanity check"
 
-        argb_ints = np.ones(shape=(n_rows, 4), dtype=np.uint8) * 255
-        argb_ints[:, 0:3] = rgb_floats.astype(np.uint8)
-
-        self.set_argb_unit8_array(argb_ints)
+        return rgb_floats.astype(np.uint8)
 
 
-    def set_argb_unit8_array(self, argb_arr):
-        """ Explicitly sets the ARGB uint8 data.
+    @property
+    def rgb_uint8_array(self):
+        """ Gets the rgb data as bytes. Loads the data from file if needed.
 
-            Typically not used directly because the argb data is loaded automatically when needed.
+            Returns 3xN array (RGB). This format can be used as LUT in image plots.
         """
-        check_is_an_array(argb_arr)
-        assert argb_arr.ndim == 2, "Expected 2D array. Got {}D".format(argb_arr.ndim)
-        _, n_cols = argb_arr.shape
-        assert n_cols == 4, "Expected 3 columns. Got: {}".format(n_cols)
-        if argb_arr.dtype != np.uint8:
-            raise TypeError("Expected np.float32. Got: {}".format(argb_arr.dtype))
+        if self._rgb_uint8_array is None:
+            self.load_rgb_uint8_array()
+        return self._rgb_uint8_array
 
-        self._argb_uint8_array = argb_arr
+
+    def load_rgb_uint8_array(self, file_name=None):
+        """ Loads the RGB data from file and converts to uint8.
+
+            :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
+        """
+        rgb_ints = self._read_rgb_uint8_file(file_name)
+        self.set_rgb_uint8_array(rgb_ints)
+
+
+    def set_rgb_uint8_array(self, rgb_arr):
+        """ Explicitly sets the RGB uint8 data.
+
+            Typically not used directly because the RGB data is loaded automatically when needed.
+        """
+        check_is_an_array(rgb_arr)
+        assert rgb_arr.ndim == 2, "Expected 2D array. Got {}D".format(rgb_arr.ndim)
+        _, n_cols = rgb_arr.shape
+        assert n_cols == 3, "Expected 3 columns. Got: {}".format(n_cols)
+        if rgb_arr.dtype != np.uint8:
+            raise TypeError("Expected np.uint8. Got: {}".format(rgb_arr.dtype))
+
+        self._rgb_uint8_array = rgb_arr
+
+
+    @property
+    def rgba_uint8_array(self):
+        """ Gets the rgba data as bytes. Loads the data from file if needed.
+
+            Returns 4xN array (RGBA). This format can be used to create Qt images.
+        """
+        if self._rgba_uint8_array is None:
+            self.load_rgba_uint8_array()
+        return self._rgba_uint8_array
+
+
+    def load_rgba_uint8_array(self, file_name=None):
+        """ Loads the RGB data from file, converts to uint8 and appends alpha column of 255.
+
+            :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
+        """
+        rgb_ints = self._read_rgb_uint8_file(file_name)
+        rgba_ints = np.ones(shape=(len(rgb_ints), 4), dtype=np.uint8) * 255
+        rgba_ints[:, 0:3] = rgb_ints
+        self.set_rgba_uint8_array(rgba_ints)
+
+
+    def set_rgba_uint8_array(self, rgba_arr):
+        """ Explicitly sets the RGBA uint8 data.
+
+            Typically not used directly because the RGBA data is loaded automatically when needed.
+        """
+        check_is_an_array(rgba_arr)
+        assert rgba_arr.ndim == 2, "Expected 2D array. Got {}D".format(rgba_arr.ndim)
+        _, n_cols = rgba_arr.shape
+        assert n_cols == 4, "Expected 4 columns. Got: {}".format(n_cols)
+        if rgba_arr.dtype != np.uint8:
+            raise TypeError("Expected np.uint8. Got: {}".format(rgba_arr.dtype))
+
+        self._rgba_uint8_array = rgba_arr
 
 
 

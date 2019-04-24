@@ -20,7 +20,7 @@ SIZE_Y = 350
 
 
 def normalize(img):
-    """ Normalized imaga values to be between 0 and 1
+    """ Normalizes image values to be between 0 and 1
     """
     zMin, zMax = np.amin(img), np.amax(img)
     offset = zMin
@@ -133,7 +133,7 @@ def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
         imageArrBGRA = np.multiply.outer(imageArray256, np.ones(shape=(4,), dtype=np.uint8))
         imageArrBGRA[:, :, 3] = 255  # Set all alpha values to 255
     else:
-        rgba_arr = colorMap.argb_uint8_array
+        rgba_arr = colorMap.rgba_uint8_array
 
         numColors = len(rgba_arr)
         imageArray256 = np.clip(imageArr * (numColors), 0, numColors-1).astype(np.uint8)
