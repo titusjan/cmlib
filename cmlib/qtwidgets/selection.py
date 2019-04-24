@@ -169,8 +169,18 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self.comboBox.setCurrentText(pretty_name)
 
 
-
     def _onDialogRejected(self):
         """ Sets the color that was selected to the combobox.
         """
         self.sigColorMapHighlighted.emit(self._colorMapAtShow)
+
+
+    def setColorMapByKey(self, key):
+        """ Select the color map given it's key.
+
+            Will select the color map in both the combobox and the dialog. This ensures that the
+            color map is temporary added to the list of combobox options, even if it wasn't
+            present.
+        """
+        self.browser.setColorMapByKey(key) # Will accept the colorbar and so call _onDialogAccepted.
+

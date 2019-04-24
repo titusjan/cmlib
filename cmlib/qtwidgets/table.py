@@ -323,6 +323,19 @@ class CmLibModel(QtCore.QAbstractTableModel):
     #         return None
 
 
+    def getIndexByKey(self, key):
+        """ Returns a color map ha a key.
+
+            Returns invalid index if the key is not found.
+        """
+        for row, cmap in enumerate(self._colorMaps): # TODO: use ordered dict?
+            if cmap.key == key:
+                return self.index(row, self.COL_KEY)
+        else:
+            return QtCore.QModelIndex()
+
+
+
 
 class CmLibProxyModel(QtCore.QSortFilterProxyModel):
     """ Proxy model that overrides the sorting.
@@ -438,6 +451,14 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
 
 
 
+    def getProxyIndexByKey(self, key):
+        """ Returns the index of the proxy model given the color map key
+        """
+        sourceIdx = self.sourceModel().getIndexByKey(key)
+        return self.mapFromSource(sourceIdx)
+
+
+
 # TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py
 class CmLibTableViewer(ToggleColumnTableView):
 
@@ -537,3 +558,17 @@ class CmLibTableViewer(ToggleColumnTableView):
             Returns None if None selected.
         """
         return self._proxyModel.getColorMapByProxyIndex(self.currentIndex())
+
+
+    def selectRowByKey(self, key):
+        """ Selects the row with the color map with key
+
+            Returns the selected row or None, if no color map was found with this key.
+        """
+        index = self._proxyModel.getProxyIndexByKey(key)
+        if not index.isValid():
+            logger.warning("No color map found with key {!r}. Ignored selection.")
+            return None
+
+        self.selectRow(index.row())
+        return index.row()

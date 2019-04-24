@@ -291,6 +291,8 @@ def main():
         win = CmLibBrowserDialog(cmLibModel=cmLibModel)
         win.setGeometry(10, 10, 1200, 500)
 
+    win.selectionWidget.setColorMapByKey("SciColMaps/Hawaii")
+
     win.show()
     win.raise_()
     app.exec_()

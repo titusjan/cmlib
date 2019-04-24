@@ -213,3 +213,12 @@ class CmLibBrowserDialog(QtWidgets.QDialog):
         """
         return QtCore.QSize(1000, 600)
 
+
+    def setColorMapByKey(self, key):
+        """ Selects the color map in the table and accepts the color map (i.e. 'presses Ok')
+        """
+        logger.debug("Setting color map by key: {}".format(key))
+        row = self.tableView.selectRowByKey(key)
+        self.accept()
+        return row
+
