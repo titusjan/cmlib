@@ -311,16 +311,10 @@ class CmLibModel(QtCore.QAbstractTableModel):
             return self._colorMaps[index.row()]
 
 
-    def getColorMapByKey(self, key): # TODO: use ordered dict?
-        """ Returns a color map ha a key.
-
-            Return None if no key is not found.
+    def getColorMapByKey(self, key):
+        """ Returns a color map having a key. Returns None if not found.
         """
-        for cmap in self._colorMaps:
-            if cmap.key == key:
-                return key
-        else:
-            return None
+        return self.cmLib.getColorMapByKey(key)
 
 
     def getIndexByKey(self, key):
@@ -333,7 +327,6 @@ class CmLibModel(QtCore.QAbstractTableModel):
                 return self.index(row, self.COL_KEY)
         else:
             return QtCore.QModelIndex()
-
 
 
 

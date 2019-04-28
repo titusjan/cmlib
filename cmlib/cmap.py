@@ -423,6 +423,16 @@ class CmLib():
         return self._color_maps
 
 
+    def getColorMapByKey(self, key):
+        """ Returns a color map having a key. Returns None if not found.
+        """
+        for cmap in self._color_maps:
+            if cmap.key == key:
+                return cmap
+        else:
+            return None
+
+
     def clear(self):
         """ Removes all color maps
         """
