@@ -230,7 +230,6 @@ class ColorMap():
         self._key = None
         self._prettyName = None
         self._rgb_float_array = None
-        self._rgb_uint8_array = None
         self._rgba_uint8_array = None
         self._meta_data = None
         self._catalog_meta_data = None
@@ -341,33 +340,9 @@ class ColorMap():
 
             Returns 3xN array (RGB). This format can be used as LUT in image plots.
         """
-        if self._rgb_uint8_array is None:
-            self.load_rgb_uint8_array()
-        return self._rgb_uint8_array
-
-
-    def load_rgb_uint8_array(self, file_name=None):
-        """ Loads the RGB data from file and converts to uint8.
-
-            :param str file_name: the rgb file. If None, the rgb_file_name property will be used.
-        """
-        rgb_ints = self._read_rgb_uint8_file(file_name)
-        self.set_rgb_uint8_array(rgb_ints)
-
-
-    def set_rgb_uint8_array(self, rgb_arr):
-        """ Explicitly sets the RGB uint8 data.
-
-            Typically not used directly because the RGB data is loaded automatically when needed.
-        """
-        check_is_an_array(rgb_arr)
-        assert rgb_arr.ndim == 2, "Expected 2D array. Got {}D".format(rgb_arr.ndim)
-        _, n_cols = rgb_arr.shape
-        assert n_cols == 3, "Expected 3 columns. Got: {}".format(n_cols)
-        if rgb_arr.dtype != np.uint8:
-            raise TypeError("Expected np.uint8. Got: {}".format(rgb_arr.dtype))
-
-        self._rgb_uint8_array = rgb_arr
+        if self._rgba_uint8_array is None:
+            self.load_rgba_uint8_array()
+        return self._rgba_uint8_array[:,0:3]
 
 
     @property

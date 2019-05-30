@@ -15,7 +15,7 @@
 from .misc import __version__
 
 # Classes that may be of use externally. I.e. by users of CmLib
-from .cmap import CmLib, ColorMap, DataCategory
+from .cmap import CmLib, ColorMap, DataCategory, CmMetaData, CatalogMetaData
 from .qtwidgets.browser import CmLibBrowserDialog
 from .qtwidgets.qimg import makeColorBarPixmap
 from .qtwidgets.selection import ColorSelectionWidget
