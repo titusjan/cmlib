@@ -114,7 +114,7 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
 
-        self.comboBox.currentIndexChanged.connect(self._onCurrentChanged)
+        self.comboBox.activated.connect(self._onCurrentActivated)
         self.browser.tableView.sigColorMapHighlighted.connect(self.sigColorMapHighlighted)
         self.browser.accepted.connect(self._onDialogAccepted)
         self.browser.rejected.connect(self._onDialogRejected)
@@ -138,9 +138,12 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
 
     @pyqtSlot(int)
-    def _onCurrentChanged(self, row):
-        """ Emits sigColorMapSelected if a valid row has been selected
+    def _onCurrentActivated(self, row):
+        """ Emits sigColorMapSelected if a valid row has been selected by the user.
+
+            Only called when activated via the GUI, not programmatically)
         """
+        logger.debug("ColorSelectionWidget._onCurrentChanged({})".format(row))
         colorMap = self._proxyModel.getColorMapByRow(row)
         if colorMap is not None:
             self.sigColorMapChanged.emit(colorMap)
