@@ -79,7 +79,7 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         dialog is shown.
     """
     sigColorMapHighlighted = pyqtSignal(ColorMap)
-    sigColorMapChanged = pyqtSignal(ColorMap)
+    sigColorMapChanged = pyqtSignal(object) # ColorMap or None
 
     def __init__(self, cmLibModel: CmLibModel, **kwargs):
         """ Constructor
@@ -170,6 +170,7 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self._proxyModel.colorMapFromDialog = colorMap
         self._proxyModel.invalidateFilter()
         self.comboBox.setCurrentText(pretty_name)
+        self.sigColorMapChanged.emit(colorMap)
 
 
     def _onDialogRejected(self):
