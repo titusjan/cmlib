@@ -199,6 +199,9 @@ class DemoWindow(QtWidgets.QWidget):
 
         self.imageLabel = QtWidgets.QLabel()
         self.imageLabel.setScaledContents(True)
+        self.imageLabel.setMinimumHeight(150)
+        self.imageLabel.setMinimumWidth(150)
+        self.imageLabel.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
 
         self.highLightedLabel = QtWidgets.QLabel()
         self.selectedLabel = QtWidgets.QLabel()
@@ -210,6 +213,10 @@ class DemoWindow(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.highLightedLabel)
         self.mainLayout.addWidget(self.selectedLabel)
         self.mainLayout.addWidget(self.selectionWidget)
+
+        for i in range(self.mainLayout.count()):
+            self.mainLayout.setStretch(i, 0)
+        self.mainLayout.setStretch(1, 1)
 
         self.selectionWidget.sigColorMapHighlighted.connect(self.updateHighlightedLabel)
         self.selectionWidget.sigColorMapChanged.connect(self.updateSelectedLabel)
