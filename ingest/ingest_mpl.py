@@ -53,6 +53,7 @@ MAPS = [ ('Perceptually Uniform Sequential', [
             'gist_rainbow', 'rainbow', 'jet', 'nipy_spectral', 'gist_ncar'])]
 
 
+RECOMMENDED = ['viridis', 'plasma', 'inferno', 'magma', 'cubehelix']
 
 def create_files(names, category, bw_friendly=False):
 
@@ -79,20 +80,21 @@ def create_files(names, category, bw_friendly=False):
         md.file_name = data_file
         md.category = category
         md.notes = ''
-        md.black_white_friendly = bw_friendly
+        md.black_white_friendly = bw_friendly or name in [
+            'binary', 'gist_yarg', 'gist_gray', 'gray', 'bone', 'pink',
+            'hot', 'afmhot', 'gist_heat', 'copper']
 
         if name in ['viridis', 'plasma', 'inferno', 'magma', 'cividis']:
-            md.recommended = True
             md.perceptually_uniform = True
+
+        if name in RECOMMENDED:
+            md.recommended = True
 
         if name in ['gist_rainbow', 'rainbow', 'jet', 'nipy_spectral']:
             md.tags.append('rainbow')
 
         if name in ['ocean', 'gist_earth', 'terrain']:
             md.tags.append('geo')
-
-        if name in ['flag', 'prism']:
-            md.tags.append('repetitive')
 
         md.save_to_json_file(os.path.join(TARGET_DIR, "{}.json".format(name)))
 
@@ -121,7 +123,7 @@ def make_cm_array(name):
 def main():
     create_files(MAPS[0][1], DataCategory.Sequential, bw_friendly=True)
     create_files(MAPS[1][1], DataCategory.Sequential, bw_friendly=True)
-    create_files(MAPS[2][1], DataCategory.Sequential)
+    create_files(MAPS[2][1], DataCategory.Sequential) # Some are bw_friendly hardcoded inside
     create_files(MAPS[3][1], DataCategory.Diverging)
     create_files(MAPS[4][1], DataCategory.Cyclic)
     create_files(MAPS[5][1], DataCategory.Qualitative)
