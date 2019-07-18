@@ -1,0 +1,13 @@
+{
+    "name": "Purples-03",
+    "pretty_name": "Purples-03",
+    "file_name": "Purples-03.csv",
+    "category": "Sequential",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

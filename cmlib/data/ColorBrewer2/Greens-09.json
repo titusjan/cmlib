@@ -1,0 +1,13 @@
+{
+    "name": "Greens-09",
+    "pretty_name": "Greens-09",
+    "file_name": "Greens-09.csv",
+    "category": "Sequential",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

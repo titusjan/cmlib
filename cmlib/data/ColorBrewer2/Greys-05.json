@@ -1,0 +1,13 @@
+{
+    "name": "Greys-05",
+    "pretty_name": "Greys-05",
+    "file_name": "Greys-05.csv",
+    "category": "Sequential",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

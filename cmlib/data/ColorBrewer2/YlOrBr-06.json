@@ -1,0 +1,13 @@
+{
+    "name": "YlOrBr-06",
+    "pretty_name": "YlOrBr-06",
+    "file_name": "YlOrBr-06.csv",
+    "category": "Sequential",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

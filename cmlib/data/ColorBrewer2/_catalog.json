@@ -1,0 +1,10 @@
+{
+    "key": "CB2",
+    "name": "Color Brewer 2",
+    "version": "2.0",
+    "date": "2019-07-18",
+    "author": "Cynthia A. Brewer",
+    "url": "https://colorbrewer2.org/",
+    "doi": "",
+    "license": "Apache License, Version 2.0"
+}

@@ -1,0 +1,13 @@
+{
+    "name": "PRGn-10",
+    "pretty_name": "PRGn-10",
+    "file_name": "PRGn-10.csv",
+    "category": "Diverging",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

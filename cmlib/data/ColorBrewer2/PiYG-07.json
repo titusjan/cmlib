@@ -1,0 +1,13 @@
+{
+    "name": "PiYG-07",
+    "pretty_name": "PiYG-07",
+    "file_name": "PiYG-07.csv",
+    "category": "Diverging",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}

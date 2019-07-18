@@ -278,6 +278,7 @@ def main():
     data_dir = os.path.abspath("cmlib/data")
 
     cm_lib = CmLib()
+    cm_lib.load_catalog(os.path.join(data_dir, 'ColorBrewer2'))
     cm_lib.load_catalog(os.path.join(data_dir, 'CET'))
     cm_lib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
     cm_lib.load_catalog(os.path.join(data_dir, 'SciColMaps'))

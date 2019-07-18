@@ -51,7 +51,8 @@ def load_rgb_floats(source_file, delimiter=', ', dtype=np.float32, **kwargs):
     """ Loads a color map array from a source file.
         Returns Nx3 array of 32 bits floats
     """
-    logger.debug("Loading RGB values: {}".format(os.path.abspath(source_file)))
+    source_file = os.path.abspath(source_file)
+    logger.debug("Loading RGB values: {}".format(source_file))
     array = np.loadtxt(source_file, delimiter=delimiter, dtype=dtype, **kwargs)
     return array
 

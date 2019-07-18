@@ -1,0 +1,13 @@
+{
+    "name": "Paired-06",
+    "pretty_name": "Paired-06",
+    "file_name": "Paired-06.csv",
+    "category": "Qualitative",
+    "recommended": true,
+    "perceptually_uniform": false,
+    "black_white_friendly": false,
+    "color_blind_friendly": false,
+    "isoluminant": false,
+    "notes": "",
+    "tags": []
+}
