@@ -24,6 +24,7 @@ class ComboProxyModel(QtCore.QSortFilterProxyModel):
         super(ComboProxyModel, self).__init__(parent)
 
         # The color map selected from the browser dialog box
+
         self.colorMapFromDialog = None
 
 
@@ -90,10 +91,12 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self._sourceModel = cmLibModel
         self._proxyModel = ComboProxyModel(parent=self)
         self._proxyModel.setSourceModel(self._sourceModel)
+        self._proxyModel.sort(CmLibModel.COL_NAME)
 
         self._colorMapAtShow = None # The current color map at the moment the browser is shown
 
         self.comboBox = QtWidgets.QComboBox()
+        self.comboBox.setInsertPolicy(QtWidgets.QComboBox.InsertAlphabetically)
         self.comboBox.setModel(self._proxyModel)
         self.comboBox.setModelColumn(CmLibModel.COL_NAME)
 
@@ -113,6 +116,7 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.openDialogButton)
 
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainLayout.setSpacing(0)
 
         self.comboBox.activated.connect(self._onCurrentActivated)
         self.browser.tableView.sigColorMapHighlighted.connect(self.sigColorMapHighlighted)
