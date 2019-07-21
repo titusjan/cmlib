@@ -565,3 +565,14 @@ class CmLibTableViewer(ToggleColumnTableView):
 
         self.selectRow(index.row())
         return index.row()
+
+
+    def scrollToCurrent(self):
+        """ Scroll to the currently selected color map.
+        """
+        curIdx = self.currentIndex()
+        logger.debug("scrollToCurrent: {} (isValid)".format(curIdx, curIdx.isValid()))
+        if curIdx.isValid():
+            self.scrollTo(self.currentIndex())
+        
+        

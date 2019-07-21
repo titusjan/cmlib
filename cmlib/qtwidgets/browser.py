@@ -4,7 +4,7 @@
 import logging
 
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 
 from ..cmap import DataCategory
 from ..misc import check_class
@@ -26,6 +26,8 @@ def uniqueSort(lst):
 class FilterForm(QtWidgets.QWidget):
     """ Form with widgets to filter the color bars
     """
+    sigFilterChanged = pyqtSignal() # A filter has changed
+
     def __init__(self, proxyModel: CmLibProxyModel, parent=None):
         super().__init__(parent=parent)
 
@@ -115,10 +117,19 @@ class FilterForm(QtWidgets.QWidget):
         """ Creates checkbox that filters on attrName with the and-operator.
         """
         checkBox = QtWidgets.QCheckBox()
+        filterType2, attrName2, desiredValue2 = filterType, attrName, desiredValue
         checkBox.toggled.connect(lambda checked:
-            self._proxyModel.toggleFilter(filterType, attrName, desiredValue, checked))
+            self._onFilterChecked(filterType, attrName2, desiredValue2, checked))
         return checkBox
 
+
+    def _onFilterChecked(self, filterType, attrName, desiredValue, checked):
+        """ Called when the user checks a filter on or off
+        """
+        self._proxyModel.toggleFilter(filterType, attrName, desiredValue, checked)
+        logger.debug("sigFilterClicked({}, {})".format(attrName, checked))
+        self.sigFilterChanged.emit()
+        
 
     def resetCheckboxes(self):
         """ Resets all checkboxes to their initial values
@@ -189,6 +200,10 @@ class CmLibBrowserDialog(QtWidgets.QDialog):
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.reject)
         #self.discardButton.clicked.connect(self.reject)
+        
+        self.filterForm.sigFilterChanged.connect(self.tableView.scrollToCurrent)
+
+
 
 
     @property
