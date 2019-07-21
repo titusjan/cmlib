@@ -8,6 +8,6 @@
     "black_white_friendly": true,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Yorick-GIST. Sequential increasing black-red-orange-white, to emulate blackbody radiation from an iron bar as it grows hotter",
     "tags": []
 }

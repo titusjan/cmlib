@@ -80,7 +80,7 @@ class FilterForm(QtWidgets.QWidget):
             checkBox = self._createFilterCheckbox(CmLibProxyModel.FT_QUALITY, attrName, True)
             checkBox.setText(text)
             if attrName == "recommended":
-                self._defaultOnCheckboxes.append(checkBox)
+                self._defaultOffCheckboxes.append(checkBox)
             else:
                 self._defaultOffCheckboxes.append(checkBox)
             self.qualityLayout.addWidget(checkBox)

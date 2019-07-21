@@ -2,12 +2,12 @@
     "name": "gnuplot2",
     "pretty_name": "Gnuplot2",
     "file_name": "gnuplot2.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Sequential color printable as gray (black-blue-violet-yellow-white)",
     "tags": []
 }

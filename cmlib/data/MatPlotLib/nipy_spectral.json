@@ -2,13 +2,13 @@
     "name": "nipy_spectral",
     "pretty_name": "Nipy-Spectral",
     "file_name": "nipy_spectral.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "black-purple-blue-green-yellow-red-white spectrum, originally from the Neuroimaging in Python project",
     "tags": [
         "Rainbow"
     ]

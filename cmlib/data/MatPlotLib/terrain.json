@@ -2,13 +2,13 @@
     "name": "terrain",
     "pretty_name": "Terrain",
     "file_name": "terrain.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Mapmaker's colors, blue-green-yellow-brown-white, originally from IGOR Pro",
     "tags": [
         "Geo"
     ]

@@ -3,11 +3,11 @@
     "pretty_name": "PuBu",
     "file_name": "PuBu.csv",
     "category": "Sequential",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": false,
     "black_white_friendly": true,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Color Brewer. White, light purple, dark blue",
     "tags": []
 }

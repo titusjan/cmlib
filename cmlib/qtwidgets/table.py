@@ -236,15 +236,17 @@ class CmLibModel(QtCore.QAbstractTableModel):
             colMap = self._colorMaps[row]
             if col == self.COL_CATALOG:
                 cmd = colMap.catalog_meta_data
-                return " ".join([cmd.name, cmd.version, cmd.date])
+                toolTip = " ".join([cmd.name, cmd.version, cmd.date])
             else:
                 md = colMap.meta_data
-                toolTip = "{}\nSize: {} colors\nCategory: {}".format(
+                toolTip = "{}<br/>Size: {} colors<br/>Category: {}".format(
                     md.pretty_name, len(colMap.rgba_uint8_array),
                     md.category.name)
                 if md.notes:
-                    toolTip = "{}\nNotes:{}".format(toolTip, md.notes)
-                return  toolTip
+                    toolTip = "{}<br/><br/>{}".format(toolTip, md.notes)
+            # Use rich text so the tool tip is word-wrapped
+            logger.debug("Tooltip: {}".format(toolTip))
+            return "<FONT COLOR=black>{}</FONT>".format(toolTip)
 
         elif role == Qt.DecorationRole:
             if col == self.COL_NAME and self.showIconBars:

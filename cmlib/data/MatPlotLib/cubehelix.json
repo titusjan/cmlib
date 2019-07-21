@@ -2,12 +2,12 @@
     "name": "cubehelix",
     "pretty_name": "Cubehelix",
     "file_name": "cubehelix.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": true,
     "perceptually_uniform": false,
-    "black_white_friendly": false,
+    "black_white_friendly": true,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Unlike most other color schemes cubehelix was designed by D.A. Green to be monotonically increasing in termsof perceived brightness. Also, when printed on a black and white postscript printer, the scheme results in agreyscale with monotonically increasing brightness. This color scheme is named cubehelix because the (r, g, b)values produced can be visualised as a squashed helix around the diagonal in the (r, g, b) color cube.",
     "tags": []
 }

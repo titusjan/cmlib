@@ -3,11 +3,11 @@
     "pretty_name": "Accent",
     "file_name": "Accent.csv",
     "category": "Qualitative",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Color Brewer. ",
     "tags": []
 }

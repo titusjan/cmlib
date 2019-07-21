@@ -8,6 +8,6 @@
     "black_white_friendly": true,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Matlab. Sequential black-red-yellow-white, to emulate blackbody radiation from an object at increasing temperatures",
     "tags": []
 }

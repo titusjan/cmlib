@@ -2,13 +2,13 @@
     "name": "jet",
     "pretty_name": "Jet",
     "file_name": "jet.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Matlab. A spectral map with dark endpoints, blue-cyan-yellow-red; based on a fluid-jet simulation by NCSA",
     "tags": [
         "Rainbow"
     ]

@@ -3,11 +3,11 @@
     "pretty_name": "Wistia",
     "file_name": "Wistia.csv",
     "category": "Sequential",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": false,
     "black_white_friendly": false,
-    "color_blind_friendly": false,
+    "color_blind_friendly": true,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Wistia. An MIT licensed, colorblind-friendly heatmap",
     "tags": []
 }

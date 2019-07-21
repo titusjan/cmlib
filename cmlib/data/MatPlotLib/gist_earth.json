@@ -2,13 +2,13 @@
     "name": "gist_earth",
     "pretty_name": "Gist-Earth",
     "file_name": "gist_earth.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Yorick-GIST. Mapmaker's colors from dark blue deep ocean to green lowlands to brown highlands to white mountains",
     "tags": [
         "Geo"
     ]

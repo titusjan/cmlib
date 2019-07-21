@@ -29,7 +29,7 @@ MAPS = [
     ("lapaz", DataCategory.Sequential),
     ("lisbon", DataCategory.Diverging),
     ("nuuk", DataCategory.Sequential),
-    ("oleron", DataCategory.Other),
+    ("oleron", DataCategory.Sequential),
     ("oslo", DataCategory.Sequential),
     ("roma", DataCategory.Sequential),
     ("tofino", DataCategory.Diverging),

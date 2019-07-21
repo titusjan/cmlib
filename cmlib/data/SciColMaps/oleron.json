@@ -2,7 +2,7 @@
     "name": "oleron",
     "pretty_name": "Oleron",
     "file_name": "oleron.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": false,

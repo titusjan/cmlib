@@ -109,7 +109,7 @@ def ingest_files():
 
     # From http://www.personal.psu.edu/cab38/ColorBrewer/ColorBrewer_updates.html
     smd = CatalogMetaData()
-    smd.key = "CB2"
+    smd.key = "ColorBrewer"
     smd.name = "Color Brewer 2"
     smd.version = "2.0"
     smd.date = "2019-07-18" # Download date

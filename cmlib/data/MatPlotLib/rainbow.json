@@ -2,13 +2,13 @@
     "name": "rainbow",
     "pretty_name": "Rainbow",
     "file_name": "rainbow.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Spectral purple-blue-green-yellow-orange-red colormap with diverging luminance",
     "tags": [
         "Rainbow"
     ]

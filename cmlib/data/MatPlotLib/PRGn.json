@@ -3,11 +3,11 @@
     "pretty_name": "PRGn",
     "file_name": "PRGn.csv",
     "category": "Diverging",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Color Brewer. purple, white, green",
     "tags": []
 }

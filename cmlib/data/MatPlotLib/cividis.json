@@ -3,11 +3,11 @@
     "pretty_name": "Cividis",
     "file_name": "cividis.csv",
     "category": "Sequential",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": true,
     "black_white_friendly": true,
-    "color_blind_friendly": false,
+    "color_blind_friendly": true,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Perceptually uniform shades of ",
     "tags": []
 }

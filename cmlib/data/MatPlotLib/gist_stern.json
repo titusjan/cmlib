@@ -2,12 +2,12 @@
     "name": "gist_stern",
     "pretty_name": "Gist-Stern",
     "file_name": "gist_stern.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Yorick-GIST. \"Stern special\" color table from Interactive Data Language software",
     "tags": []
 }

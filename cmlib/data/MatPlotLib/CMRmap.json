@@ -2,12 +2,12 @@
     "name": "CMRmap",
     "pretty_name": "CMRmap",
     "file_name": "CMRmap.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Default colormaps on color images often reproduce to confusing grayscale images. The proposed colormapmaintains an aesthetically pleasing color image that automatically reproduces to a monotonic grayscale withdiscrete, quantifiable saturation levels.",
     "tags": []
 }

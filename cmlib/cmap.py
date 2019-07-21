@@ -82,7 +82,6 @@ class DataCategory(enum.Enum):
     Cyclic = 2
     Diverging = 3
     Qualitative = 4
-    Other = 5
 
 
 
@@ -122,7 +121,8 @@ class CmMetaData(AbstractMetaData):
         self.pretty_name = self.make_pretty_name(name)
         self.file_name = ""
         self.recommended = False
-        self.category = DataCategory.Other
+        #self.category = DataCategory.Other
+        self.category = None
         self.perceptually_uniform = False
         self.black_white_friendly = False
         self.color_blind_friendly = False

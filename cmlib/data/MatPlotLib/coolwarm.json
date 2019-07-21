@@ -3,11 +3,11 @@
     "pretty_name": "Coolwarm",
     "file_name": "coolwarm.csv",
     "category": "Diverging",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Kenneth Moreland. diverging blue-gray-red, meant to avoid issues with 3D shading, color blindness, and ordering of colors",
     "tags": []
 }

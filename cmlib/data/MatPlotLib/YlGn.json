@@ -3,11 +3,11 @@
     "pretty_name": "YlGn",
     "file_name": "YlGn.csv",
     "category": "Sequential",
-    "recommended": false,
+    "recommended": true,
     "perceptually_uniform": false,
     "black_white_friendly": true,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Origin: Color Brewer. Light yellow, dark green",
     "tags": []
 }

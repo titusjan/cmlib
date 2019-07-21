@@ -2,12 +2,12 @@
     "name": "gnuplot",
     "pretty_name": "Gnuplot",
     "file_name": "gnuplot.csv",
-    "category": "Other",
+    "category": "Sequential",
     "recommended": false,
     "perceptually_uniform": false,
     "black_white_friendly": false,
     "color_blind_friendly": false,
     "isoluminant": false,
-    "notes": "",
+    "notes": "Gnuplot's traditional pm3d scheme (black-blue-red-yellow)",
     "tags": []
 }
