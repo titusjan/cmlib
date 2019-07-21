@@ -67,9 +67,9 @@ def ingest_files():
         md.black_white_friendly = name in ("oslo", "grayC", "turku")
 
         if name == "oleron":
-            md.tags = ['geo']
+            md.tags = ['Geo']
         elif name == "batlow":
-            md.tags = ['rainbow']
+            md.tags = ['Rainbow']
         elif name == "roma":
             "seismic-tomography"
 

@@ -113,7 +113,7 @@ def ingest_files():
             md.black_white_friendly = True
 
         if name.startswith('CET-R'):
-            md.tags = ['rainbow']
+            md.tags = ['Rainbow']
 
         if name in ['CET-I1', 'CET-I2', 'CET-I3', 'CET-D11', 'CET-D12']:
             md.isoluminant = True

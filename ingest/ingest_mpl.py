@@ -23,6 +23,9 @@ logger = logging.getLogger(__name__)
 
 TARGET_DIR = "../cmlib/data/MatPlotLib"
 
+# https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/_cm.py
+# https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/pyplot.py
+
 MAPS = [ ('Perceptually Uniform Sequential', [
             'viridis', 'plasma', 'inferno', 'magma', 'cividis']),
 
@@ -91,10 +94,10 @@ def create_files(names, category, bw_friendly=False):
             md.recommended = True
 
         if name in ['gist_rainbow', 'rainbow', 'jet', 'nipy_spectral']:
-            md.tags.append('rainbow')
+            md.tags.append('Rainbow')
 
         if name in ['ocean', 'gist_earth', 'terrain']:
-            md.tags.append('geo')
+            md.tags.append('Geo')
 
         md.save_to_json_file(os.path.join(TARGET_DIR, "{}.json".format(name)))
 
