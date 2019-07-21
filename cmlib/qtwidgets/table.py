@@ -233,10 +233,18 @@ class CmLibModel(QtCore.QAbstractTableModel):
                 raise AssertionError("Unexpected column: {}".format(col))
 
         elif role == Qt.ToolTipRole:
+            colMap = self._colorMaps[row]
             if col == self.COL_CATALOG:
-                colMap = self._colorMaps[row]
                 cmd = colMap.catalog_meta_data
                 return " ".join([cmd.name, cmd.version, cmd.date])
+            else:
+                md = colMap.meta_data
+                toolTip = "{}\nSize: {} colors\nCategory: {}".format(
+                    md.pretty_name, len(colMap.rgba_uint8_array),
+                    md.category.name)
+                if md.notes:
+                    toolTip = "{}\nNotes:{}".format(toolTip, md.notes)
+                return  toolTip
 
         elif role == Qt.DecorationRole:
             if col == self.COL_NAME and self.showIconBars:
