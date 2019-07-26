@@ -389,6 +389,7 @@ class CmLib():
         Consists of a list of color maps.
     """
     def __init__(self):
+        super(CmLib, self).__init__()
         self._color_maps = []
 
 

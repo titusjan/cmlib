@@ -59,13 +59,13 @@ class CmLibModel(QtCore.QAbstractTableModel):
 
     SORT_ROLE = Qt.UserRole
 
-    def __init__(self, cmLib, parent=None):
+    def __init__(self, cmLib, **kwargs):
         """ Constructor
 
             :param CmLib cmLib: the underlying color library
             :param QWidget parent: Qt parent widget
         """
-        super().__init__(parent=parent)
+        super(CmLibModel, self).__init__(**kwargs)
         check_class(cmLib, CmLib)
 
         assert len(self.HEADERS) == len(self.DEFAULT_WIDTHS), "sanity check failed."
