@@ -1,10 +1,11 @@
-""" Table model and view classes for examining the color map library
+# -*- coding: utf-8 -*-
 
+""" Table model and view classes for examining the color map library
 """
 import logging
 import numpy as np
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt, pyqtSignal
 
 
@@ -472,7 +473,7 @@ class CmLibTableViewer(ToggleColumnTableView):
 
             :param CmLibModel model: the item model
         """
-        super().__init__(parent=parent)
+        super(CmLibTableViewer, self).__init__(parent=parent)
 
         self._colorMapNoneSelected = self.createTransparentColorMap()
 

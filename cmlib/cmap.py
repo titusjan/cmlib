@@ -87,7 +87,9 @@ class DataCategory(enum.Enum):
 
 
 # TODO: in the future we perhaps could use Python 3.7 Data Classes
-class AbstractMetaData(metaclass=abc.ABCMeta):
+class AbstractMetaData():
+
+    __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
     def from_dict(self, dct):
@@ -223,7 +225,7 @@ class CatalogMetaData(AbstractMetaData):
 
 
 
-class ColorMap():
+class ColorMap(object):
     """ Represents color map data.
     """
     def __init__(self, meta_data, catalog_meta_data, rgb_file_name=None):
@@ -383,7 +385,7 @@ class ColorMap():
 
 
 
-class CmLib():
+class CmLib(object):
     """ The color map library.
 
         Consists of a list of color maps.

@@ -118,7 +118,7 @@ def makeUniformNoise():
     return np.random.uniform(0.0, 1.0, size=(SIZE_X, SIZE_Y))
 
 
-def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
+def colorizeImageArray(imageArr, colorMap=None,
                        width=None, height=None, drawBorder=False):
     """ Creates a PixMap that visualizes the color map.
         This can be used in a QLabel to draw a legend.
@@ -178,10 +178,10 @@ def colorizeImageArray(imageArr: np.ndarray, colorMap=None,
 class DemoWindow(QtWidgets.QWidget):
     """ Demo window
     """
-    def __init__(self, cmLibModel: CmLibModel, **kwargs):
+    def __init__(self, cmLibModel, **kwargs):
         """ Constructor
         """
-        super().__init__(**kwargs)
+        super(DemoWindow, self).__init__(**kwargs)
 
         self._drawBorder = True
         #self._imageArray = makeRamp()

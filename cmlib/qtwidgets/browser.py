@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """ Functionality to browse through the color maps in a library
 """
 
@@ -15,7 +17,7 @@ from ..qtwidgets.table import CmLibModel, CmLibProxyModel, CmLibTableViewer
 logger = logging.getLogger(__name__)
 
 def _isChecked(checkState):
-    """ Returns if checkState == Qt.﻿Checked """
+    """ Returns if checkState == Qt.Checked """
     return checkState == Qt.Checked
 
 def uniqueSort(lst):
@@ -28,8 +30,8 @@ class FilterForm(QtWidgets.QWidget):
     """
     sigFilterChanged = pyqtSignal() # A filter has changed
 
-    def __init__(self, proxyModel: CmLibProxyModel, parent=None):
-        super().__init__(parent=parent)
+    def __init__(self, proxyModel, parent=None):
+        super(FilterForm, self).__init__(parent=parent)
 
         self._defaultOnCheckboxes = []
         self._defaultOffCheckboxes = []
@@ -145,8 +147,8 @@ class FilterForm(QtWidgets.QWidget):
 class CmLibBrowserDialog(QtWidgets.QDialog):
     """ Widget to browse the though the color library
     """
-    def __init__(self, cmLibModel: CmLibModel, parent=None):
-        super().__init__(parent=parent)
+    def __init__(self, cmLibModel, parent=None):
+        super(CmLibBrowserDialog, self).__init__(parent=parent)
 
         check_class(cmLibModel, CmLibModel)
         self._cmLibModel = cmLibModel

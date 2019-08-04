@@ -82,10 +82,10 @@ class ColorSelectionWidget(QtWidgets.QWidget):
     sigColorMapHighlighted = pyqtSignal(ColorMap)
     sigColorMapChanged = pyqtSignal(object) # ColorMap or None
 
-    def __init__(self, cmLibModel: CmLibModel, **kwargs):
+    def __init__(self, cmLibModel, **kwargs):
         """ Constructor
         """
-        super().__init__(**kwargs)
+        super(ColorSelectionWidget, self).__init__(**kwargs)
 
         check_class(cmLibModel, CmLibModel)
         self._sourceModel = cmLibModel
