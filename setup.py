@@ -2,16 +2,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-# TODO:
-#   wheels
-
 # To make a release follow these steps:
 #   python setup.py sdist
+# or better
+#   python setup.py bdist_wheel
 #   twine upload dist/cmlib-1.0.0rc1.tar.gz
 
-# See also https://packaging.python.org/en/latest/distributing.html
-# TODO: still can't make a wheel even following the instructions in the link below.
-# http://stackoverflow.com/questions/26664102/why-can-i-not-create-a-wheel-in-pyt
 
 import sys
 
