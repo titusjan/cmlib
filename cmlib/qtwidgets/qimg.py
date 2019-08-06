@@ -4,8 +4,7 @@
 import logging
 import numpy as np
 
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import Qt
+from ..qtwidgets.bindings import QtCore, QtGui, Qt
 
 logger = logging.getLogger(__name__)
 

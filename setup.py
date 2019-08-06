@@ -8,6 +8,8 @@ from __future__ import absolute_import
 #   python setup.py bdist_wheel
 #   twine upload dist/cmlib-1.0.0rc1.tar.gz
 
+# see https://packaging.python.org/en/latest/distributing.html
+# https://packaging.python.org/guides/
 
 import sys
 

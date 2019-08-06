@@ -2,13 +2,12 @@
 """
 import logging
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from .bindings import QtCore, QtWidgets, QtSignal, QtSlot
+from .browser import CmLibBrowserDialog
+from .table import CmLibModel
 
 from ..cmap import ColorMap
 from ..misc import check_class
-from ..qtwidgets.browser import CmLibBrowserDialog
-from ..qtwidgets.table import CmLibModel
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +78,8 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         It is also emitted when the user clicks Cancel with the color map that was active when the
         dialog is shown.
     """
-    sigColorMapHighlighted = pyqtSignal(ColorMap)
-    sigColorMapChanged = pyqtSignal(object) # ColorMap or None
+    sigColorMapHighlighted = QtSignal(ColorMap)
+    sigColorMapChanged = QtSignal(object) # ColorMap or None
 
     def __init__(self, cmLibModel, **kwargs):
         """ Constructor
@@ -141,7 +140,7 @@ class ColorSelectionWidget(QtWidgets.QWidget):
                            .format(curRow))
 
 
-    @pyqtSlot(int)
+    @QtSlot(int)
     def _onCurrentActivated(self, row):
         """ Emits sigColorMapSelected if a valid row has been selected by the user.
 

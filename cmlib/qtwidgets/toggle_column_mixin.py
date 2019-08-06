@@ -7,8 +7,7 @@ from __future__ import print_function
 
 import logging
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt
+from .bindings import QtCore, QtWidgets, Qt
 
 logger = logging.getLogger(__name__)
 

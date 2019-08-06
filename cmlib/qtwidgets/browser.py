@@ -5,13 +5,11 @@
 
 import logging
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSignal
-
-from ..cmap import DataCategory
+from ..cmap import DataCategory # TODO: why attempted relative import beyond top-level package
 from ..misc import check_class
-from ..qtwidgets.qimg import makeColorBarPixmap
-from ..qtwidgets.table import CmLibModel, CmLibProxyModel, CmLibTableViewer
+from .bindings import QtCore, QtWidgets, Qt, QtSignal
+from .qimg import makeColorBarPixmap
+from .table import CmLibModel, CmLibProxyModel, CmLibTableViewer
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +26,7 @@ def uniqueSort(lst):
 class FilterForm(QtWidgets.QWidget):
     """ Form with widgets to filter the color bars
     """
-    sigFilterChanged = pyqtSignal() # A filter has changed
+    sigFilterChanged = QtSignal() # A filter has changed
 
     def __init__(self, proxyModel, parent=None):
         super(FilterForm, self).__init__(parent=parent)

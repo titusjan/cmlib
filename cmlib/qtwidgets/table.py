@@ -5,14 +5,12 @@
 import logging
 import numpy as np
 
-from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSignal
 
-
+from .bindings import QtCore, QtWidgets, Qt, QtSignal
+from .toggle_column_mixin import ToggleColumnTableView
+from .qimg import makeColorBarPixmap
 from ..cmap import CmLib, ColorMap, CatalogMetaData, CmMetaData
 from ..misc import check_class, __version__
-from ..qtwidgets.toggle_column_mixin import ToggleColumnTableView
-from ..qtwidgets.qimg import makeColorBarPixmap
 
 logger = logging.getLogger(__name__)
 
@@ -466,7 +464,7 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
 # TODO: https://github.com/baoboa/pyqt5/blob/master/examples/itemviews/frozencolumn/frozencolumn.py
 class CmLibTableViewer(ToggleColumnTableView):
 
-    sigColorMapHighlighted = pyqtSignal(ColorMap)
+    sigColorMapHighlighted = QtSignal(ColorMap)
 
     def __init__(self, model=None, parent=None):
         """ Constructor

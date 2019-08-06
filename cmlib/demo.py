@@ -1,18 +1,16 @@
 """ Demonstration of the colormap library and widgets
 """
-
 import logging
 import os.path
 
 import numpy as np
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt, pyqtSlot
 
-from cmlib import CmLib, CmLibModel, ColorSelectionWidget, CmLibBrowserDialog
+from cmlib.qtwidgets.bindings import QtCore, QtGui, QtWidgets, Qt, QtSlot
+from cmlib.qtwidgets.bindings import PYQT_VERSION, QT_VERSION, QT_API_NAME
 from cmlib.qtwidgets.qimg import arrayToQImage
+from cmlib import CmLib, CmLibModel, ColorSelectionWidget, CmLibBrowserDialog
 
 logger = logging.getLogger("demo")
-
 
 # the size of the colormap test images
 SIZE_X = 350
@@ -258,7 +256,7 @@ class DemoWindow(QtWidgets.QWidget):
         self.imageLabel.setPixmap(pixMap)
 
 
-    @pyqtSlot()
+    @QtSlot()
     def _onImageChanged(self):
         """ Draws and colorizes the selected image
         """
@@ -314,6 +312,10 @@ def main():
 if __name__ == "__main__":
     LOG_FMT = '%(asctime)s %(filename)25s:%(lineno)-4d : %(levelname)-7s: %(message)s'
     logging.basicConfig(level='DEBUG', format=LOG_FMT)
+    logger.info("Imported Qt bindings: {}, version {}, Qt version: {}"
+                .format(QT_API_NAME, PYQT_VERSION, QT_VERSION))
+
+
     main()
 
 
