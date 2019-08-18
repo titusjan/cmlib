@@ -21,7 +21,7 @@ def err(*args, **kwargs):
 try:
     from setuptools import setup, find_packages
 except ImportError:
-    err("CmLib requires setuptools for intallation. (https://pythonhosted.org/an_example_pypi_project/setuptools.html)")
+    err("CmLib requires setuptools for installation. (https://pythonhosted.org/an_example_pypi_project/setuptools.html)")
     err("You can download and install it simply from https://pypi.org/project/ez_setup/")
     sys.exit(1)
 
@@ -93,6 +93,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development',
         'Topic :: Scientific/Engineering',
         'Topic :: Utilities',
