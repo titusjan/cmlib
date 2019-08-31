@@ -10,6 +10,9 @@
         https://matplotlib.org/tutorials/colors/colormaps.html          # choosing a good color map
         https://matplotlib.org/tutorials/colors/colormapnorms.html
 
+
+    TODO:
+        look at https://github.com/matplotlib/cmocean (https://matplotlib.org/cmocean/)
 """
 
 from .misc import __version__
