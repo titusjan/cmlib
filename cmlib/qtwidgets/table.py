@@ -15,9 +15,9 @@ from ..misc import check_class, __version__
 logger = logging.getLogger(__name__)
 
 _HW_BOOL = 80 # header width for boolean columns
-_ALIGN_STRING = Qt.AlignVCenter | Qt.AlignLeft
-_ALIGN_NUMBER = Qt.AlignVCenter | Qt.AlignRight
-_ALIGN_BOOLEAN = Qt.AlignVCenter | Qt.AlignHCenter
+_ALIGN_STRING = int(Qt.AlignVCenter | Qt.AlignLeft)
+_ALIGN_NUMBER = int(Qt.AlignVCenter | Qt.AlignRight)
+_ALIGN_BOOLEAN = int(Qt.AlignVCenter | Qt.AlignHCenter)
 
 #
 # def createTransparentColorMap():
