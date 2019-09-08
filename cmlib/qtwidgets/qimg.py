@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 # Define constants for the depth dimension when an image is converted to a Width x Height x Depth array
 # Qt uses ARGB (or BGRA in little endian) when the format is RGB32, ARGB32 or ARGB32_Premultiplied
 
-def arrayToQImage(arr, share_memory=True, format = None):
+def arrayToQImage(arr, share_memory=False, format = None):
     """ Creates QBugImage from a numpy array.
 
         If share_memory is True, the numpy array and the QImage is shared.
@@ -35,7 +35,7 @@ def arrayToQImage(arr, share_memory=True, format = None):
     arr_height, arr_width, arr_depth = arr.shape
     assert arr_depth == 4, "Array depth must be 4. Got: {}".format(arr_depth)
 
-    if share_memory:
+    if not share_memory:
         arr = np.copy(arr)
 
     if not arr.flags['C_CONTIGUOUS']:
