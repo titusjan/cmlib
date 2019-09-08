@@ -8,7 +8,7 @@ import numpy as np
 from cmlib.qtwidgets.bindings import QtCore, QtGui, QtWidgets, Qt, QtSlot
 from cmlib.qtwidgets.bindings import PYQT_VERSION, QT_VERSION, QT_API_NAME
 from cmlib.qtwidgets.qimg import arrayToQImage
-from cmlib import CmLib, CmLibModel, ColorSelectionWidget, CmLibBrowserDialog
+from cmlib import CmLib, CmLibModel, ColorSelectionWidget, CmLibBrowserDialog, DATA_DIR
 
 logger = logging.getLogger("demo")
 
@@ -273,13 +273,11 @@ class DemoWindow(QtWidgets.QWidget):
 def main():
     app = QtWidgets.QApplication([])
 
-    data_dir = os.path.abspath("cmlib/data")
-
     cm_lib = CmLib()
-    cm_lib.load_catalog(os.path.join(data_dir, 'ColorBrewer2'))
-    cm_lib.load_catalog(os.path.join(data_dir, 'CET'))
-    cm_lib.load_catalog(os.path.join(data_dir, 'MatPlotLib'))
-    cm_lib.load_catalog(os.path.join(data_dir, 'SciColMaps'))
+    cm_lib.load_catalog(os.path.join(DATA_DIR, 'ColorBrewer2'))
+    cm_lib.load_catalog(os.path.join(DATA_DIR, 'CET'))
+    cm_lib.load_catalog(os.path.join(DATA_DIR, 'MatPlotLib'))
+    cm_lib.load_catalog(os.path.join(DATA_DIR, 'SciColMaps'))
 
     logger.debug("Number of color maps: {}".format(len(cm_lib.color_maps)))
 

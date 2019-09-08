@@ -15,7 +15,7 @@
         look at https://github.com/matplotlib/cmocean (https://matplotlib.org/cmocean/)
 """
 
-from .misc import __version__
+from .misc import __version__, MODULE_DIR, DATA_DIR
 
 # Classes that may be of use externally. I.e. by users of CmLib
 from .cmap import CmLib, ColorMap, DataCategory, CmMetaData, CatalogMetaData

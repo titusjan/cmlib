@@ -40,6 +40,7 @@ except Exception as ex:
     raise
 
 
+DATA_DIR = os.path.join(MODULE_DIR, "data")
 
 def is_an_array(var, allow_none=False):
     """ Returns True if var is a numpy array.
