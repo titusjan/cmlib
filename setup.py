@@ -61,7 +61,16 @@ from os import listdir
 catalog_dirs = ['data/{}/*'.format(path) for path in listdir('cmlib/data')]
 
 
-from cmlib import __version__
+#from cmlib.misc import __version__
+import os.path
+
+# Don't import __version__ from cmlib because this also tries to import PyQt, which
+# can fail if PyQt is not installed.
+MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
+VERSION_FILE = os.path.join(MODULE_DIR, 'cmlib', 'version.txt')
+
+with open(VERSION_FILE) as stream:
+    __version__ = stream.readline().strip()
 
 setup(
     name = 'cmlib',
@@ -73,7 +82,7 @@ setup(
     license = "BSD",
     url="https://github.com/titusjan/cmlib",
     packages = find_packages(exclude=('ingest',)),
-    package_data = {'': ['HISTORY.rst'], 'cmlib': ['data/*'] + catalog_dirs},
+    package_data = {'': ['HISTORY.rst'], 'cmlib': ['version.txt', 'data/*'] + catalog_dirs},
     entry_points={'gui_scripts': ['cmlib_demo = cmlib.demo:main']},
     #install_requires = install_requires, # DISABLED. See coments above.
     zip_safe = False,

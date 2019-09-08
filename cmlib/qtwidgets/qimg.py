@@ -16,7 +16,7 @@ def arrayToQImage(arr, share_memory=False, format = None):
     """ Creates QBugImage from a numpy array.
 
         If share_memory is True, the numpy array and the QImage is shared.
-        Be careful: make sure the image is destroyed before the numpy array ,
+        Be careful: make sure the image is destroyed before the numpy array,
         otherwise the image will point to unallocated memory!!
 
         If format is not set it will default to QtGui.QImage.Format.Format_RGB32
