@@ -99,7 +99,7 @@ def create_files(names, category, bw_friendly=False, origin='', recommended=Fals
         if name in ['viridis', 'plasma', 'inferno', 'magma', 'cividis']:
             md.perceptually_uniform = True
 
-        if name in ['gist_rainbow', 'rainbow', 'jet', 'nipy_spectral']:
+        if name in ['gist_rainbow', 'rainbow', 'jet', 'nipy_spectral', 'hsv']:
             md.tags.append('Rainbow')
 
         if name in ['ocean', 'gist_earth', 'terrain']:

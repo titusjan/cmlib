@@ -244,7 +244,7 @@ class CmLibModel(QtCore.QAbstractTableModel):
                 if md.notes:
                     toolTip = "{}<br/><br/>{}".format(toolTip, md.notes)
             # Use rich text so the tool tip is word-wrapped
-            logger.debug("Tooltip: {}".format(toolTip))
+            #logger.debug("Tooltip: {}".format(toolTip))
             return "<FONT COLOR=black>{}</FONT>".format(toolTip)
 
         elif role == Qt.DecorationRole:

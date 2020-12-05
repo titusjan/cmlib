@@ -5,11 +5,20 @@ Color maps on the internet:
     http://colorcet.pyviz.org/ which comes from https://peterkovesi.com/projects/colourmaps/
 
 TODO:
-    color brewer
     https://www.kennethmoreland.com/color-advice/
     https://datascience.dsscale.org/publications/ (can't find the maps data)
     https://sciviscolor.org/
+    https://github.com/liamedeiros/ehtplot/blob/docs/docs/COLORMAPS.ipynb
 
-Color lib
+    # 16 different colors
+    http://alumni.media.mit.edu/~wad/color/palette.html
+
+Package for color manipulation
     https://github.com/colour-science/colour
     https://github.com/colour-science/awesome-colour
+
+Create your own color scales. Very nice.
+    https://gka.github.io/palettes/#/23|d|00429d,96ffea,ffffe0|ffffe0,ff005e,93003a|1|1
+
+NCS:
+    https://www.ncskleuren.nl/ncs-kleursysteem-ncs-notatie/
