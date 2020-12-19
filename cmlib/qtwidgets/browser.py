@@ -9,7 +9,7 @@ from ..cmap import DataCategory # TODO: why attempted relative import beyond top
 from ..misc import check_class
 from .bindings import QtCore, QtWidgets, Qt, QtSignal
 from .qimg import makeColorBarPixmap
-from .table import CmLibModel, CmLibProxyModel, CmLibTableViewer
+from .table import CmLibModel, CmLibProxyModel, CmLibTableViewer, ALL_ITEMS_STR
 
 
 logger = logging.getLogger(__name__)
@@ -40,32 +40,23 @@ class FilterForm(QtWidgets.QWidget):
         colMaps = self._cmLib.color_maps
 
         self.resetButton = QtWidgets.QPushButton("Reset Filters")
-        self.resetButton.clicked.connect(self.resetCheckboxes)
+        self.resetButton.clicked.connect(self.resetFilters)
 
-        self.catalogsGroupBox = QtWidgets.QGroupBox("Show catalogs")
+        self.catalogsGroupBox = QtWidgets.QGroupBox("Catalog")
         self.catalogsLayout = QtWidgets.QVBoxLayout(self.catalogsGroupBox)
-        allCatalogs = uniqueSort([(cm.catalog_meta_data.key, cm.catalog_meta_data.name)
-                                   for cm in colMaps])
+        allCatalogs = uniqueSort([cm.catalog_meta_data.name for cm in colMaps])
+        self.catalogComboBox = self._createFilterCombobox(
+            CmLibProxyModel.FT_CATALOG, allCatalogs)
+        self.catalogsLayout.addWidget(self.catalogComboBox)
 
-        for catalogKey, catalogName in allCatalogs:
-            checkBox = self._createFilterCheckbox(
-                CmLibProxyModel.FT_CATALOG, None, catalogKey)
-            checkBox.setText(catalogKey)
-            checkBox.setToolTip(catalogName)
-            self._defaultOnCheckboxes.append(checkBox)
-            self.catalogsLayout.addWidget(checkBox)
-
-        self.categoriesGroupBox = QtWidgets.QGroupBox("Show categories")
+        self.categoriesGroupBox = QtWidgets.QGroupBox("Category")
         self.categoriesLayout = QtWidgets.QVBoxLayout(self.categoriesGroupBox)
+        allCategories = uniqueSort([dc.name for dc in list(DataCategory)])
+        self.categoryComboBox = self._createFilterCombobox(
+            CmLibProxyModel.FT_CATEGORY, allCategories)
+        self.categoriesLayout.addWidget(self.categoryComboBox)
 
-        for category in list(DataCategory):
-            checkBox = self._createFilterCheckbox(
-                CmLibProxyModel.FT_CATEGORY, 'category', category)
-            checkBox.setText(category.name)
-            self._defaultOnCheckboxes.append(checkBox)
-            self.categoriesLayout.addWidget(checkBox)
-
-        self.qualityGroupBox = QtWidgets.QGroupBox("Quality filter")
+        self.qualityGroupBox = QtWidgets.QGroupBox("Quality filters")
         self.qualityLayout = QtWidgets.QVBoxLayout(self.qualityGroupBox)
 
         infoList = [
@@ -85,7 +76,7 @@ class FilterForm(QtWidgets.QWidget):
                 self._defaultOffCheckboxes.append(checkBox)
             self.qualityLayout.addWidget(checkBox)
 
-        self.tagsGroupBox = QtWidgets.QGroupBox("Tag filter")
+        self.tagsGroupBox = QtWidgets.QGroupBox("Tag filters")
         self.tagsLayout = QtWidgets.QVBoxLayout(self.tagsGroupBox)
 
         tagSet = set([])
@@ -110,7 +101,29 @@ class FilterForm(QtWidgets.QWidget):
         self.mainLayout.addWidget(self.resetButton)
         self.mainLayout.addStretch()
 
-        self.resetCheckboxes()
+        self.resetFilters()
+
+
+    def _createFilterCombobox(self, filterType, allNames):
+        """ Creates checkbox that filters on attrName with the and-operator.
+        """
+        combobox = QtWidgets.QComboBox()
+        combobox.addItem(ALL_ITEMS_STR)
+        combobox.addItems(allNames)
+
+        filterType2 = filterType # keep reference in closure
+
+        combobox.currentTextChanged.connect(lambda text:
+            self._onFilterIndexSelected(filterType2, text))
+
+        return combobox
+
+
+    def _onFilterIndexSelected(self, filterType, text):
+        """ Called when the user checks a filter on or off
+        """
+        self._proxyModel.setExclusiveFilter(filterType, text)
+        self.sigFilterChanged.emit()
 
 
     def _createFilterCheckbox(self, filterType, attrName, desiredValue):
@@ -119,7 +132,7 @@ class FilterForm(QtWidgets.QWidget):
         checkBox = QtWidgets.QCheckBox()
         filterType2, attrName2, desiredValue2 = filterType, attrName, desiredValue
         checkBox.toggled.connect(lambda checked:
-            self._onFilterChecked(filterType, attrName2, desiredValue2, checked))
+            self._onFilterChecked(filterType2, attrName2, desiredValue2, checked))
         return checkBox
 
 
@@ -127,13 +140,15 @@ class FilterForm(QtWidgets.QWidget):
         """ Called when the user checks a filter on or off
         """
         self._proxyModel.toggleFilter(filterType, attrName, desiredValue, checked)
-        logger.debug("sigFilterClicked({}, {})".format(attrName, checked))
         self.sigFilterChanged.emit()
         
 
-    def resetCheckboxes(self):
+    def resetFilters(self):
         """ Resets all checkboxes to their initial values
         """
+        self.catalogComboBox.setCurrentText(ALL_ITEMS_STR)
+        self.categoryComboBox.setCurrentText(ALL_ITEMS_STR)
+
         for checkbox in self._defaultOnCheckboxes:
             checkbox.setChecked(True)
 

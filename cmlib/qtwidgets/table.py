@@ -19,6 +19,9 @@ _ALIGN_STRING = int(Qt.AlignVCenter | Qt.AlignLeft)
 _ALIGN_NUMBER = int(Qt.AlignVCenter | Qt.AlignRight)
 _ALIGN_BOOLEAN = int(Qt.AlignVCenter | Qt.AlignHCenter)
 
+
+ALL_ITEMS_STR = "All"
+
 #
 # def createTransparentColorMap():
 #     """ Creates a color map to use for when not color map is selected"""
@@ -81,7 +84,7 @@ class CmLibModel(QtCore.QAbstractTableModel):
         self.iconBarHeight = 16
 
         # Check mark for boolean columns
-        #   ✓ checkmark Unicode: U+2713
+        #   ✓ Check mark Unicode: U+2713
         #   ✔︎ Heavy check mark Unicode: U+2714
         self.checkmarkChar = '✓︎'
 
@@ -352,9 +355,11 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
     def __init__(self, parent):
         super(CmLibProxyModel, self).__init__(parent)
 
+        self._exlusiveFilters = {
+            CmLibProxyModel.FT_CATALOG: ALL_ITEMS_STR,
+            CmLibProxyModel.FT_CATEGORY: ALL_ITEMS_STR,
+        }
         self._filters = {
-            CmLibProxyModel.FT_CATALOG: [],
-            CmLibProxyModel.FT_CATEGORY: [],
             CmLibProxyModel.FT_TAG: [],
             CmLibProxyModel.FT_QUALITY: [],
         }
@@ -400,10 +405,23 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
         return (leftData, leftKey) < (rightData, rightKey)
 
 
+    def setExclusiveFilter(self, filterType, desiredValue):
+        """ Sets a filter that can have only one value at the time.
+            These filters (catalog, category) are typically set by selecting an item of a combobox.
+        """
+        logger.debug("Setting exclusive {}-filter {!r}".format(filterType, desiredValue))
+        self._exlusiveFilters[filterType] = desiredValue
+
+        for key, value in sorted(self._exlusiveFilters.items()):
+            logger.debug("   {:15s}{}".format(key, value))
+
+        self.invalidateFilter()
+
 
     def toggleFilter(self, filterType, attrName, desiredValue, isFilterAdded):
         """ Adds or removes an 'And' filter (depending on isFilterAdded).
             Rows are accept if all of the metadata attributes have their desired value.
+            These filters are typically added/removed by (un)checking the corresponding checkbox
         """
         filt = (attrName, desiredValue)
         if isFilterAdded:
@@ -412,6 +430,9 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
         else:
             logger.debug("Removing {}-filter {}".format(filterType, filt))
             self._filters[filterType].remove(filt)
+
+        # for key, value in sorted(self._filters.items()):
+        #     logger.debug("   {:15s}{}".format(key, value))
         self.invalidateFilter()
 
 
@@ -422,20 +443,22 @@ class CmLibProxyModel(QtCore.QSortFilterProxyModel):
         assert not sourceParentIndex.isValid(), "sourceParentIndex is not the root index"
 
         colMap = self.sourceModel().cmLib.color_maps[sourceRow]
-        md = colMap.meta_data
+
+        # Exclusive filters (catalog and catergory)
         catMd = colMap.catalog_meta_data
+        catalogFilter = self._exlusiveFilters[CmLibProxyModel.FT_CATALOG]
+        acceptCatalog = (catalogFilter == catMd.name or catalogFilter == ALL_ITEMS_STR)
 
-        acceptCatalog = any([catMd.key == desired for _, desired in
-                             self._filters[CmLibProxyModel.FT_CATALOG]])
+        md = colMap.meta_data
+        categoryFilter = self._exlusiveFilters[CmLibProxyModel.FT_CATEGORY]
+        acceptCategory = (categoryFilter == md.category.name or categoryFilter == ALL_ITEMS_STR)
 
-        acceptCategory = any([getattr(md, attrName) == desired for attrName, desired in
-                              self._filters[CmLibProxyModel.FT_CATEGORY]])
-
+        # Filters that must all be true
         acceptQuality = all([getattr(md, attrName) == desired for attrName, desired in
                              self._filters[CmLibProxyModel.FT_QUALITY]])  # Note test for all
 
         acceptTags = all([desired in md.tags for _, desired in
-                          self._filters[CmLibProxyModel.FT_TAG]])  # Note test for all
+                          self._filters[CmLibProxyModel.FT_TAG]])
 
         accept = all([acceptCatalog, acceptCategory, acceptQuality, acceptTags])
 
