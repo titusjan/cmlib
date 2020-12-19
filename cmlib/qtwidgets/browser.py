@@ -194,6 +194,7 @@ class CmLibBrowserDialog(QtWidgets.QDialog):
         self.mainLayout = QtWidgets.QHBoxLayout()
         self.setLayout(self.mainLayout)
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainLayout.setSpacing(0)
         self.mainLayout.addWidget(self.filterForm)
 
         self.rightLayout = QtWidgets.QVBoxLayout()
