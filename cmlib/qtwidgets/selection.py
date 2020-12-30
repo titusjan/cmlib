@@ -123,6 +123,18 @@ class ColorSelectionWidget(QtWidgets.QWidget):
         self.browser.rejected.connect(self._onDialogRejected)
 
 
+    def getButtonText(self):
+        """ Returns the text of the 'Open Dialog' buttong
+        """
+        return self.openDialogButton.getText()
+
+
+    def setButtonText(self, text):
+        """ Returns the text of the 'Open Dialog' buttong
+        """
+        return self.openDialogButton.setText(text)
+
+
     def showDialog(self):
         """ Shows the color browser dialog
         """

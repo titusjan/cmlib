@@ -204,6 +204,7 @@ class DemoWindow(QtWidgets.QWidget):
         self.highLightedLabel = QtWidgets.QLabel()
         self.selectedLabel = QtWidgets.QLabel()
         self.selectionWidget = ColorSelectionWidget(cmLibModel=cmLibModel)
+        self.selectionWidget.setButtonText("More...")
 
         self.mainLayout = QtWidgets.QVBoxLayout(self)
         self.mainLayout.addWidget(self.imageComboBox)
