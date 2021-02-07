@@ -7,6 +7,7 @@ from __future__ import absolute_import
 # or better
 #   rm -rf build dist
 #   python setup.py bdist_wheel
+#   twine check dist/*
 #   twine upload dist/cmlib-x.y.z-py3-none-any.whl
 
 # If you get invalid command 'bdist_wheel', you must install the 'wheel' package first.
@@ -72,6 +73,7 @@ setup(
     version = __version__,
     description = "Color Map Library with harmonized data from different catalogs. Includes PyQt selection widgets.",
     long_description = readme + '\n\n' + history,
+    long_description_content_type = 'text/x-rst',
     author = "Pepijn Kenter",
     author_email = "titusjan@gmail.com",
     license = "BSD",

@@ -3,7 +3,7 @@
 History
 -------
 
-1.1.0 (2021-01-03)
+1.1.0 (2021-02-07)
 ------------------
 *   Catalog and Category are are selected by combo-boxes (was checkboxes)
 *   Possible to change the button text of the selection widget.
