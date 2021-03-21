@@ -90,3 +90,5 @@ easier to browse the collection and make a choice.
 https://everydayanalytics.ca/2017/03/when-to-use-sequential-and-diverging-palettes.html
 
 https://medium.com/nightingale/how-to-choose-the-colors-for-your-data-visualizations-50b2557fa335
+
+https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/
