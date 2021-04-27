@@ -3,6 +3,10 @@
 History
 -------
 
+1.1.1 (2021-04-27)
+------------------
+*   Fix setup.py install by adding HISTORY.rst in source distribution
+
 1.1.0 (2021-02-07)
 ------------------
 *   Catalog and Category are are selected by combo-boxes (was checkboxes)
