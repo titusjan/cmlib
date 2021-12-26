@@ -68,6 +68,8 @@ import glob
 import json
 import logging
 import os.path
+import pathlib
+import importlib.resources
 
 from collections import OrderedDict
 
@@ -422,18 +424,17 @@ class CmLib(object):
 
             Loads metadata. The actual color data is lazy loaded (i.e. when needed).
         """
-        catalog_file = os.path.abspath(os.path.join(catalog_dir, CatalogMetaData.DEFAULT_FILE_NAME))
-        cmd = CatalogMetaData.create_from_json(catalog_file)
+        catalog_dir = pathlib.Path(catalog_dir)
+        catalog_dir = catalog_dir.name
+        with importlib.resources.path(f"cmlib.data.{catalog_dir}", f"{CatalogMetaData.DEFAULT_FILE_NAME}") as catalog_file:
+            cmd = CatalogMetaData.create_from_json(catalog_file)
+            catalog_dir_files = importlib.resources.contents(f"cmlib.data.{catalog_dir}")
+            catalog_dir_files = (item for item in catalog_dir_files if item.endswith("json"))
+            catalog_dir_files = (item for item in catalog_dir_files if not item.endswith(CatalogMetaData.DEFAULT_FILE_NAME))
 
-        json_files_glob = os.path.join(catalog_dir, '*.json')
-        for md_file_name in glob.iglob(json_files_glob):
-            if md_file_name.endswith(CatalogMetaData.DEFAULT_FILE_NAME):
-                continue # skip catalog json file
-
-            md_file_path = os.path.join(catalog_dir, md_file_name)
-            md = CmMetaData.create_from_json(md_file_path)
-
-            rgb_file_path = os.path.join(catalog_dir, md.file_name)
-
-            colorMap = ColorMap(meta_data=md, catalog_meta_data=cmd, rgb_file_name=rgb_file_path)
-            self._color_maps.append(colorMap)
+            for md_file_name in catalog_dir_files:
+                with importlib.resources.path(f"cmlib.data.{catalog_dir}", md_file_name) as md_file_path:
+                    md = CmMetaData.create_from_json(md_file_path)
+                with importlib.resources.path(f"cmlib.data.{catalog_dir}", md.file_name) as rgb_file_path:
+                    colorMap = ColorMap(meta_data=md, catalog_meta_data=cmd, rgb_file_name=rgb_file_path)
+                self._color_maps.append(colorMap)
