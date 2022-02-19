@@ -101,7 +101,8 @@ class ColorSelectionWidget(QtWidgets.QWidget):
 
         scale = 0.65
         self.comboBox.setIconSize(
-            QtCore.QSize(cmLibModel.iconBarWidth * scale, cmLibModel.iconBarHeight * scale))
+            QtCore.QSize(round(cmLibModel.iconBarWidth * scale),
+                         round(cmLibModel.iconBarHeight * scale)))
 
         self.browser = CmLibBrowserDialog(cmLibModel=cmLibModel)
 
