@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-# To make a release follow these steps (nneded:
+# To make a release follow these steps:
 #   python setup.py bdist_wheel
-# or a source distribution as needed for Anacona
+# or a source distribution as needed for Anaconda
 #   rm -rf build dist
 #   python setup.py sdist --formats=zip
 #   twine check dist/*

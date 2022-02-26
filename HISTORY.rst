@@ -3,6 +3,10 @@
 History
 -------
 
+1.1.2 (2022-02-26)
+------------------
+*   Fixed errors when running with Python 3.10.
+
 1.1.1 (2021-04-27)
 ------------------
 *   Fix setup.py install by adding HISTORY.rst in source distribution
