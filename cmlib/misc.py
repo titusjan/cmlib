@@ -78,7 +78,7 @@ def copy_data(source_file, target_file): # TODO: obsolete
 
 
 
-def load_rgb_floats(source_file, delimiter=', ', dtype=np.float32, **kwargs):
+def load_rgb_floats(source_file, delimiter=',', dtype=np.float32, **kwargs):
     """ Loads a color map array from a source file.
         Returns Nx3 array of 32 bits floats
     """
