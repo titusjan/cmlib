@@ -3,6 +3,11 @@
 History
 -------
 
+1.1.3 (2022-07-27)
+------------------
+*   Fixed error reading colormaps in numpy 1.23.
+    (See https://github.com/titusjan/argos/issues/25)
+
 1.1.2 (2022-02-26)
 ------------------
 *   Fixed errors when running with Python 3.10.
