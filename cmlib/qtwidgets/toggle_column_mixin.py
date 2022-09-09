@@ -12,11 +12,11 @@ from .bindings import QtCore, QtWidgets, Qt
 logger = logging.getLogger(__name__)
 
 # Qt classes have many ancestors
-#pylint: disable=R0901
+#pylint: disable=too-many-ancestors
 
 # Don't want to create constructors for this mixin just to satisfy Pylint so
-# we disable W0201 (attribute-defined-outside-init)
-#pylint: disable=W0201
+# we disable attribute-defined-outside-init (attribute-defined-outside-init)
+#pylint: disable=attribute-defined-outside-init
 
 
 class ToggleColumnMixIn(object):
@@ -148,6 +148,6 @@ class ToggleColumnTreeView(QtWidgets.QTreeView, ToggleColumnMixIn):
         return self.header()
 
 
-#pylint: enable=R0901
+#pylint: enable=too-many-ancestors
 
 
